@@ -519,6 +519,37 @@
   - Strict TypeScript check: 0 errors (`npm run typecheck`).
   - Production build: passed cleanly (`npm run build`).
 
+---
+
+## 2026-09-18 — Step 11: Clean Architecture Layers Wired End-to-End (Completed ✅)
+
+**Branch:** `step/11-architecture-e2e-wiring`
+**Commit:** `feat(step-11): clean architecture layers wired end-to-end (firestore -> repo -> usecase -> di -> hook -> component)`
+
+**What was done:**
+- **Infrastructure Layer (`src/infrastructure/repositories/content/FirestorePageRepository.ts`):**
+  - Implemented concrete `FirestorePageRepository` implementing `IPageRepository`.
+  - Maps Firestore collection `pages` to domain `Page` entity with `Slug` value objects and `Date` timestamps.
+  - Implemented query operations: `getAll()`, `getPublished()`, `getHeaderNavPages()`, `getFooterNavPages()`, `getBySlug(slug)`, `create()`, `update()`, `delete()`.
+- **Application Layer (`src/application/use-cases/pages/GetPublishedPageBySlugUseCase.ts`):**
+  - Implemented `GetPublishedPageBySlugUseCase` receiving `IPageRepository` through constructor dependency injection.
+  - Validates slug with `Slug.tryCreate()`, queries repository, checks `isPublished`, and returns presentation-safe `PageDTO` via `toPageDTO(page)`.
+  - Zero framework or external dependencies.
+- **Dependency Injection Container Wiring (`src/infrastructure/di/bootstrap.ts`):**
+  - Registered `DI_TOKENS.PageRepository` as singleton `FirestorePageRepository`.
+  - Registered `DI_TOKENS.GetPublishedPageBySlug` resolving `IPageRepository` from container into `GetPublishedPageBySlugUseCase`.
+- **Presentation Layer (`src/presentation/pages/`):**
+  - Built custom hook `usePage(slug)` in `src/presentation/pages/hooks/usePage.ts` resolving use-case strictly via `useContainer(DI_TOKENS.GetPublishedPageBySlug)` with zero Firebase imports.
+  - Built verification view `PipelineTest` in `src/presentation/pages/pipeline-test/` adhering to Rule 13 (Universal Separation of Concerns: `PipelineTest.tsx`, `PipelineTest.hooks.ts`, `PipelineTest.css`) with instrument-panel styling, hairline borders, and zero shadows.
+  - Updated `App.hooks.ts` and `App.tsx` with `showPipelineTest` state trigger via query parameter `?test=pipeline` or `#pipeline-test`.
+- **Integration Test & Verification (`scripts/test-pipeline-e2e.ts`):**
+  - Automated Node test script boots DI container, resolves `GetPublishedPageBySlugUseCase`, and asserts real Firestore data for slug `home` and `null` for non-existent page.
+- **Quality Gates:**
+  - Biome linter and formatter: 0 errors, 0 warnings (`npm run check`).
+  - Strict TypeScript check (`tsc -b`): 0 errors with Node 24 `erasableSyntaxOnly` compatibility.
+  - Production build: passed cleanly (`npm run build`).
+
+
 
 
 

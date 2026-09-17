@@ -3,9 +3,12 @@
 // This is the ONLY file that imports both infrastructure classes and DI tokens together.
 // Import this once at app startup (main.tsx), before any component renders.
 
+import { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages/GetPublishedPageBySlugUseCase";
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
+import type { IPageRepository } from "../../domain/repositories/content/IPageRepository";
 import { CloudinaryMediaUploader } from "../cloudinary/CloudinaryMediaUploader";
 import { getDb } from "../firebase/firebaseClient";
+import { FirestorePageRepository } from "../repositories/content/FirestorePageRepository";
 import { getEnv } from "../system/env";
 import { container, singleton } from "./container";
 import { DI_TOKENS } from "./tokens";
@@ -14,7 +17,6 @@ import { DI_TOKENS } from "./tokens";
  * Bootstraps the DI container with all concrete bindings.
  *
  * Ordering: infrastructure registrations first, then use-cases that depend on them.
- * Steps 7–11 will add real repository and use-case registrations here.
  */
 export function bootstrapContainer(): void {
   // ── System / Infrastructure ────────────────────────────────────────────────
@@ -31,15 +33,20 @@ export function bootstrapContainer(): void {
     singleton(() => new PingUseCase())
   );
 
-  // ── Content repositories (registered in Step 11 once Firebase is ready) ────
-  // container.register(DI_TOKENS.PageRepository, singleton(() => new FirestorePageRepository()));
-  // container.register(DI_TOKENS.SectionRepository, singleton(() => new FirestoreSectionRepository()));
-  // container.register(DI_TOKENS.MediaRepository, singleton(() => new FirestoreMediaRepository()));
+  // ── Content repositories (Step 11) ──────────────────────────────────────────
+  container.register(
+    DI_TOKENS.PageRepository,
+    singleton(() => new FirestorePageRepository())
+  );
 
-  // ── Admin repositories (registered in Step 11) ──────────────────────────────
-  // container.register(DI_TOKENS.AdminAccessRepository, singleton(() => new FirestoreAdminAccessRepository()));
-  // container.register(DI_TOKENS.ContactRepository, singleton(() => new FirestoreContactRepository()));
-
-  // ── Email sender (registered in Step 18) ────────────────────────────────────
-  // container.register(DI_TOKENS.EmailSender, singleton(() => new EmailApiSender()));
+  // ── Use-cases (Step 11) ─────────────────────────────────────────────────────
+  container.register(
+    DI_TOKENS.GetPublishedPageBySlug,
+    singleton(
+      () =>
+        new GetPublishedPageBySlugUseCase(
+          container.resolve<IPageRepository>(DI_TOKENS.PageRepository)
+        )
+    )
+  );
 }
