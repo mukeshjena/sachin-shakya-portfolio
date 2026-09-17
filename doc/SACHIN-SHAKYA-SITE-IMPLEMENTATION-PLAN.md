@@ -50,7 +50,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | # | Step | Phase | Status |
 |---|------|-------|--------|
 | 1 | Toolchain & project bootstrap | Foundation | Completed ✅ |
-| 2 | `.gitignore`, `.agent/` memory system, strict rules file | Foundation | Pending |
+| 2 | `.gitignore`, `.agent/` memory system, strict rules file | Foundation | Completed ✅ |
 | 3 | Clean Architecture skeleton + DI container | Foundation | Pending |
 | 4 | Coming-soon page, initial commit, `develop` + `release/v1.0.0` branches | Foundation | Pending |
 | 5 | First Cloudflare Worker deploy via Wrangler | Foundation | Pending |
