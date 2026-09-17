@@ -95,3 +95,27 @@
 - `singleton()` helper is a closure wrapper, not framework magic — zero overhead
 - bootstrap.ts pre-comments every future registration so nothing is missed in later steps
 
+---
+
+## 2026-09-18 — Fix: CSS Extraction + Pre-Commit Gates (post-Step 4 correction)
+
+**Branch:** `fix/css-extraction-precommit-hooks` → merged into `main`
+**Commit:** `acbb9c8 fix: extract inline CSS to ComingSoon.css + add pre-commit gates + rules 13/14`
+
+**What was done:**
+- **CSS extraction:** Moved `COMING_SOON_STYLES` string constant + `<style>` tag from `ComingSoon.tsx` → new `ComingSoon.css` co-located file. Component now imports `"./ComingSoon.css"`. Zero hardcoded hex values — all use `var(--token-name)`.
+- **Pre-commit hook:** Created `.githooks/pre-commit` (shell script) that runs 3 gates before every commit:
+  1. `npx biome check .` — lint + format
+  2. `npx tsc -b` — TypeScript strict check
+  3. `npx vite build --silent` — confirms app bundles
+- **Hook activation:** Added `"prepare": "git config core.hooksPath .githooks"` to `package.json`. Runs automatically on `npm install`. Hook path confirmed: `git config core.hooksPath = .githooks`.
+- **Rule 13 added** to `agent.md` + plan: No inline `<style>` tags, CSS string constants, or multi-property `style={{}}` in `.tsx`. All styles in co-located `.css` files.
+- **Rule 14 added** to `agent.md` + plan: No hardcoded hex/rgba/hsl values in CSS or TSX. Use CSS custom properties only.
+- **Palette token table corrected** in `agent.md` to match exact reference values from `code.old/index.html` (petrol navy `#06121a`, amber `#ffb020`, cyan `#49c7e8`, etc.).
+- **Pre-Commit Gates section** added to both `agent.md` and implementation plan.
+
+**Verification:**
+- `npx biome check .` → ✅ 32 files, 0 errors
+- `npm run build` → ✅ 23 modules, 161ms
+
+
