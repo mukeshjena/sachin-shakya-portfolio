@@ -199,3 +199,20 @@
   - Created GCP / Firebase project `sachin-shakya-site` via Firebase CLI.
 - **Workflow Control:**
   - Paused execution per user instruction; standing by for explicit `continue` before proceeding to Step 7.
+
+---
+
+## 2026-09-18 — Full `.agents` Workspace Customization Framework (Rules & Skills)
+
+**Key Additions:**
+- Implemented the complete Antigravity `.agents/` customization framework matching reference project `DIIRA-INDUSTRIAL-FUEL` and `ODINA-GARMENTS-PRIVATE-LIMITED`:
+  - **Rules (`.agents/rules/`):**
+    1. `design-aesthetics-and-standards.md` — Sci-fi professional instrument panel aesthetics, shadow-free surfaces, zero emojis, zero debounced inputs, color token consistency, dual mobile app dock vs desktop web chrome.
+    2. `clean-architecture-and-code-standards.md` — 4 Clean Architecture layers, DI container enforcement via `useContainer()`, Universal Separation of Concerns (Rule 13), 500 LOC max, 3 files/folder max.
+    3. `git-workflow-and-branching-order.md` — 4-stage promotion flow, single pre-commit gate, rapid push, strict ban on `--no-verify`.
+    4. `reference-odina-diira.md` — Direct filesystem mapping to ODINA and DIIRA canonical reference implementations.
+  - **Skills (`.agents/skills/`):**
+    1. `modern-ui-ux-design/SKILL.md` with 5 detailed reference guides (`color_theory_tokens.md`, `component_design_blueprints.md`, `micro_interactions_motion.md`, `typography_pairing.md`, `visual_hierarchy_grid.md`).
+    2. `ui-polish-critique/SKILL.md` with `anti_patterns_checklist.md`.
+    3. `devops-portfolio-seo/SKILL.md` — Enterprise JSON-LD Schema.org, OpenGraph, dynamic sitemap, Core Web Vitals.
+- Strict pause enforced: Waiting for user to explicitly type `continue` before starting Step 7.
