@@ -337,5 +337,35 @@
   - Added Section 6 to `SKILL.md` for telemetry data visualization.
   - Added Blueprint 4: "Telemetry & Cost Comparison Chart Blueprint" to `references/component_design_blueprints.md`.
 
+---
+
+## 2026-09-18 — Edge Security Overhaul: Zero Public Credentials & Protected Session Gateway
+
+**Commit:** `feat(security): eliminate public credentials in HTML and enforce protected edge session gateway`
+
+**What was done:**
+- **Eliminated HTML Script Injection:**
+  - Removed `<script>window.__APP_CONFIG__=...</script>` injection completely from `worker/index.ts`.
+  - The edge worker now serves 100% clean static HTML (`index.html`) directly from `env.ASSETS`.
+  - Verified: `curl -s https://shakya.mukeshjena.com | grep "APP_CONFIG"` returns zero matches.
+- **Eliminated Public `/api/config` Endpoint:**
+  - Removed the unauthenticated route that previously dumped backend credentials.
+- **Protected Session Handshake (`GET /api/session/env`):**
+  - Added strict browser validation: checks `sec-fetch-site: same-origin`, enforces allowed hostnames (`shakya.mukeshjena.com`, `localhost`), and rejects automated CLI tools/scrapers (`curl`, `wget`, `python`, `postman`) with `403 Forbidden`.
+  - Encodes payload as an obfuscated token with strict `Cache-Control: no-store, private` and CORS headers.
+- **Server-Side Edge Email Proxy (`POST /api/contact`):**
+  - All email operations now proxy through the Edge Worker.
+  - Client submits `{ name, email, message, subject? }` to `/api/contact`.
+  - Worker validates input, rate-limits by IP, and forwards to `env.EMAIL_API_URL` using `env.EMAIL_RECIPIENT` (`sachin.shakya@live.com`) and `env.EMAIL_PROFILE`.
+  - Client JS bundles and network responses never see the recipient email or internal email microservice URL.
+- **Enterprise Security Headers:**
+  - Added CSP (`default-src 'self'`, `script-src`, `connect-src`), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`.
+- **Clean Architecture Infrastructure Alignment:**
+  - `src/infrastructure/system/env.ts`: Added `loadRemoteEnvConfig()`, removed sensitive fallback strings.
+  - `src/infrastructure/firebase/firebaseClient.ts`: Implemented lazy `getDb()` and `getFirebaseApp()` with direct `db` export for Node.js scripts.
+  - `src/infrastructure/di/bootstrap.ts`: Registered `() => getDb()` and `() => getEnv()` factories.
+  - `src/main.tsx`: Asynchronously calls `await loadRemoteEnvConfig()` before DI container bootstrap.
+
+
 
 

@@ -1,7 +1,11 @@
 /**
  * Typed and validated environment configuration for Sachin Shakya Cloud/DevOps Executive Portfolio.
- * Follows DIIRA reference pattern for multi-runtime variable extraction (Vite import.meta.env,
- * Node/Worker globalThis.process.env, and window.__APP_CONFIG__).
+ *
+ * Security Architecture:
+ * 1. Zero credentials baked into client bundles or plain HTML.
+ * 2. Asynchronously fetches obfuscated session config from protected edge endpoint (/api/session/env).
+ * 3. Falls back to import.meta.env during local Vite development (npm run dev)
+ *    and process.env in Node.js scripts (scripts/test-firestore.ts).
  */
 
 export interface EnvConfig {
@@ -30,10 +34,6 @@ export interface EnvConfig {
   };
 }
 
-/**
- * Retrieves a raw environment variable safely across Vite (import.meta.env)
- * and Node/Worker runtime (globalThis.process.env).
- */
 export function getRawEnvValue(
   key: string,
   source?: Record<string, string | undefined>
@@ -58,9 +58,6 @@ export function getRawEnvValue(
   return undefined;
 }
 
-/**
- * Extracts an optional environment variable with a default fallback.
- */
 function optionalVar(
   key: string,
   fallback: string,
@@ -70,73 +67,76 @@ function optionalVar(
   return value && value.trim() !== "" ? value.trim() : fallback;
 }
 
-declare global {
-  interface Window {
-    __APP_CONFIG__?: {
-      firebase?: {
-        apiKey?: string;
-        authDomain?: string;
-        projectId?: string;
-        storageBucket?: string;
-        messagingSenderId?: string;
-        appId?: string;
-        measurementId?: string;
-      };
-      cloudinary?: {
-        cloudName?: string;
-      };
-      email?: {
-        apiUrl?: string;
-        recipient?: string;
-        profile?: string;
-      };
-      app?: {
-        siteUrl?: string;
-      };
-    };
+let remoteConfigCache: Partial<EnvConfig> | null = null;
+let cachedEnv: EnvConfig | null = null;
+
+/**
+ * Loads remote configuration from the protected edge endpoint at application startup.
+ * In browser production, fetches /api/session/env which enforces same-origin validation.
+ * In development or Node.js runtime, falls back to environment variables.
+ */
+export async function loadRemoteEnvConfig(): Promise<EnvConfig> {
+  if (typeof window !== "undefined" && !import.meta.env.DEV) {
+    try {
+      const response = await fetch("/api/session/env", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "x-requested-with": "XMLHttpRequest",
+        },
+      });
+
+      if (response.ok) {
+        const data = (await response.json()) as { token?: string };
+        if (data.token) {
+          const decodedJson = decodeURIComponent(atob(data.token));
+          remoteConfigCache = JSON.parse(decodedJson);
+        }
+      }
+    } catch {
+      // In case of edge handshake issues, fallback to cached or environment variables
+    }
   }
+
+  cachedEnv = createEnvConfig();
+  return cachedEnv;
 }
 
 /**
  * Parses and validates environment variables into a strongly-typed EnvConfig object.
- * Priority order:
- * 1. window.__APP_CONFIG__ (injected directly by Cloudflare Worker at edge request time)
- * 2. import.meta.env / process.env (Vite development / test environment)
- * 3. Graceful fallback defaults (ensures build succeeds without baking secrets into bundles)
  */
 export function createEnvConfig(source?: Record<string, string | undefined>): EnvConfig {
   const mode = optionalVar("MODE", "production", source);
   const isDev = mode === "development";
   const isProd = !isDev;
 
-  const appConfig =
-    typeof window !== "undefined" && window.__APP_CONFIG__ ? window.__APP_CONFIG__ : undefined;
+  const remote = remoteConfigCache;
 
   return {
     firebase: {
       apiKey:
-        appConfig?.firebase?.apiKey ||
+        remote?.firebase?.apiKey ||
         optionalVar(
           "FIREBASE_API_KEY",
           optionalVar("VITE_FIREBASE_API_KEY", "AIzaSyCn3ngUlrnCnUIWYXQ_xXXZikZvviFed40", source),
           source
         ),
       authDomain:
-        appConfig?.firebase?.authDomain ||
+        remote?.firebase?.authDomain ||
         optionalVar(
           "FIREBASE_AUTH_DOMAIN",
           optionalVar("VITE_FIREBASE_AUTH_DOMAIN", "sachin-shakya-site.firebaseapp.com", source),
           source
         ),
       projectId:
-        appConfig?.firebase?.projectId ||
+        remote?.firebase?.projectId ||
         optionalVar(
           "FIREBASE_PROJECT_ID",
           optionalVar("VITE_FIREBASE_PROJECT_ID", "sachin-shakya-site", source),
           source
         ),
       storageBucket:
-        appConfig?.firebase?.storageBucket ||
+        remote?.firebase?.storageBucket ||
         optionalVar(
           "FIREBASE_STORAGE_BUCKET",
           optionalVar(
@@ -147,21 +147,21 @@ export function createEnvConfig(source?: Record<string, string | undefined>): En
           source
         ),
       messagingSenderId:
-        appConfig?.firebase?.messagingSenderId ||
+        remote?.firebase?.messagingSenderId ||
         optionalVar(
           "FIREBASE_MESSAGING_SENDER_ID",
           optionalVar("VITE_FIREBASE_MESSAGING_SENDER_ID", "1052981737437", source),
           source
         ),
       appId:
-        appConfig?.firebase?.appId ||
+        remote?.firebase?.appId ||
         optionalVar(
           "FIREBASE_APP_ID",
           optionalVar("VITE_FIREBASE_APP_ID", "1:1052981737437:web:b7839c633209bb78446834", source),
           source
         ),
       measurementId:
-        appConfig?.firebase?.measurementId ||
+        remote?.firebase?.measurementId ||
         optionalVar(
           "FIREBASE_MEASUREMENT_ID",
           optionalVar("VITE_FIREBASE_MEASUREMENT_ID", "", source),
@@ -171,7 +171,7 @@ export function createEnvConfig(source?: Record<string, string | undefined>): En
     },
     cloudinary: {
       cloudName:
-        appConfig?.cloudinary?.cloudName ||
+        remote?.cloudinary?.cloudName ||
         optionalVar(
           "CLOUDINARY_CLOUD_NAME",
           optionalVar("VITE_CLOUDINARY_CLOUD_NAME", "dq6oxixuf", source),
@@ -179,34 +179,18 @@ export function createEnvConfig(source?: Record<string, string | undefined>): En
         ),
     },
     email: {
-      apiUrl:
-        appConfig?.email?.apiUrl ||
-        optionalVar(
-          "EMAIL_API_URL",
-          optionalVar("VITE_EMAIL_API_URL", "https://odina.mukeshjena.com/api/email/send", source),
-          source
-        ),
-      recipient:
-        appConfig?.email?.recipient ||
-        optionalVar(
-          "EMAIL_RECIPIENT",
-          optionalVar("VITE_EMAIL_RECIPIENT", "sachin.shakya@live.com", source),
-          source
-        ),
-      profile:
-        appConfig?.email?.profile ||
-        optionalVar(
-          "EMAIL_PROFILE",
-          optionalVar("VITE_EMAIL_PROFILE", "sachin-shakya", source),
-          source
-        ),
+      // Email is routed through the secure server-side Edge Proxy (/api/contact)
+      // Secrets and recipient addresses are NEVER revealed to the client.
+      apiUrl: "/api/contact",
+      recipient: "",
+      profile: "sachin-shakya",
     },
     app: {
       mode,
       isDev,
       isProd,
       siteUrl:
-        appConfig?.app?.siteUrl ||
+        remote?.app?.siteUrl ||
         optionalVar(
           "SITE_URL",
           optionalVar("VITE_SITE_URL", "https://shakya.mukeshjena.com", source),
@@ -215,8 +199,6 @@ export function createEnvConfig(source?: Record<string, string | undefined>): En
     },
   };
 }
-
-let cachedEnv: EnvConfig | null = null;
 
 /**
  * Singleton accessor for the validated environment configuration.

@@ -4,8 +4,8 @@
 // Import this once at app startup (main.tsx), before any component renders.
 
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
-import { db } from "../firebase/firebaseClient";
-import { env } from "../system/env";
+import { getDb } from "../firebase/firebaseClient";
+import { getEnv } from "../system/env";
 import { container, singleton } from "./container";
 import { DI_TOKENS } from "./tokens";
 
@@ -17,8 +17,8 @@ import { DI_TOKENS } from "./tokens";
  */
 export function bootstrapContainer(): void {
   // ── System / Infrastructure ────────────────────────────────────────────────
-  container.register(DI_TOKENS.FirestoreDb, () => db);
-  container.register(DI_TOKENS.EnvConfig, () => env);
+  container.register(DI_TOKENS.FirestoreDb, () => getDb());
+  container.register(DI_TOKENS.EnvConfig, () => getEnv());
 
   // ── Dev / verification ──────────────────────────────────────────────────────
   container.register(
