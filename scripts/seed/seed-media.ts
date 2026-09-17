@@ -28,6 +28,7 @@ export interface SeededMediaMap {
   logoUrl: string;
   heroPhotoUrl: string;
   experiencePhotoUrl: string;
+  aboutPhotoUrl?: string;
   cloudInfraUrl: string;
 }
 
@@ -116,12 +117,21 @@ export async function seedMediaAssets(): Promise<SeededMediaMap> {
   const apiKey = process.env.CLOUDINARY_API_KEY;
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
+  const projectAssetsDir = path.resolve(process.cwd(), "public", "assets");
   const downloadsDir = path.join("C:", "Users", "LenovO", "Downloads");
+
+  const resolveAssetPath = (filename: string): string => {
+    const projectPath = path.join(projectAssetsDir, filename);
+    if (fs.existsSync(projectPath)) {
+      return projectPath;
+    }
+    return path.join(downloadsDir, filename);
+  };
 
   const assetsToSeed: MediaAssetSeedSpec[] = [
     {
       key: "asset-logo",
-      localPath: path.join(downloadsDir, "sachin-logo.png"),
+      localPath: resolveAssetPath("sachin-logo.png"),
       folder: CLOUDINARY_FOLDERS.logo,
       publicIdPrefix: "sachin-logo",
       altText: "Sachin Shakya — Lead Cloud Architect & DevOps Consultant Logo",
@@ -130,7 +140,7 @@ export async function seedMediaAssets(): Promise<SeededMediaMap> {
     },
     {
       key: "asset-sachin-hero",
-      localPath: path.join(downloadsDir, "sachin-one.png"),
+      localPath: resolveAssetPath("sachin-one.png"),
       folder: CLOUDINARY_FOLDERS.homeHero,
       publicIdPrefix: "sachin-hero",
       altText: "Sachin Shakya — Executive Cloud Operations & Architecture Leadership",
@@ -139,12 +149,21 @@ export async function seedMediaAssets(): Promise<SeededMediaMap> {
     },
     {
       key: "asset-sachin-experience",
-      localPath: path.join(downloadsDir, "sachin-two.png"),
+      localPath: resolveAssetPath("sachin-two.png"),
       folder: CLOUDINARY_FOLDERS.homeExperience,
       publicIdPrefix: "sachin-experience",
       altText: "Sachin Shakya — Mission-Critical Cloud Telemetry & DevOps Execution",
       fallbackUrl:
         "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      key: "asset-sachin-about",
+      localPath: resolveAssetPath("sachin-three.png"),
+      folder: CLOUDINARY_FOLDERS.homeImpact,
+      publicIdPrefix: "sachin-about",
+      altText: "Sachin Shakya — Enterprise Architecture & Strategic Advisory",
+      fallbackUrl:
+        "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80",
     },
   ];
 
@@ -221,6 +240,7 @@ export async function seedMediaAssets(): Promise<SeededMediaMap> {
     logoUrl: results["asset-logo"],
     heroPhotoUrl: results["asset-sachin-hero"],
     experiencePhotoUrl: results["asset-sachin-experience"],
+    aboutPhotoUrl: results["asset-sachin-about"],
     cloudInfraUrl: infraUrl,
   };
 }
