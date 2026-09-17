@@ -1,8 +1,12 @@
-// App.tsx — Minimal placeholder for Step 1.
-// Real app shell (providers, router, layout) is assembled in Steps 13–14.
-// Logic lives in co-located hooks/.ts files, never in this file.
+// App.tsx — Step 3 placeholder: verifies DI chain end-to-end.
+// No logic in this file — logic lives in App.hooks.ts (added in Step 13).
+// This file will be replaced by the real provider-wrapped router in Step 13.
+
+import { useAppPing } from "./App.hooks";
 
 function App() {
+  const pingResult = useAppPing();
+
   return (
     <main
       style={{
@@ -18,7 +22,19 @@ function App() {
       <h1 style={{ fontSize: "1.5rem", color: "#f59e0b", letterSpacing: "0.05em" }}>
         Sachin Shakya
       </h1>
-      <p style={{ color: "#9ca3af", fontSize: "0.875rem" }}>Portfolio loading — scaffold ready.</p>
+      <p style={{ color: "#9ca3af", fontSize: "0.875rem" }}>Portfolio — scaffold ready</p>
+      <code
+        style={{
+          marginTop: "1rem",
+          padding: "0.5rem 1rem",
+          background: "#1f2937",
+          borderRadius: "0.25rem",
+          color: "#22c55e",
+          fontSize: "0.75rem",
+        }}
+      >
+        {pingResult}
+      </code>
     </main>
   );
 }
