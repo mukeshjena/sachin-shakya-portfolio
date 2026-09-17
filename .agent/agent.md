@@ -34,7 +34,7 @@
 | 12 | **Commit message format:** `feat(step-NN): <short description>` | Consistent history for the ledger. |
 | 13 | **Strict separation of concerns across ALL layers — nothing hardcoded in `.tsx` or `.hooks.ts`.**<br>• **Styles** → dedicated `.css` files (co-located or global) using CSS custom properties.<br>• **Constants & Hardcoded Values** → dedicated `.constants.ts` or `src/config/` (all copy, labels, badge texts, metrics, magic numbers, strings, keys, dates).<br>• **Static & Mock Data** → dedicated `.data.ts` files.<br>• **Computation / Formatting Logic** → dedicated `.utils.ts` files (pure functions).<br>• **State & Lifecycles** → dedicated `.hooks.ts` files (orchestrates React state and hooks only).<br>• **Markup / View** → dedicated `.tsx` files (pure declarative JSX templates).<br>The ONLY allowed inline style exception is a single dynamic runtime style like `style={{ width: \`${pct}%\` }}`. | Complete architectural purity, maintainability, and testability. |
 | 14 | **No hardcoded hex/rgba/hsl colour values in any file.** Use CSS custom properties from `src/index.css` `:root` exclusively — `var(--amber)`, not `#ffb020`. | Single palette source of truth. |
-| 15 | **`--no-verify` (and `-n`) is STRICTLY PROHIBITED on BOTH `git commit` and `git push`.** Never bypass git hooks under any circumstances. Skipping hooks allows bad formatting, lint errors, broken types, and failing builds to slip through into git history and origin branches. If a pre-commit or pre-push check fails, diagnose and fix the code immediately. | Gate integrity — skipping hooks defeats automated quality enforcement. |
+| 15 | **`--no-verify` (and `-n`) is STRICTLY PROHIBITED on `git commit`.** Never bypass git hooks under any circumstances. Skipping hooks allows bad formatting, lint errors, broken types, and failing builds to slip through into git history. Pre-commit executes all 3 validations (Biome, TypeScript, Vite build) before every commit. Pre-push hook is omitted to prevent redundant double checking and ensure rapid, responsive git push operations. If pre-commit fails, diagnose and fix the root cause immediately. | Gate integrity — skipping hooks defeats automated quality enforcement. |
 | 16 | **Primary Reference Implementations (ODINA & DIIRA).** For ANY reference pattern, implementation detail, Cloudflare/Wrangler config, CI/CD workflow, Firebase/Firestore setup, Cloudinary uploads, seed scripts, or SEO patterns, ALWAYS inspect and align with the two canonical reference projects:<br>• **ODINA:** `D:\MyFiles\p2m-solutions\p2m-projects\ODINA-GARMENTS-PRIVATE-LIMITED`<br>• **DIIRA:** `D:\MyFiles\p2m-solutions\p2m-projects\DIIRA-INDUSTRIAL-FUEL` | Prevents reinventing patterns and guarantees cross-project architectural consistency. |
 
 ### What Goes Where (Rule 13 reference)
@@ -53,20 +53,21 @@
 
 ---
 
-## Pre-Commit & Pre-Push Gates
+## Pre-Commit Validation Gate
 
-The repository enforces automated validation gates via `.githooks/pre-commit` and `.githooks/pre-push`.
+The repository enforces a single automated validation gate via `.githooks/pre-commit`.
 Activated automatically by `npm run prepare` (`git config core.hooksPath .githooks`).
 
 | Gate | Runs On | Checks Executed |
 |---|---|---|
-| **Pre-Commit** | `git commit` | 1. Biome lint & format check (`npx biome check .`)<br>2. TypeScript strict typecheck (`npx tsc -b`)<br>3. Vite production build (`npx vite build --logLevel silent`) |
-| **Pre-Push** | `git push` | 1. Biome lint & format check (`npx biome check .`)<br>2. TypeScript strict typecheck (`npx tsc -b`)<br>3. Vite production build (`npx vite build --logLevel silent`) |
+| **Pre-Commit** (`.githooks/pre-commit`) | `git commit` | 1. Biome lint & format check (`npx biome check .`)<br>2. TypeScript strict typecheck (`npx tsc -b`)<br>3. Vite production build (`npx vite build --logLevel silent`) |
 
+> **Single Quality Gate:**
+> Pre-commit verifies all 3 stages before code enters git history. Pre-push checks are eliminated to prevent duplicate execution and keep `git push` fast and lightweight.
+>
 > **STRICT PROHIBITION OF `--no-verify` (Rule 15):**
-> Using `--no-verify` or `-n` with `git commit` or `git push` is **STRICTLY FORBIDDEN**.
-> Bypassing gates undermines repository integrity and risks pushing erroneous or failing code.
-> If a check fails, diagnose and fix the root cause before committing or pushing.
+> Using `--no-verify` or `-n` with `git commit` is **STRICTLY FORBIDDEN**.
+> If any check fails, diagnose and fix the root cause before committing.
 
 
 ## Design Principles

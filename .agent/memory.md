@@ -182,7 +182,20 @@
 - Verified live GitHub Actions run on `main`: Run `#35277357086` succeeded in 30s.
 - Status Ledger updated: Step 6 → `Completed ✅`.
 
+---
 
+## 2026-09-18 — Streamlined Quality Gate & Atomic Pipeline Alignment
 
-
-
+**Key Changes:**
+- **Single Quality Gate:**
+  - Removed `.githooks/pre-push` to eliminate redundant double checks and enable instant `git push` operations.
+  - `.githooks/pre-commit` remains the single strict gate running all 3 validations (Biome lint/format, TypeScript strict typecheck, and Vite production build).
+  - Rule 15 updated in `.agent/agent.md` and `doc/SACHIN-SHAKYA-SITE-IMPLEMENTATION-PLAN.md` to reflect that `--no-verify` is strictly prohibited on `git commit`.
+- **Atomic Pipeline Alignment (Reference Parity):**
+  - Updated `.github/workflows/deploy-cloudflare.yml` to match canonical reference project `DIIRA-INDUSTRIAL-FUEL`.
+  - Added concurrency group `production-cloudflare-deploy` (`cancel-in-progress: true`), formatted secrets audit, security audit, dependency freshness check, post-deploy secret synchronization to Cloudflare Worker store, live edge health check (`shakya.mukeshjena.com`), and PR preview deployments.
+  - Added `.nvmrc` pinning Node.js 24 LTS.
+- **Firebase Project Initialized:**
+  - Created GCP / Firebase project `sachin-shakya-site` via Firebase CLI.
+- **Workflow Control:**
+  - Paused execution per user instruction; standing by for explicit `continue` before proceeding to Step 7.
