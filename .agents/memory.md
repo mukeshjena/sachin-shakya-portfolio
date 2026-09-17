@@ -240,3 +240,37 @@
   - `reference-odina-diira.md`
 - **Cross-Session Continuity:**
   - `.agents/agent.md` and `.agents/memory.md` now serve as the permanent, unified context source across all IDE sessions.
+
+---
+
+## 2026-09-18 — Step 7: Firebase Project + Firestore (Native Mode) (Completed ✅)
+
+**Branch:** `step/07-firebase-firestore-bootstrap` → merged into `release/v1.0.0`, `main`, and `develop`
+**Commit:** `2e72d5e feat(step-07): bootstrap firebase project and firestore native database`
+
+**What was done:**
+- Created Firebase/GCP Project: `sachin-shakya-site` (Project Number: `1052981737437`).
+- Provisioned Cloud Firestore in **Native mode** in region `asia-south1` (Mumbai).
+- Created Web App: `sachin-shakya-web` (App ID: `1:1052981737437:web:b7839c633209bb78446834`, API Key: `AIzaSyCn3ngUlrnCnUIWYXQ_xXXZikZvviFed40`).
+- Generated Firebase config files:
+  - `.firebaserc` pointing to `sachin-shakya-site`.
+  - `firebase.json` configuring Firestore rules, indexes, and emulators.
+  - `firestore.rules` containing published-state helper and collection security policies matching DIIRA reference architecture.
+  - `firestore.indexes.json` configured for compound queries.
+  - Deployed Firestore security rules live: `firebase deploy --only firestore:rules --project sachin-shakya-site` (Status: released to cloud.firestore).
+- Environment and Secret Configuration:
+  - Local `.env` configured with `VITE_FIREBASE_*` and `VITE_SITE_URL`.
+  - Updated GitHub repository secrets via `gh secret set`: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`, `VITE_SITE_URL`.
+  - Updated `.github/workflows/deploy-cloudflare.yml` to supply `VITE_*` secrets to Vite build step.
+- Clean Architecture Infrastructure:
+  - Created `src/infrastructure/system/env.ts` with strongly typed `createEnvConfig()`, multi-runtime fallback (window.__APP_CONFIG__, Vite import.meta.env, Node process.env), strictly adhering to 3 files/folder limit.
+  - Created `src/infrastructure/firebase/firebaseClient.ts` with multi-tab persistent IndexedDB caching (`persistentMultipleTabManager`) to preserve free-tier read quotas, with environment detection to avoid Node/script warnings.
+  - Registered `FirestoreDb` and `EnvConfig` tokens in `src/infrastructure/di/tokens.ts` and `src/infrastructure/di/bootstrap.ts`.
+- Verification:
+  - Created `scripts/test-firestore.ts` testing live write, read, and delete operations against `sachin-shakya-site`.
+  - Added `npm run test:firestore` to `package.json`.
+  - `npm run test:firestore` executed with 100% success and 0 warnings.
+  - Quality gates: Biome lint/format passed, `tsc -b` passed, Vite production build passed.
+  - CI/CD Run `#35281057331` succeeded on `main` in 46s. Live custom domain `https://shakya.mukeshjena.com` returning HTTP 200 OK.
+- Status Ledger updated: Step 7 → `Completed ✅`.
+
