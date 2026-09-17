@@ -384,6 +384,46 @@
 - **Updated `doc/SACHIN-SHAKYA-SITE-IMPLEMENTATION-PLAN.md`:**
   - Added Edge Security skill to Section 7 skills list.
 
+---
+
+## 2026-09-18 — Step 8: Cloudinary Folder Structure & Signed Uploads (Completed ✅)
+
+**Branch:** `step/08-cloudinary-structure`
+**Commit:** `feat(step-08): cloudinary folder structure and signed edge upload gateway`
+
+**What was done:**
+- **Cloudinary Folder Structure & Hierarchy (`sachin-shakya/`):**
+  - Defined strict folder hierarchy constants in `src/infrastructure/cloudinary/cloudinaryConfig.ts`:
+    - `sachin-shakya/logo`
+    - `sachin-shakya/home/hero`
+    - `sachin-shakya/home/impact`
+    - `sachin-shakya/home/experience`
+    - `sachin-shakya/pages/{slug}`
+    - `sachin-shakya/promo-popup`
+    - `sachin-shakya/test`
+  - Added image URL transformation helpers (`getOptimizedImageUrl`, `getThumbnailUrl`, `getResponsiveSrcSet`, `resolveCloudinaryFolder`) providing auto-format (`f_auto`), auto-quality (`q_auto`), responsive sizing, and thumbnail crops.
+- **Edge Worker Signed Upload & Destroy Gateways (`worker/index.ts`):**
+  - Implemented `POST /api/cloudinary/sign`: Generates short-lived SHA-1 signatures via Web Crypto API. Rejects automated/unauthorized scrapers, enforces folder restrictions so uploads cannot escape into unauthorized directories, and returns signature + API key without exposing the API secret.
+  - Implemented `POST /api/cloudinary/destroy`: Server-side asset deletion proxy using edge secrets. Enforces that only assets within `sachin-shakya/` can be destroyed.
+  - Updated CSP `connect-src` to include `https://api.cloudinary.com`.
+- **Domain Layer Integration:**
+  - Created `src/domain/services/IMediaUploader.ts`: pure TypeScript interface defining `upload()` and `destroy()` contracts.
+- **Infrastructure Layer Modules (`src/infrastructure/cloudinary/`):**
+  - `cloudinaryConfig.ts`: Folder paths and image optimization utilities.
+  - `cloudinaryClient.ts`: Browser-side signed upload client that coordinates with the Cloudflare Edge Worker gateway.
+  - `CloudinaryMediaUploader.ts`: Concrete service implementing `IMediaUploader`.
+  - Maintained exact 3-file-per-folder limit (Rule 4).
+- **Dependency Injection Wiring:**
+  - Added `DI_TOKENS.MediaUploader` in `src/infrastructure/di/tokens.ts`.
+  - Registered `CloudinaryMediaUploader` as singleton in `src/infrastructure/di/bootstrap.ts`.
+- **Automated Verification Suite:**
+  - Created `scripts/test-cloudinary.ts` with automatic `.env` loading.
+  - Added `"test:cloudinary": "tsx scripts/test-cloudinary.ts"` to `package.json`.
+  - Executed tests: verified signed upload to `sachin-shakya/test/`, verified returned metadata (`secure_url`, `public_id`, dimensions, format, bytes), and successfully verified cleanup via destroy API (`result: "ok"`).
+  - Verified `npm run test:firestore` passes.
+  - Verified Biome checks (`npm run check`) and strict TypeScript typechecking (`npm run typecheck`).
+
+
 
 
 

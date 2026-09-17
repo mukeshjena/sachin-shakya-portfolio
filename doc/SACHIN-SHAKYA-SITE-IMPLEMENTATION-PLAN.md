@@ -56,7 +56,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 5 | First Cloudflare Worker deploy via Wrangler | Foundation | Completed ✅ |
 | 6 | Atomic CI/CD pipeline (GitHub Actions) | Foundation | Completed ✅ |
 | 7 | Firebase project + Firestore (Native mode) | Backend | Completed ✅ |
-| 8 | Cloudinary folder structure + signed uploads | Backend | Pending |
+| 8 | Cloudinary folder structure + signed uploads | Backend | Completed ✅ |
 | 9 | Domain model & Firestore schema | Backend | Pending |
 | 10 | Idempotent seed script + cleanup script | Backend | Pending |
 | 11 | Clean Architecture layers wired end-to-end | Core | Pending |

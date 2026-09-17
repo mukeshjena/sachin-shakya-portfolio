@@ -13,6 +13,7 @@
     "format": "biome format --write .",
     "prepare": "git config core.hooksPath .githooks",
     "test:firestore": "tsx scripts/test-firestore.ts",
+    "test:cloudinary": "tsx scripts/test-cloudinary.ts",
     "seed": "tsx scripts/seed/seed.ts",
     "cleanup": "tsx scripts/cleanup/cleanup.ts",
     "deploy": "npm run build && wrangler deploy"

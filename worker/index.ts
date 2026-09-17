@@ -35,7 +35,7 @@ interface Env {
 function securityHeaders(): Record<string, string> {
   return {
     "Content-Security-Policy":
-      "default-src 'self'; script-src 'self' 'unsafe-inline' https://apis.google.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://res.cloudinary.com; img-src 'self' data: https://res.cloudinary.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-ancestors 'none'; object-src 'none'; base-uri 'self';",
+      "default-src 'self'; script-src 'self' 'unsafe-inline' https://apis.google.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://res.cloudinary.com https://api.cloudinary.com; img-src 'self' data: https://res.cloudinary.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-ancestors 'none'; object-src 'none'; base-uri 'self';",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "strict-origin-when-cross-origin",
@@ -118,6 +118,23 @@ function getPublicClientPayload(env: Env): string {
 
   // Obfuscate as base64 URI component to prevent plaintext network snooping
   return btoa(encodeURIComponent(JSON.stringify(payload)));
+}
+
+async function generateSha1Hex(text: string): Promise<string> {
+  const enc = new TextEncoder();
+  const hashBuffer = await crypto.subtle.digest("SHA-1", enc.encode(text));
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function signCloudinaryParams(
+  params: Record<string, string | number>,
+  secret: string
+): Promise<string> {
+  const sortedKeys = Object.keys(params).sort();
+  const serialized = sortedKeys.map((k) => `${k}=${params[k]}`).join("&");
+  return await generateSha1Hex(`${serialized}${secret}`);
 }
 
 export default {
@@ -238,6 +255,150 @@ export default {
         );
       } catch (_err) {
         return new Response(JSON.stringify({ error: "Internal processing error" }), {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...securityHeaders() },
+        });
+      }
+    }
+
+    // Cloudinary Signed Upload Gateway: Generate short-lived SHA-1 signatures for scoped uploads
+    if (url.pathname === "/api/cloudinary/sign" && request.method === "POST") {
+      if (!isLegitimateBrowserRequest(request)) {
+        return new Response(JSON.stringify({ error: "Access Denied" }), {
+          status: 403,
+          headers: { "Content-Type": "application/json", ...securityHeaders() },
+        });
+      }
+
+      if (!env.CLOUDINARY_API_KEY || !env.CLOUDINARY_API_SECRET) {
+        return new Response(JSON.stringify({ error: "Cloudinary credentials not configured" }), {
+          status: 503,
+          headers: { "Content-Type": "application/json", ...securityHeaders() },
+        });
+      }
+
+      try {
+        const body = (await request.json()) as Record<string, string | number>;
+        const folder =
+          typeof body.folder === "string" && body.folder.startsWith("sachin-shakya")
+            ? body.folder
+            : "sachin-shakya";
+
+        const timestamp =
+          typeof body.timestamp === "number" ? body.timestamp : Math.round(Date.now() / 1000);
+
+        const paramsToSign: Record<string, string | number> = {
+          folder,
+          timestamp,
+        };
+
+        if (body.public_id && typeof body.public_id === "string") {
+          paramsToSign.public_id = body.public_id;
+        }
+
+        if (body.tags && typeof body.tags === "string") {
+          paramsToSign.tags = body.tags;
+        }
+
+        const signature = await signCloudinaryParams(paramsToSign, env.CLOUDINARY_API_SECRET);
+
+        return new Response(
+          JSON.stringify({
+            signature,
+            timestamp,
+            apiKey: env.CLOUDINARY_API_KEY,
+            cloudName: env.CLOUDINARY_CLOUD_NAME || "dq6oxixuf",
+            folder,
+            ...(paramsToSign.public_id ? { public_id: paramsToSign.public_id } : {}),
+          }),
+          {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders(request.headers.get("origin") || undefined),
+              ...securityHeaders(),
+            },
+          }
+        );
+      } catch (_err) {
+        return new Response(JSON.stringify({ error: "Failed to sign upload request" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...securityHeaders() },
+        });
+      }
+    }
+
+    // Cloudinary Destroy Gateway: Server-side media deletion with secret isolation
+    if (url.pathname === "/api/cloudinary/destroy" && request.method === "POST") {
+      if (!isLegitimateBrowserRequest(request)) {
+        return new Response(JSON.stringify({ error: "Access Denied" }), {
+          status: 403,
+          headers: { "Content-Type": "application/json", ...securityHeaders() },
+        });
+      }
+
+      if (!env.CLOUDINARY_API_KEY || !env.CLOUDINARY_API_SECRET) {
+        return new Response(JSON.stringify({ error: "Cloudinary credentials not configured" }), {
+          status: 503,
+          headers: { "Content-Type": "application/json", ...securityHeaders() },
+        });
+      }
+
+      try {
+        const body = (await request.json()) as { public_id?: string };
+        const publicId = body.public_id;
+
+        if (!publicId || typeof publicId !== "string" || !publicId.startsWith("sachin-shakya/")) {
+          return new Response(
+            JSON.stringify({ error: "Invalid or unauthorized asset public_id" }),
+            {
+              status: 400,
+              headers: { "Content-Type": "application/json", ...securityHeaders() },
+            }
+          );
+        }
+
+        const timestamp = Math.round(Date.now() / 1000);
+        const destroyParams = {
+          public_id: publicId,
+          timestamp,
+        };
+        const signature = await signCloudinaryParams(destroyParams, env.CLOUDINARY_API_SECRET);
+
+        const cloudName = env.CLOUDINARY_CLOUD_NAME || "dq6oxixuf";
+        const formData = new FormData();
+        formData.append("public_id", publicId);
+        formData.append("api_key", env.CLOUDINARY_API_KEY);
+        formData.append("timestamp", timestamp.toString());
+        formData.append("signature", signature);
+
+        const destroyRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/destroy`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!destroyRes.ok) {
+          const errText = await destroyRes.text();
+          return new Response(JSON.stringify({ error: `Cloudinary destroy failed: ${errText}` }), {
+            status: 502,
+            headers: { "Content-Type": "application/json", ...securityHeaders() },
+          });
+        }
+
+        const destroyResult = await destroyRes.json();
+        return new Response(JSON.stringify(destroyResult), {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders(request.headers.get("origin") || undefined),
+            ...securityHeaders(),
+          },
+        });
+      } catch (_err) {
+        return new Response(JSON.stringify({ error: "Internal processing error during destroy" }), {
           status: 500,
           headers: { "Content-Type": "application/json", ...securityHeaders() },
         });

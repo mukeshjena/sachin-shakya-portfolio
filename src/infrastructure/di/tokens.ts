@@ -18,6 +18,7 @@ export const DI_TOKENS = {
   AdminAccessRepository: Symbol("IAdminAccessRepository"),
   ContactRepository: Symbol("IContactRepository"),
   EmailSender: Symbol("IEmailSender"),
+  MediaUploader: Symbol("IMediaUploader"),
 
   // ── Application-layer use-cases ───────────────────────────────────────────
   // (populated as use-cases are implemented in Steps 11+)

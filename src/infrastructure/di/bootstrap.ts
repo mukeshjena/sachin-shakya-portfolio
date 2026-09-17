@@ -4,6 +4,7 @@
 // Import this once at app startup (main.tsx), before any component renders.
 
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
+import { CloudinaryMediaUploader } from "../cloudinary/CloudinaryMediaUploader";
 import { getDb } from "../firebase/firebaseClient";
 import { getEnv } from "../system/env";
 import { container, singleton } from "./container";
@@ -19,6 +20,10 @@ export function bootstrapContainer(): void {
   // ── System / Infrastructure ────────────────────────────────────────────────
   container.register(DI_TOKENS.FirestoreDb, () => getDb());
   container.register(DI_TOKENS.EnvConfig, () => getEnv());
+  container.register(
+    DI_TOKENS.MediaUploader,
+    singleton(() => new CloudinaryMediaUploader())
+  );
 
   // ── Dev / verification ──────────────────────────────────────────────────────
   container.register(
