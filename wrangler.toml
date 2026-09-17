@@ -2,7 +2,7 @@
 # Step 5: Static asset deploy via Workers Static Assets
 
 name = "sachin-shakya-portfolio"
-compatibility_date = "2026-09-18"
+compatibility_date = "2025-09-01"
 workers_dev = true
 main = "worker/index.ts"
 
