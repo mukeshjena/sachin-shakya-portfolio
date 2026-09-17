@@ -274,3 +274,40 @@
   - CI/CD Run `#35281057331` succeeded on `main` in 46s. Live custom domain `https://shakya.mukeshjena.com` returning HTTP 200 OK.
 - Status Ledger updated: Step 7 → `Completed ✅`.
 
+---
+
+## 2026-09-18 — Secrets Architecture Overhaul: Edge Worker Runtime Injection & Pure Static Builds
+
+**Commit:** `feat(security): sync secrets to cloudflare worker runtime and enforce pure static build`
+
+**What was done:**
+- **GitHub Secrets Reset:**
+  - Deleted all old secrets from the GitHub repository (`CLOUDFLARE_*`, `VITE_FIREBASE_*`, `VITE_SITE_URL`).
+  - Gathered complete production credentials across Firebase, Cloudflare, Cloudinary, and Email microservice:
+    - `CLOUDFLARE_ACCOUNT_ID` & `CLOUDFLARE_API_TOKEN` (reused from ODINA)
+    - `CLOUDINARY_CLOUD_NAME` (`dq6oxixuf`), `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` (from ODINA)
+    - `FIREBASE_API_KEY`, `FIREBASE_AUTH_DOMAIN`, `FIREBASE_PROJECT_ID`, `FIREBASE_STORAGE_BUCKET`, `FIREBASE_MESSAGING_SENDER_ID`, `FIREBASE_APP_ID` (from `sachin-shakya-site`)
+    - `FIREBASE_SERVICE_ACCOUNT_JSON` (generated via Google Cloud IAM CLI: `firebase-adminsdk-fbsvc@sachin-shakya-site.iam.gserviceaccount.com` and minified)
+    - `EMAIL_API_URL` (`https://odina.mukeshjena.com/api/email/send`), `EMAIL_RECIPIENT` (`sachin.shakya@live.com`), `EMAIL_PROFILE` (`sachin-shakya`)
+    - `SITE_URL` (`https://shakya.mukeshjena.com`)
+  - Added all 16 secrets to GitHub repository secrets via `gh secret set`.
+- **Pure Static Build & Secret Elimination:**
+  - Updated `.github/workflows/deploy-cloudflare.yml` Step 5 (`npm run build`) to run as a pure static build with ZERO environment variables baked in.
+  - No credentials exist in `dist/assets/*.js` client bundles.
+- **Cloudflare Edge Worker Gateway (`worker/index.ts`):**
+  - Created `worker/index.ts` following canonical DIIRA reference pattern.
+  - Intercepts requests, delegates static assets directly to `env.ASSETS`, and injects safe runtime configuration (`window.__APP_CONFIG__`) into `index.html` at the edge before serving HTML to the browser.
+  - Serves `/api/config` for runtime diagnostic checks.
+  - Critical server-only secrets (`CLOUDINARY_API_SECRET`, `FIREBASE_SERVICE_ACCOUNT_JSON`) remain strictly inside the edge worker and are NEVER exposed to client bundles.
+- **Wrangler Configuration:**
+  - Updated `wrangler.toml` with `main = "worker/index.ts"`, `binding = "ASSETS"`, and `run_worker_first = true`.
+  - Pinned `compatibility_date = "2025-09-01"` to avoid Cloudflare server time UTC timezone mismatches.
+- **Environment System Alignment (`src/infrastructure/system/env.ts`):**
+  - Updated `createEnvConfig()` to read from `window.__APP_CONFIG__` first, then fall back to local `.env` variables (`FIREBASE_*` and `VITE_FIREBASE_*`).
+  - Added strongly-typed `email` configuration.
+- **Verification:**
+  - Pre-commit gates passed (Biome, TypeScript, Vite).
+  - CI/CD deployment succeeded in 52s.
+  - Verified live `/api/config` returning full runtime configuration from Cloudflare Worker secrets.
+
+
