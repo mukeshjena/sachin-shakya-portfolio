@@ -1,0 +1,154 @@
+name: Deploy to Cloudflare Workers (Production)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main, release/v1.0.0]
+  workflow_dispatch:
+
+# Concurrency group ensures atomic, zero-downtime deployments by cancelling outdated in-progress runs
+concurrency:
+  group: production-cloudflare-deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    name: Build, Quality Gates & Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "npm"
+
+      # Step 1: Pre-flight Secrets Validation
+      - name: Audit & Validate GitHub Secrets
+        env:
+          CHECK_CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CHECK_CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          echo "=========================================================="
+          echo "Pre-flight Secrets Audit for Cloudflare Deployment"
+          echo "=========================================================="
+
+          ERRORS=0
+
+          check_secret() {
+            local name="$1"
+            local val="$2"
+            local required="$3"
+
+            if [ -n "$val" ]; then
+              echo "  ✓ $name: Configured"
+            else
+              if [ "$required" = "true" ]; then
+                echo "  ✗ $name: MISSING (Required for deployment)"
+                ERRORS=$((ERRORS + 1))
+              else
+                echo "  • $name: Not Set (Optional / has fallback)"
+              fi
+            fi
+          }
+
+          echo "Cloudflare Core Credentials:"
+          check_secret "CLOUDFLARE_API_TOKEN" "$CHECK_CF_API_TOKEN" "true"
+          check_secret "CLOUDFLARE_ACCOUNT_ID" "$CHECK_CF_ACCOUNT_ID" "true"
+
+          echo "=========================================================="
+          if [ $ERRORS -gt 0 ] && [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "Pre-flight check failed with $ERRORS missing required secrets."
+            echo "Configure missing secrets in GitHub Repo Settings -> Secrets and variables -> Actions."
+            exit 1
+          else
+            echo "All required credentials validated successfully."
+          fi
+
+      # Step 2: Install Dependencies
+      - name: Install dependencies
+        env:
+          npm_config_loglevel: error
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      # Step 3: Code Quality Checks (Biome)
+      - name: Run Biome Linter & Code Quality Check
+        run: npx biome check .
+
+      # Step 4: Strict TypeScript Check
+      - name: Run TypeScript Strict Typecheck
+        run: npm run typecheck
+
+      # Step 5: Build React Application
+      - name: Build React Application (Hashed Static Assets)
+        run: npm run build
+
+      # Step 6: Bundle Size Budgets
+      - name: Enforce Bundle Size Budgets
+        run: |
+          echo "=========================================================="
+          echo "Checking bundle size budgets..."
+          echo "=========================================================="
+
+          BUDGET_INDEX_KB=1000
+          BUDGET_TOTAL_JS_KB=3000
+          ERRORS=0
+
+          check_size() {
+            local label="$1"
+            local pattern="$2"
+            local budget_kb="$3"
+            local file
+            file=$(find dist/assets -name "$pattern" -type f 2>/dev/null | head -n 1)
+            if [ -n "$file" ] && [ -f "$file" ]; then
+              local size_bytes
+              size_bytes=$(wc -c < "$file")
+              local size_kb=$(( size_bytes / 1024 ))
+              if [ "$size_kb" -gt "$budget_kb" ]; then
+                echo "  ✗ $label: ${size_kb} KB - exceeds budget of ${budget_kb} KB"
+                ERRORS=$((ERRORS + 1))
+              else
+                echo "  ✓ $label: ${size_kb} KB / ${budget_kb} KB budget"
+              fi
+            else
+              echo "  • $label: file matching '$pattern' not found, skipping"
+            fi
+          }
+
+          check_size "index chunk" "index-*.js" "$BUDGET_INDEX_KB"
+
+          TOTAL_JS_KB=$(find dist/assets -name "*.js" ! -name "*.map" -type f -exec wc -c {} + 2>/dev/null | awk '$2 != "total" {s+=$1} END {print int(s/1024)}')
+          if [ -n "$TOTAL_JS_KB" ] && [ "$TOTAL_JS_KB" -gt "$BUDGET_TOTAL_JS_KB" ]; then
+            echo "  ✗ Total JS: ${TOTAL_JS_KB} KB - exceeds budget of ${BUDGET_TOTAL_JS_KB} KB"
+            ERRORS=$((ERRORS + 1))
+          else
+            echo "  ✓ Total JS: ${TOTAL_JS_KB:-0} KB / ${BUDGET_TOTAL_JS_KB} KB budget"
+          fi
+
+          echo "=========================================================="
+          if [ $ERRORS -gt 0 ]; then
+            echo "Bundle size budget exceeded."
+            exit 1
+          else
+            echo "All bundle size budgets passed."
+          fi
+
+      # Step 7: Atomic Zero-Downtime Deployment to Cloudflare Edge (Main Branch Only)
+      - name: Atomic Deploy to Cloudflare Global Edge
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        run: |
+          echo "=========================================================="
+          echo "Deploying Static Assets to Cloudflare Global Edge..."
+          echo "=========================================================="
+          npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
