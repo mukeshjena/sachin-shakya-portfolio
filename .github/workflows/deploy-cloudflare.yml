@@ -41,8 +41,11 @@ jobs:
           CHECK_CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CHECK_CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CHECK_CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-          CHECK_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
-          CHECK_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          CHECK_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          CHECK_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          CHECK_FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          CHECK_EMAIL_API_URL: ${{ secrets.EMAIL_API_URL }}
+          CHECK_SITE_URL: ${{ secrets.SITE_URL }}
         run: |
           echo "=========================================================="
           echo "Pre-flight Secrets Audit for Sachin Shakya Deployment"
@@ -81,6 +84,12 @@ jobs:
           echo "Firebase Production Credentials:"
           check_secret "FIREBASE_API_KEY" "$CHECK_FIREBASE_API_KEY" "false"
           check_secret "FIREBASE_PROJECT_ID" "$CHECK_FIREBASE_PROJECT_ID" "false"
+          check_secret "FIREBASE_SERVICE_ACCOUNT_JSON" "$CHECK_FIREBASE_SERVICE_ACCOUNT" "false"
+
+          echo ""
+          echo "Application & Integration Endpoints:"
+          check_secret "EMAIL_API_URL" "$CHECK_EMAIL_API_URL" "false"
+          check_secret "SITE_URL" "$CHECK_SITE_URL" "false"
 
           echo "=========================================================="
           if [ $ERRORS -gt 0 ] && [ "${{ github.event_name }}" != "pull_request" ]; then
@@ -110,17 +119,8 @@ jobs:
       - name: Run TypeScript Strict Typecheck
         run: npm run typecheck
 
-      # Step 5: Build React Application
+      # Step 5: Build React Application (Pure Static Build - Secrets Managed Directly by Worker)
       - name: Build React Application (with Hashed Static Assets)
-        env:
-          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
-          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
-          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
-          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
-          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
-          VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
-          VITE_SITE_URL: ${{ secrets.VITE_SITE_URL }}
         run: npm run build
 
       # Step 6: Bundle Size Budgets
@@ -197,28 +197,30 @@ jobs:
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
 
-      # Step 8a: Sync build secrets to Cloudflare Worker secret store (post-deploy)
+      # Step 8a: Sync secrets to Cloudflare Worker secret store (post-deploy)
       - name: Sync All Secrets to Cloudflare Worker
         if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          _FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
-          _FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
-          _FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-          _FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
-          _FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
-          _FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
-          _FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+          _FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          _FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          _FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          _FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          _FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          _FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          _FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+          _FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
           _CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           _CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           _CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-          _EMAIL_API_URL: ${{ secrets.VITE_EMAIL_API_URL }}
-          _EMAIL_RECIPIENT: ${{ secrets.VITE_EMAIL_RECIPIENT }}
-          _EMAIL_PROFILE: ${{ secrets.VITE_EMAIL_PROFILE }}
+          _EMAIL_API_URL: ${{ secrets.EMAIL_API_URL }}
+          _EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          _EMAIL_PROFILE: ${{ secrets.EMAIL_PROFILE }}
+          _SITE_URL: ${{ secrets.SITE_URL }}
         run: |
           echo "=========================================================="
-          echo "Syncing build secrets to Cloudflare Worker secret store"
+          echo "Syncing secrets to Cloudflare Worker secret store"
           echo "=========================================================="
 
           WORKER="sachin-shakya-portfolio"
@@ -239,19 +241,21 @@ jobs:
             fi
           }
 
-          sync_secret "FIREBASE_API_KEY"             "$_FIREBASE_API_KEY"
-          sync_secret "FIREBASE_AUTH_DOMAIN"         "$_FIREBASE_AUTH_DOMAIN"
-          sync_secret "FIREBASE_PROJECT_ID"          "$_FIREBASE_PROJECT_ID"
-          sync_secret "FIREBASE_STORAGE_BUCKET"      "$_FIREBASE_STORAGE_BUCKET"
-          sync_secret "FIREBASE_MESSAGING_SENDER_ID" "$_FIREBASE_MESSAGING_SENDER_ID"
-          sync_secret "FIREBASE_APP_ID"              "$_FIREBASE_APP_ID"
-          sync_secret "FIREBASE_MEASUREMENT_ID"      "$_FIREBASE_MEASUREMENT_ID"
-          sync_secret "CLOUDINARY_CLOUD_NAME"        "$_CLOUDINARY_CLOUD_NAME"
-          sync_secret "CLOUDINARY_API_KEY"           "$_CLOUDINARY_API_KEY"
-          sync_secret "CLOUDINARY_API_SECRET"        "$_CLOUDINARY_API_SECRET"
-          sync_secret "EMAIL_API_URL"                "$_EMAIL_API_URL"
-          sync_secret "EMAIL_RECIPIENT"              "$_EMAIL_RECIPIENT"
-          sync_secret "EMAIL_PROFILE"                "$_EMAIL_PROFILE"
+          sync_secret "FIREBASE_API_KEY"              "$_FIREBASE_API_KEY"
+          sync_secret "FIREBASE_AUTH_DOMAIN"          "$_FIREBASE_AUTH_DOMAIN"
+          sync_secret "FIREBASE_PROJECT_ID"           "$_FIREBASE_PROJECT_ID"
+          sync_secret "FIREBASE_STORAGE_BUCKET"       "$_FIREBASE_STORAGE_BUCKET"
+          sync_secret "FIREBASE_MESSAGING_SENDER_ID"  "$_FIREBASE_MESSAGING_SENDER_ID"
+          sync_secret "FIREBASE_APP_ID"               "$_FIREBASE_APP_ID"
+          sync_secret "FIREBASE_MEASUREMENT_ID"       "$_FIREBASE_MEASUREMENT_ID"
+          sync_secret "FIREBASE_SERVICE_ACCOUNT_JSON" "$_FIREBASE_SERVICE_ACCOUNT_JSON"
+          sync_secret "CLOUDINARY_CLOUD_NAME"         "$_CLOUDINARY_CLOUD_NAME"
+          sync_secret "CLOUDINARY_API_KEY"            "$_CLOUDINARY_API_KEY"
+          sync_secret "CLOUDINARY_API_SECRET"         "$_CLOUDINARY_API_SECRET"
+          sync_secret "EMAIL_API_URL"                 "$_EMAIL_API_URL"
+          sync_secret "EMAIL_RECIPIENT"               "$_EMAIL_RECIPIENT"
+          sync_secret "EMAIL_PROFILE"                 "$_EMAIL_PROFILE"
+          sync_secret "SITE_URL"                      "$_SITE_URL"
 
           echo "=========================================================="
           echo "Synced: $SYNCED secrets | Skipped: $SKIPPED"

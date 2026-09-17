@@ -4,6 +4,7 @@
 name = "sachin-shakya-portfolio"
 compatibility_date = "2026-09-18"
 workers_dev = true
+main = "worker/index.ts"
 
 [[routes]]
 pattern = "shakya.mukeshjena.com"
@@ -12,3 +13,4 @@ custom_domain = true
 [assets]
 directory = "./dist"
 not_found_handling = "single-page-application"
+html_handling = "auto-trailing-slash"

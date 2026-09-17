@@ -17,6 +17,11 @@ export interface EnvConfig {
   readonly cloudinary: {
     readonly cloudName: string;
   };
+  readonly email: {
+    readonly apiUrl: string;
+    readonly recipient: string;
+    readonly profile: string;
+  };
   readonly app: {
     readonly mode: string;
     readonly isDev: boolean;
@@ -80,6 +85,11 @@ declare global {
       cloudinary?: {
         cloudName?: string;
       };
+      email?: {
+        apiUrl?: string;
+        recipient?: string;
+        profile?: string;
+      };
       app?: {
         siteUrl?: string;
       };
@@ -106,35 +116,90 @@ export function createEnvConfig(source?: Record<string, string | undefined>): En
     firebase: {
       apiKey:
         appConfig?.firebase?.apiKey ||
-        optionalVar("VITE_FIREBASE_API_KEY", "AIzaSyCn3ngUlrnCnUIWYXQ_xXXZikZvviFed40", source),
+        optionalVar(
+          "FIREBASE_API_KEY",
+          optionalVar("VITE_FIREBASE_API_KEY", "AIzaSyCn3ngUlrnCnUIWYXQ_xXXZikZvviFed40", source),
+          source
+        ),
       authDomain:
         appConfig?.firebase?.authDomain ||
-        optionalVar("VITE_FIREBASE_AUTH_DOMAIN", "sachin-shakya-site.firebaseapp.com", source),
+        optionalVar(
+          "FIREBASE_AUTH_DOMAIN",
+          optionalVar("VITE_FIREBASE_AUTH_DOMAIN", "sachin-shakya-site.firebaseapp.com", source),
+          source
+        ),
       projectId:
         appConfig?.firebase?.projectId ||
-        optionalVar("VITE_FIREBASE_PROJECT_ID", "sachin-shakya-site", source),
+        optionalVar(
+          "FIREBASE_PROJECT_ID",
+          optionalVar("VITE_FIREBASE_PROJECT_ID", "sachin-shakya-site", source),
+          source
+        ),
       storageBucket:
         appConfig?.firebase?.storageBucket ||
         optionalVar(
-          "VITE_FIREBASE_STORAGE_BUCKET",
-          "sachin-shakya-site.firebasestorage.app",
+          "FIREBASE_STORAGE_BUCKET",
+          optionalVar(
+            "VITE_FIREBASE_STORAGE_BUCKET",
+            "sachin-shakya-site.firebasestorage.app",
+            source
+          ),
           source
         ),
       messagingSenderId:
         appConfig?.firebase?.messagingSenderId ||
-        optionalVar("VITE_FIREBASE_MESSAGING_SENDER_ID", "1052981737437", source),
+        optionalVar(
+          "FIREBASE_MESSAGING_SENDER_ID",
+          optionalVar("VITE_FIREBASE_MESSAGING_SENDER_ID", "1052981737437", source),
+          source
+        ),
       appId:
         appConfig?.firebase?.appId ||
-        optionalVar("VITE_FIREBASE_APP_ID", "1:1052981737437:web:b7839c633209bb78446834", source),
+        optionalVar(
+          "FIREBASE_APP_ID",
+          optionalVar("VITE_FIREBASE_APP_ID", "1:1052981737437:web:b7839c633209bb78446834", source),
+          source
+        ),
       measurementId:
         appConfig?.firebase?.measurementId ||
-        optionalVar("VITE_FIREBASE_MEASUREMENT_ID", "", source) ||
+        optionalVar(
+          "FIREBASE_MEASUREMENT_ID",
+          optionalVar("VITE_FIREBASE_MEASUREMENT_ID", "", source),
+          source
+        ) ||
         undefined,
     },
     cloudinary: {
       cloudName:
         appConfig?.cloudinary?.cloudName ||
-        optionalVar("VITE_CLOUDINARY_CLOUD_NAME", "sachin-shakya", source),
+        optionalVar(
+          "CLOUDINARY_CLOUD_NAME",
+          optionalVar("VITE_CLOUDINARY_CLOUD_NAME", "dq6oxixuf", source),
+          source
+        ),
+    },
+    email: {
+      apiUrl:
+        appConfig?.email?.apiUrl ||
+        optionalVar(
+          "EMAIL_API_URL",
+          optionalVar("VITE_EMAIL_API_URL", "https://odina.mukeshjena.com/api/email/send", source),
+          source
+        ),
+      recipient:
+        appConfig?.email?.recipient ||
+        optionalVar(
+          "EMAIL_RECIPIENT",
+          optionalVar("VITE_EMAIL_RECIPIENT", "sachin.shakya@live.com", source),
+          source
+        ),
+      profile:
+        appConfig?.email?.profile ||
+        optionalVar(
+          "EMAIL_PROFILE",
+          optionalVar("VITE_EMAIL_PROFILE", "sachin-shakya", source),
+          source
+        ),
     },
     app: {
       mode,
@@ -142,7 +207,11 @@ export function createEnvConfig(source?: Record<string, string | undefined>): En
       isProd,
       siteUrl:
         appConfig?.app?.siteUrl ||
-        optionalVar("VITE_SITE_URL", "https://shakya.mukeshjena.com", source),
+        optionalVar(
+          "SITE_URL",
+          optionalVar("VITE_SITE_URL", "https://shakya.mukeshjena.com", source),
+          source
+        ),
     },
   };
 }

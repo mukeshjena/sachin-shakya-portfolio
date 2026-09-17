@@ -14,10 +14,13 @@ node_modules
 dist
 dist-ssr
 
-# Environment — NEVER commit real credentials
+# Environment & Keys — NEVER commit real credentials
 .env
 .env.*
 !.env.example
+*service-account*.json
+*.pem
+*.key
 
 # Cloudflare Wrangler
 .wrangler
