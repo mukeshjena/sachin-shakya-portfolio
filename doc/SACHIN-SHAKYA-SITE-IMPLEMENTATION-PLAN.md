@@ -112,7 +112,25 @@ These are **your local Windows paths**. The executing agent must read them direc
 - **Linting/formatting:** Biome (replaces ESLint+Prettier)
 - **PWA:** Vite PWA plugin (installable, offline app shell)
 - **Email API:** existing provider already used in `emailService.js` (reused, not replaced)
-- **DI:** lightweight container (`tsyringe` or a hand-rolled `Container` — see Step 3) — no framework logic inside `.tsx` files, ever (client rule #19)
+- **DI:** hand-rolled typed `Container` class in `infrastructure/di/container.ts` — no framework logic inside `.tsx` files, ever (client rule #19)
+
+### Additional Rules Adopted During Implementation
+
+| # | Rule | Rationale |
+|---|------|-----------|
+| 13 | **No inline `<style>` tags, CSS string constants, or multi-property `style={{}}` objects in `.tsx` files.** All styles go in a co-located `.css` file (e.g. `ComingSoon.css` next to `ComingSoon.tsx`). | Separation of concerns — components stay scannable, styles stay maintainable. |
+| 14 | **No hardcoded hex/rgba/hsl colour values in `.css` or `.tsx` files.** Use only CSS custom properties from `src/index.css` `:root` block (e.g. `var(--amber)` not `#ffb020`). | Single palette source of truth — theme changes propagate everywhere from one file. |
+
+### Pre-Commit Gates (`.githooks/pre-commit`)
+
+Activated automatically via `npm run prepare` (runs on every `npm install`). Blocks commits if any check fails:
+
+1. **Biome check** — lint violations, import order, formatting
+2. **TypeScript** (`tsc -b`) — type errors, strict mode violations  
+3. **Vite build** — module resolution failures, bundling errors
+
+Emergency bypass: `git commit --no-verify` — use only in genuine emergencies and document the reason in the commit message.
+
 
 ---
 

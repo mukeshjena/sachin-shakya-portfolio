@@ -32,8 +32,23 @@
 | 10 | **TypeScript strict mode is always on.** No `any`, no `!` non-null assertions without a `// safe:` comment explaining why. | Type safety throughout. |
 | 11 | **No new npm packages without checking bundle impact.** Free-tier Cloudflare Workers has a 1 MB script size limit. | Budget/performance constraint. |
 | 12 | **Commit message format:** `feat(step-NN): <short description>` | Consistent history for the ledger. |
+| 13 | **No inline `<style>` tags, no CSS string constants (e.g. `const STYLES = \`...\``), no `style={{}}` prop objects with multi-property values in `.tsx` files.** All component styles go in a co-located `.css` file imported at the top of the component. Single dynamic values like `style={{ width: \`${pct}%\` }}` are the only allowed exception. | Keeps components scannable and styles maintainable. |
+| 14 | **No hardcoded hex/rgba/hsl colour values in `.css` or `.tsx` files.** Use CSS custom properties from `src/index.css` (`:root` block) exclusively. This means `var(--amber)` not `#ffb020`. | Single source of truth for the palette; theme changes in one place. |
 
 ---
+
+## Pre-Commit Gates
+
+The `.githooks/pre-commit` hook runs automatically on every `git commit` and blocks if any check fails. Activated by `npm run prepare` (runs automatically on `npm install`).
+
+| Check | Command | What it catches |
+|-------|---------|----------------|
+| **1. Biome** | `npx biome check .` | Lint violations, import order, formatting mismatches |
+| **2. TypeScript** | `npx tsc -b` | Type errors, missing types, strict mode violations |
+| **3. Vite build** | `npx vite build --silent` | Module resolution failures, bundling errors |
+
+> **Emergency bypass:** `git commit --no-verify` — use sparingly and document why in the commit message.
+
 
 ## Design Principles
 
@@ -42,14 +57,22 @@ Tokens are defined in `src/index.css` and extended in `tailwind.config.ts` (Step
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--ink-900` | `#0a0e1a` | Page background |
-| `--ink-800` | `#111827` | Card/surface background |
-| `--ink-700` | `#1f2937` | Elevated surface |
-| `--accent-amber` | `#f59e0b` | Primary accent (CTAs, headings) |
-| `--accent-cyan` | `#06b6d4` | Secondary accent (links, highlights) |
-| `--accent-live` | `#22c55e` | Status / live indicators |
-| `--text-primary` | `#f9fafb` | Body text |
-| `--text-secondary` | `#9ca3af` | Muted / caption text |
+| `--ink-900` | `#06121a` | Page background (deepest petrol navy) |
+| `--ink-850` | `#08171f` | Section background |
+| `--ink-800` | `#0b1d27` | Card/surface background |
+| `--ink-700` | `#102a36` | Elevated surface |
+| `--ink-600` | `#17394a` | Borders, dividers |
+| `--mist` | `#93aeba` | Body text / secondary text |
+| `--mist-dim` | `#6b8896` | Muted / caption text |
+| `--paper` | `#e8f1f4` | Primary text (near-white with blue tint) |
+| `--amber` | `#ffb020` | Primary accent (CTAs, headings) |
+| `--amber-deep` | `#e08c00` | Hover/pressed amber state |
+| `--cyan` | `#49c7e8` | Secondary accent (links, highlights) |
+| `--live` | `#3fd08a` | Live status indicators only |
+| `--line` | `rgba(130,180,200,.16)` | Borders |
+| `--line-soft` | `rgba(130,180,200,.09)` | Subtle dividers |
+
+> Fonts: `--f-display` = Archivo, `--f-body` = IBM Plex Sans, `--f-mono` = IBM Plex Mono
 
 ### Depth Without Shadows
 - Layered gradients (`bg-gradient-to-br`) instead of `box-shadow`
