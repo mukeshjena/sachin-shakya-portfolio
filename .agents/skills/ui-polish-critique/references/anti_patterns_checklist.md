@@ -25,3 +25,16 @@ Run through this checklist before approving any frontend PR or component:
 | Direct Firebase/Cloudinary import in UI | Rule 8: breaks Clean Architecture boundaries. | Inject via DI container (`useContainer()`). |
 | More than 3 files in one directory | Rule 2: creates folder bloat and tangled concerns. | Subdivide into subfolders (e.g. `constants/`, `utils/`). |
 | File exceeding 500 lines | Rule 1: causes cognitive overload and poor reviewability. | Split into composable subcomponents or helper modules. |
+
+---
+
+## 3. Anti-AI Aesthetic Smell Tests
+
+| Anti-Pattern | Why It Is Forbidden | Correct Alternative |
+|---|---|---|
+| Monotonous 3-column bento grids | Hallmark of lazy AI web generators; lacks hierarchy. | Asymmetric editorial layouts (65/35 splits, offset sidebars, telemetry panoramas). |
+| Neon radial blur blobs / glowing halos | Cheap AI aesthetic; lacks executive maturity. | Flat matte canvas (`var(--ink-900)`), hairline 1px borders (`var(--line)`), layered fills. |
+| Robotic corporate buzzwords | Vague AI filler text that damages technical credibility. | Concrete technical milestones ($170K/mo savings, 40% MTTR reduction, Eptura, Downer, Azure, AWS). |
+| Uniform card height and padding | Feels machine-generated and flat. | Varied visual pacing, dominant hero statistics, and breathing negative space. |
+| Non-tabular numbers on metrics | Numbers shift and jitter; looks unpolished. | `tabular-nums font-mono` for all KPIs, timestamps, and chart ticks. |
+

@@ -31,6 +31,8 @@ Every agent working on this repository operates with 6 specialized personas, bac
 ### 3. UI/UX & Visual Design Specialist
 - **Focus:** Sci-Fi Professional "Instrument Panel" aesthetic tailored for a Lead Cloud Architect & DevOps Consultant.
 - **Rules Enforced:**
+  - Bespoke, human-crafted executive design: strictly zero AI design tropes (no monotonous 3-column bento boxes, no diffuse neon radial glows, no corporate AI buzzwords).
+  - Asymmetric editorial tension: dynamic 65/35 viewports, offset technical sidebars, wide-screen telemetry panoramas.
   - Multiple interactive telemetry graphs for FinOps cost reduction ($170K/mo savings curve), MTTR reduction (40% faster recovery), automation efficiency, and multi-cloud fleet distribution.
   - Strictly zero `box-shadow` anywhere (depth via 1px hairline borders `var(--line)` and layered gradient fills).
   - Strictly zero emojis anywhere (outline Cupertino/Phosphor `react-icons/pi` or Ionicons `react-icons/io5` only).
@@ -97,6 +99,9 @@ Every agent working on this repository operates with 6 specialized personas, bac
 | 14 | **No hardcoded hex colors** | Use CSS custom properties from `src/index.css` `:root` exclusively (`var(--amber)`, `var(--ink-900)`). |
 | 15 | **Strict ban on `--no-verify`** | Never bypass git hooks with `--no-verify` or `-n`. Fix all failures at the root cause. |
 | 16 | **Canonical Reference Alignment** | Always align with ODINA (`D:\MyFiles\...\ODINA-GARMENTS-PRIVATE-LIMITED`) and DIIRA (`D:\MyFiles\...\DIIRA-INDUSTRIAL-FUEL`). |
+| 17 | **Plan-Then-Proceed per Step** | Generate a detailed `implementation_plan.md` artifact before writing code for every step. Pause at completion for `continue` before initiating the next step plan. |
+| 18 | **Non-Blocking CI/CD Verification** | Never wait on `gh run watch`. Inspect `gh run list --limit 1` and resolve any prior failed run before closing the step. |
+| 19 | **Anti-AI Bespoke Aesthetic Standard** | Ban monotonous bento grids, neon blur halos, and AI buzzword salad. Design with asymmetric tension, matte materiality, and concrete engineering telemetry. |
 
 ---
 
@@ -105,8 +110,8 @@ Every agent working on this repository operates with 6 specialized personas, bac
 | Rule File | Contents |
 |---|---|
 | [**`clean-architecture-and-code-standards.md`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/rules/clean-architecture-and-code-standards.md) | Layer boundaries, DI container wiring, Rule 13 separation matrix, file/folder size limits. |
-| [**`design-aesthetics-and-standards.md`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/rules/design-aesthetics-and-standards.md) | Instrument panel palette, shadow-free surfaces, zero emojis, zero debounce, mobile dock. |
-| [**`git-workflow-and-branching-order.md`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/rules/git-workflow-and-branching-order.md) | 4-stage promotion lifecycle, pre-commit gate, rapid push, human pause protocol. |
+| [**`design-aesthetics-and-standards.md`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/rules/design-aesthetics-and-standards.md) | Instrument panel palette, shadow-free surfaces, zero emojis, zero debounce, mobile dock, anti-AI design manifesto. |
+| [**`git-workflow-and-branching-order.md`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/rules/git-workflow-and-branching-order.md) | 4-stage promotion lifecycle, per-step implementation planning, pre-commit gate, rapid push, non-blocking CI check, human pause protocol. |
 | [**`reference-odina-diira.md`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/rules/reference-odina-diira.md) | Filesystem reference paths, topic-by-topic architectural mapping. |
 
 ---
@@ -115,8 +120,8 @@ Every agent working on this repository operates with 6 specialized personas, bac
 
 | Skill Folder | Contents |
 |---|---|
-| [**`modern-ui-ux-design/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/modern-ui-ux-design) | Design guide + 5 references: `color_theory_tokens.md`, `component_design_blueprints.md`, `micro_interactions_motion.md`, `typography_pairing.md`, `visual_hierarchy_grid.md`. |
-| [**`ui-polish-critique/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/ui-polish-critique) | 5-step critique workflow + `anti_patterns_checklist.md`. |
+| [**`modern-ui-ux-design/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/modern-ui-ux-design) | Design guide + Anti-AI Handbook + organized foundations (`color_theory_tokens.md`, `typography_pairing.md`, `visual_hierarchy_grid.md`) & blueprints (`anti_ai_design_handbook.md`, `component_design_blueprints.md`, `micro_interactions_motion.md`). |
+| [**`ui-polish-critique/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/ui-polish-critique) | 6-step critique workflow + `anti_patterns_checklist.md` with Anti-AI smell tests. |
 | [**`devops-portfolio-seo/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/devops-portfolio-seo) | Schema.org JSON-LD graph, meta tags, OpenGraph, sitemap, Core Web Vitals. |
 | [**`senior-react-typescript-engineer/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/senior-react-typescript-engineer) | Clean Architecture patterns, custom hooks, DI wiring, strict TypeScript type safety. |
 | [**`cloud-devops-engineer/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/cloud-devops-engineer) | Cloudflare Workers, Firebase Native mode, multi-tab cache, atomic CI/CD pipeline. |

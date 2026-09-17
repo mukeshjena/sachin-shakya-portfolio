@@ -38,6 +38,11 @@ Use this skill to audit frontend code to ensure strict adherence to **shadow-fre
  ┌──────────────────────────────▼──────────────────────────────┐
  │  Step 5: Typographic & Spatial Verification                 │
  │  Verify 8pt spacing grid, tabular-nums on metrics, max 500L │
+ └──────────────────────────────┬──────────────────────────────┘
+                                │
+ ┌──────────────────────────────▼──────────────────────────────┐
+ │  Step 6: Anti-AI Smell Test & Editorial Polish              │
+ │  Eliminate repetitive bento boxes, glowing halos & AI tropes│
  └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -59,4 +64,15 @@ Use this skill to audit frontend code to ensure strict adherence to **shadow-fre
 - Check `.tsx` file: Does it have state calculations, date formatting, or raw string copy? If so, extract to `.utils.ts` or `.constants.ts`.
 - Check folder file count: Does any folder exceed 3 files? If so, split into subfolders.
 
+## 5. Typographic & Spatial Verification
+- Verify 8pt spacing grid, `font-mono tabular-nums` on all metrics, currencies, and dates.
+- Restrict body copy width to `max-w-prose`.
+
+## 6. Anti-AI Smell Test & Editorial Polish
+- Eliminate monotonous 3-column bento grids where cards share identical heights and centered icons.
+- Ensure asymmetric editorial pacing (65/35 splits, offset technical sidebars).
+- Eradicate diffuse neon glowing blobs or purple/cyan mesh halos.
+- Replace generic corporate buzzwords with concrete Sachin Shakya technical telemetry ($170K/mo savings, 40% MTTR reduction, Downer, Eptura, LTIMindtree, ABN AMRO).
+
 👉 *See full checklist*: [anti_patterns_checklist.md](./references/anti_patterns_checklist.md)
+

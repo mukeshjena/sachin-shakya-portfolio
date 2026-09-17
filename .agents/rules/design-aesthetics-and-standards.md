@@ -91,3 +91,18 @@ When designing and implementing cost comparison charts, MTTR benchmarks, and clo
   - Active hover indices, scrubbers, and tab switches live in `*Chart.hooks.ts`.
   - Pure declarative SVG/JSX markup lives in `*Chart.tsx`.
   - Co-located token styling lives in `*Chart.css`.
+
+## 12. Anti-AI Design Principles: Bespoke Human-Crafted Executive Mastery
+To ensure the interface feels authored by an elite digital product designer rather than an automated AI generator:
+- **Strictly Banned AI Design Tropes:**
+  - **No Monotonous 3x3 Bento Grids:** Never lay out content as repetitive grids of identical rectangular cards with centered icons and generic text snippets.
+  - **No AI Glowing Blobs / Neon Gradients:** Strictly no purple/cyan diffuse radial gradient backdrops, floating blur circles, or generic cyberpunk glows.
+  - **No Corporate AI Buzzword Salad:** Avoid hollow marketing clichés ("Elevate your cloud scalability", "Empowering next-gen agility"). All copy must be technical, grounded, and specific to Sachin Shakya's documented milestones ($170K/month savings, 40% MTTR reduction, 2,000+ managed cloud resources, Eptura, Downer, LTIMindtree, ABN AMRO).
+  - **No Uniform Card Pacing:** Every page section must employ varied rhythm and visual hierarchy — pairing dominant focal telemetry points with complementary detailed secondary metrics.
+- **Hallmarks of Elite Human Designer Craft:**
+  - **Asymmetric Tension & Dynamic Ratios:** Employ 60/40 splits, 70/30 hero layouts, offset sidebars, and staggered milestone timelines.
+  - **High Typographic Contrast:** Combine monumental high-contrast headings (`tracking-tight leading-none`) with ultra-crisp monospaced micro-captions (`font-mono text-xs uppercase tracking-widest text-[var(--mist-dim)]`).
+  - **Instrument Panel Materiality:** Treat cards as precision instruments. Hairline 1px borders (`border border-[var(--line)]`), matte non-reflective background fills (`var(--ink-800)`), subtle 1px surface dividers, and tactile hover states (subtle border illumination, zero hover scaling).
+  - **Authentic Engineering Realism:** Feature real cloud telemetry — actual Terraform/HCL snippets, architecture topology diagrams, real latency charts, and live status beacons with physical authenticity.
+  - **Intentional Negative Space:** Design with deliberate restraint. Let high-impact numbers and case studies breathe rather than cramming UI elements into every available pixel.
+

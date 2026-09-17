@@ -423,6 +423,31 @@
   - Verified `npm run test:firestore` passes.
   - Verified Biome checks (`npm run check`) and strict TypeScript typechecking (`npm run typecheck`).
 
+---
+
+## 2026-09-18 — Governance & Design Overhaul: Per-Step Implementation Plans, Non-Blocking CI/CD, Anti-AI Bespoke UI/UX
+
+**Commit:** `feat(rules): per-step planning, non-blocking CI check, and anti-AI bespoke design skills`
+
+**What was done:**
+- **Rule 17: Per-Step Implementation Plan Protocol:**
+  - Enforced that for EVERY step, the agent must generate a dedicated `implementation_plan.md` artifact detailing files to modify/create, Clean Architecture layers, DI tokens, anti-AI design rules, and verification plan BEFORE touching code.
+  - After completing each step and pushing, the agent must pause and request the user type `continue` before initiating the next step plan.
+- **Rule 18: Non-Blocking CI/CD Status Verification:**
+  - Eliminated blocking `gh run watch` on pushes to avoid execution delays.
+  - Replaced with non-blocking status check: `gh run list --limit 1`. If the previous run failed, the failure must be diagnosed and resolved before concluding the step.
+- **Rule 19 & Anti-AI Bespoke UI/UX Skills Overhaul:**
+  - **Updated `.agents/rules/design-aesthetics-and-standards.md`:** Added Section 12 ("Anti-AI Design Principles: Bespoke Human-Crafted Executive Mastery") banning monotonous 3-column bento grids, neon radial blur blobs, and robotic AI buzzwords. Enforcing asymmetric tension, 65/35 splits, monumental typography, and authentic cloud engineering telemetry.
+  - **Overhauled `.agents/skills/modern-ui-ux-design/`:**
+    - Reorganized references into `foundations/` (tokens, typography, visual hierarchy) and `blueprints/` (components, micro-interactions, anti-ai design handbook), strictly respecting the ≤ 3 files per folder rule.
+    - Created `references/blueprints/anti_ai_design_handbook.md`: comprehensive guide with diagnostic matrices comparing generic AI output vs master designer craft.
+  - **Updated `.agents/skills/ui-polish-critique/`:**
+    - Added Step 6 to critique workflow ("Anti-AI Smell Test & Editorial Polish").
+    - Added Section 3 to `anti_patterns_checklist.md` with explicit anti-AI smell tests.
+  - **Updated `.agents/agent.md` & `doc/SACHIN-SHAKYA-SITE-IMPLEMENTATION-PLAN.md`:**
+    - Integrated Rules 17, 18, and 19 into the non-negotiable rules summary and agent persona instructions.
+
+
 
 
 

@@ -87,3 +87,24 @@ This skill guides you to craft high-prestige, authoritative cloud architecture a
   - Gridlines & Axis Dividers: `var(--line)`
 - **Tabular Precision**: Monospaced tabular figures (`font-mono tabular-nums`) across all axes, timestamps, delta percentages, and currency values.
 - **Frosted Telemetry Tooltips**: `backdrop-blur-xl`, `bg-[var(--ink-900)]/90`, `border border-[var(--line)]`, rounded pill or card, with zero zoom or scale distortion.
+
+---
+
+## 7. Anti-AI Design Manifesto: Bespoke Human Craft vs Machine Clichés
+Every layout, component, and interaction must feel designed by a senior digital art director, never an automated AI model:
+
+### A. Strictly Banned AI Design Tropes
+- ❌ **Repetitive Bento Grids:** Do not create grids of identical 1:1 rectangular cards where each card has a centered icon, bold title, and two lines of filler text.
+- ❌ **Diffused Neon Blobs:** No purple, magenta, or electric cyan radial blurs floating aimlessly in the background.
+- ❌ **Corporate AI Buzzwords:** Never write empty phrases like "Unleashing next-generation synergy." Every label must cite concrete architectural terms, exact dollar savings ($170K/mo), real cloud services (Azure, AWS, EKS, Terraform), or named enterprise roles (Eptura, Downer, LTIMindtree).
+- ❌ **Artificial Card Overcrowding:** Do not pack every square inch with cards or widgets. Embrace generous, intentional negative space.
+
+### B. Elite Designer Polish & Editorial Authority
+- ✅ **Asymmetric Section Rhythms:** Alternate between wide-format telemetry panoramas, 65/35 editorial split-screens, and staggered technical timelines.
+- ✅ **Typographic Tension:** Juxtapose massive display headlines (`tracking-tight leading-none text-4xl lg:text-6xl`) with razor-sharp micro-technical tags (`font-mono text-xs uppercase tracking-widest text-[var(--mist-dim)]`).
+- ✅ **Instrument Panel Tactility:** Use matte non-reflective backgrounds (`var(--ink-800)`), 1px hairline borders (`var(--line)`), etched section dividers, and active live indicators (`var(--live)` pulse beacon).
+- ✅ **Authentic Engineering Realism:** Feature real IaC snippets, verified incident recovery metrics, architecture topology schematics, and interactive FinOps curves.
+
+👉 *See full guide*: [anti_ai_design_handbook.md](./references/blueprints/anti_ai_design_handbook.md)
+
+

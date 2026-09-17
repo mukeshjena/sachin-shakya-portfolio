@@ -19,14 +19,20 @@ This is a **stateful runbook**, not a one-shot prompt. It is designed to be past
 
 1. Find the first step in the [Status Ledger](#status-ledger) marked `Pending`.
 2. Read that step's *Objective*, *Local Inputs Required*, *Actions*, and *Definition of Done*.
-3. Create a new branch for that step only (naming convention below).
-4. Perform the actions. Keep every file between 300–500 lines (hard cap 500). Never put more than 3 files directly inside one folder — if a folder needs a 4th file, split it into subfolders instead.
-5. Update `.agents/memory.md` with a dated entry describing what was done (see Step 2).
-6. Update the [Status Ledger](#status-ledger) row for that step from `Pending` → `Completed`.
-7. Commit with the message format below, push the step branch, and **merge/push it forward into `release/v1.0.0`** (do not touch `main` yet — see branching model).
-8. Print a short summary of what was delivered and **stop. Ask the human: "Type `continue` to proceed to Step N+1."**
-9. Only resume work after receiving the literal word `continue`.
-10. After the **last** step is completed and confirmed, merge `release/v1.0.0` → `main` (Step 28 handles this explicitly).
+3. Create a new branch for that step from `main`: `git checkout -b step/NN-<short-name>`.
+4. **Create a new Implementation Plan (`implementation_plan.md`)**: Before making any source code changes, draft a structured plan specifying exact files to modify/create, Clean Architecture layers, DI tokens, anti-AI design rules, and verification steps.
+5. **Execute & Validate Locally**: Implement the step according to the plan. Enforce:
+   - Anti-AI bespoke executive aesthetics (no monotonous bento grids, no glowing halos, no corporate buzzwords; asymmetric editorial tension and real cloud telemetry).
+   - Max 500 lines per file (target 200–400 LOC).
+   - Max 3 files per folder (split into subfolders beyond 3).
+   - Universal Separation of Concerns (Rule 13).
+6. Commit with automated pre-commit quality gate (`.githooks/pre-commit`). Strictly never use `--no-verify`.
+7. Push feature branch and merge sequentially: `release/v1.0.0` → `main` → sync `develop` → return to `main`.
+8. **Non-Blocking CI/CD Verification**: Never block on `gh run watch` (wastes time). Run `gh run list --limit 1` to inspect status; if the previous workflow run failed, diagnose and resolve the failure before concluding the step.
+9. Update `.agents/memory.md` with a dated entry describing what was done.
+10. Update the [Status Ledger](#status-ledger) row for that step to `Completed ✅`.
+11. **MANDATORY PAUSE:** Report concise delivery summary and prompt: `"Type continue to proceed to Step N+1."`
+12. **Cycle Repeats:** Only resume when receiving the literal word `continue`. Then repeat the exact protocol (new branch → new plan → execute → verify → pause).
 
 **Branching model:**
 
