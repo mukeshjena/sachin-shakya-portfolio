@@ -52,7 +52,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 1 | Toolchain & project bootstrap | Foundation | Completed ✅ |
 | 2 | `.gitignore`, `.agent/` memory system, strict rules file | Foundation | Completed ✅ |
 | 3 | Clean Architecture skeleton + DI container | Foundation | Completed ✅ |
-| 4 | Coming-soon page, initial commit, `develop` + `release/v1.0.0` branches | Foundation | Pending |
+| 4 | Coming-soon page, initial commit, `develop` + `release/v1.0.0` branches | Foundation | Completed ✅ |
 | 5 | First Cloudflare Worker deploy via Wrangler | Foundation | Pending |
 | 6 | Atomic CI/CD pipeline (GitHub Actions) | Foundation | Pending |
 | 7 | Firebase project + Firestore (Native mode) | Backend | Pending |
