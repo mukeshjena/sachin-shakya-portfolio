@@ -118,18 +118,22 @@ These are **your local Windows paths**. The executing agent must read them direc
 
 | # | Rule | Rationale |
 |---|------|-----------|
-| 13 | **No inline `<style>` tags, CSS string constants, or multi-property `style={{}}` objects in `.tsx` files.** All styles go in a co-located `.css` file (e.g. `ComingSoon.css` next to `ComingSoon.tsx`). | Separation of concerns — components stay scannable, styles stay maintainable. |
+| 13 | **Strict separation of concerns across ALL layers — nothing hardcoded in `.tsx` or `.hooks.ts`.**<br>• **Styles:** All CSS in dedicated `.css` files (co-located or global); no inline `<style>` tags, CSS string constants, or multi-property `style={{}}` in `.tsx`.<br>• **Constants & Values:** All copy text, headings, badges, labels, aria-labels, metrics, magic numbers/strings, URLs, and dates in dedicated `.constants.ts` or `src/config/`.<br>• **Static / Mock Data:** In dedicated `.data.ts` or seed scripts.<br>• **Computation / Formatting Logic:** In pure utility functions in `.utils.ts` files.<br>• **State & Lifecycles:** In `.hooks.ts` files (orchestrates state and hooks only; no math or hardcoded values).<br>• **Markup / View:** In `.tsx` files (pure declarative JSX templates). | Complete separation of concerns — presentation stays clean, logic stays testable, copy stays editable. |
 | 14 | **No hardcoded hex/rgba/hsl colour values in `.css` or `.tsx` files.** Use only CSS custom properties from `src/index.css` `:root` block (e.g. `var(--amber)` not `#ffb020`). | Single palette source of truth — theme changes propagate everywhere from one file. |
+| 15 | **`--no-verify` (and `-n`) is STRICTLY PROHIBITED on BOTH `git commit` and `git push`.** Never bypass git hooks under any circumstances. Skipping hooks allows bad formatting, lint errors, broken types, and failing builds to slip through into git history and origin branches. If a pre-commit or pre-push check fails, diagnose and fix the root cause immediately. | Gate integrity — skipping hooks defeats automated quality enforcement and risks pushing corrupt code. |
 
-### Pre-Commit Gates (`.githooks/pre-commit`)
+### Pre-Commit & Pre-Push Gates (`.githooks/`)
 
-Activated automatically via `npm run prepare` (runs on every `npm install`). Blocks commits if any check fails:
+Activated automatically via `npm run prepare` (runs on `npm install` and sets `git config core.hooksPath .githooks`).
 
-1. **Biome check** — lint violations, import order, formatting
-2. **TypeScript** (`tsc -b`) — type errors, strict mode violations  
-3. **Vite build** — module resolution failures, bundling errors
+| Gate | Trigger | Verification Steps |
+|---|---|---|
+| **Pre-Commit** (`.githooks/pre-commit`) | `git commit` | 1. **Biome check:** `npx biome check .` (lint + format + import sorting)<br>2. **TypeScript:** `npx tsc -b` (strict typecheck)<br>3. **Vite build:** `npx vite build --logLevel silent` (production build verification) |
+| **Pre-Push** (`.githooks/pre-push`) | `git push` | 1. **Biome check:** `npx biome check .` (lint + format + import sorting)<br>2. **TypeScript:** `npx tsc -b` (strict typecheck)<br>3. **Vite build:** `npx vite build --logLevel silent` (production build verification) |
 
-Emergency bypass: `git commit --no-verify` — use only in genuine emergencies and document the reason in the commit message.
+> **PROHIBITION OF `--no-verify` (Rule 15):**
+> Using `--no-verify` or `-n` with `git commit` or `git push` is **STRICTLY FORBIDDEN**.
+> If any validation fails, fix the underlying issue. Never bypass git hooks.
 
 
 ---

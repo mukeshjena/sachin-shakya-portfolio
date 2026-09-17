@@ -22,32 +22,50 @@
 |---|------|-----|
 | 1 | **Max 500 lines per file** (target 300–500). | Keeps files reviewable and focused. |
 | 2 | **Max 3 files per folder.** Split into subfolders beyond that. | Prevents folder bloat and forces clear separation. |
-| 3 | **Zero logic in `.tsx` files.** Logic lives in co-located `.hooks.ts` / `.ts` files. | Enforces presentation-layer purity. |
+| 3 | **Zero logic in `.tsx` files.** Pure declarative view markup only. Logic lives in co-located `.hooks.ts` or pure `.utils.ts` files. | Enforces presentation-layer purity. |
 | 4 | **No `box-shadow` anywhere** — in CSS, Tailwind classes, or inline styles. | Client's strict rule #12. Depth via border/gradient layering only. |
 | 5 | **No debounced inputs anywhere.** Validate on submit and on blur only. | Client's strict rule #12. |
 | 6 | **No emojis anywhere** — in code, content, or comments. Cupertino/outline icons only (`react-icons/pi` or `react-icons/io5`). | Client's strict rule. |
-| 7 | **Zero hardcoded content/images/URLs in components.** Everything comes from Firestore. | Makes content admin-editable without deploys. |
+| 7 | **Zero hardcoded content, values, images, URLs, copy text, or metrics in components or hooks.** Everything comes from Firestore or dedicated `.constants.ts` / `.data.ts` / config files. | Makes content admin-editable without deploys. |
 | 8 | **Presentation layer never imports Firebase or Cloudinary directly.** Always through the DI container (`useContainer()`). | Clean Architecture boundary enforcement. |
 | 9 | **Every new feature that adds content or media MUST update `scripts/seed/seed-content.ts` and/or `scripts/seed/seed-media.ts`.** | Seed file always reflects site truth (client rule #10). |
 | 10 | **TypeScript strict mode is always on.** No `any`, no `!` non-null assertions without a `// safe:` comment explaining why. | Type safety throughout. |
 | 11 | **No new npm packages without checking bundle impact.** Free-tier Cloudflare Workers has a 1 MB script size limit. | Budget/performance constraint. |
 | 12 | **Commit message format:** `feat(step-NN): <short description>` | Consistent history for the ledger. |
-| 13 | **No inline `<style>` tags, no CSS string constants (e.g. `const STYLES = \`...\``), no `style={{}}` prop objects with multi-property values in `.tsx` files.** All component styles go in a co-located `.css` file imported at the top of the component. Single dynamic values like `style={{ width: \`${pct}%\` }}` are the only allowed exception. | Keeps components scannable and styles maintainable. |
-| 14 | **No hardcoded hex/rgba/hsl colour values in `.css` or `.tsx` files.** Use CSS custom properties from `src/index.css` (`:root` block) exclusively. This means `var(--amber)` not `#ffb020`. | Single source of truth for the palette; theme changes in one place. |
+| 13 | **Strict separation of concerns across ALL layers — nothing hardcoded in `.tsx` or `.hooks.ts`.**<br>• **Styles** → dedicated `.css` files (co-located or global) using CSS custom properties.<br>• **Constants & Hardcoded Values** → dedicated `.constants.ts` or `src/config/` (all copy, labels, badge texts, metrics, magic numbers, strings, keys, dates).<br>• **Static & Mock Data** → dedicated `.data.ts` files.<br>• **Computation / Formatting Logic** → dedicated `.utils.ts` files (pure functions).<br>• **State & Lifecycles** → dedicated `.hooks.ts` files (orchestrates React state and hooks only).<br>• **Markup / View** → dedicated `.tsx` files (pure declarative JSX templates).<br>The ONLY allowed inline style exception is a single dynamic runtime style like `style={{ width: \`${pct}%\` }}`. | Complete architectural purity, maintainability, and testability. |
+| 14 | **No hardcoded hex/rgba/hsl colour values in any file.** Use CSS custom properties from `src/index.css` `:root` exclusively — `var(--amber)`, not `#ffb020`. | Single palette source of truth. |
+| 15 | **`--no-verify` (and `-n`) is STRICTLY PROHIBITED on BOTH `git commit` and `git push`.** Never bypass git hooks under any circumstances. Skipping hooks allows bad formatting, lint errors, broken types, and failing builds to slip through into git history and origin branches. If a pre-commit or pre-push check fails, diagnose and fix the code immediately. | Gate integrity — skipping hooks defeats automated quality enforcement. |
+
+### What Goes Where (Rule 13 reference)
+
+| Content type | Lives in | Example |
+|---|---|---|
+| Component markup | `ComponentName.tsx` | Pure declarative JSX only; zero logic, zero inline styles, zero hardcoded strings/numbers |
+| Component state & lifecycle | `ComponentName.hooks.ts` | `useState`, `useEffect`, wires utils & constants; zero computation math, zero inline constants |
+| Pure computation / utility logic | `ComponentName.utils.ts` | Calculations, date/time math, string formatting, pure algorithms |
+| Component styles | `ComponentName.css` | All CSS, no hex values — use `var(--token-name)` |
+| Constants / magic values / copy text | `ComponentName.constants.ts` | Headings, badge text, labels, aria labels, metrics, `LAUNCH_DATE`, timeouts |
+| Static / seed data | `ComponentName.data.ts` | Nav items, mock content, static item lists |
+| Shared / global config | `src/config/` | API base URLs, feature flags, env reads |
+| Business & application logic | `application/use-cases/` | Orchestrates domain operations and repositories |
+| Domain rules & models | `domain/entities/` or `domain/value-objects/` | Invariants, schemas, validation |
 
 ---
 
-## Pre-Commit Gates
+## Pre-Commit & Pre-Push Gates
 
-The `.githooks/pre-commit` hook runs automatically on every `git commit` and blocks if any check fails. Activated by `npm run prepare` (runs automatically on `npm install`).
+The repository enforces automated validation gates via `.githooks/pre-commit` and `.githooks/pre-push`.
+Activated automatically by `npm run prepare` (`git config core.hooksPath .githooks`).
 
-| Check | Command | What it catches |
-|-------|---------|----------------|
-| **1. Biome** | `npx biome check .` | Lint violations, import order, formatting mismatches |
-| **2. TypeScript** | `npx tsc -b` | Type errors, missing types, strict mode violations |
-| **3. Vite build** | `npx vite build --silent` | Module resolution failures, bundling errors |
+| Gate | Runs On | Checks Executed |
+|---|---|---|
+| **Pre-Commit** | `git commit` | 1. Biome lint & format check (`npx biome check .`)<br>2. TypeScript strict typecheck (`npx tsc -b`)<br>3. Vite production build (`npx vite build --logLevel silent`) |
+| **Pre-Push** | `git push` | 1. Biome lint & format check (`npx biome check .`)<br>2. TypeScript strict typecheck (`npx tsc -b`)<br>3. Vite production build (`npx vite build --logLevel silent`) |
 
-> **Emergency bypass:** `git commit --no-verify` — use sparingly and document why in the commit message.
+> **STRICT PROHIBITION OF `--no-verify` (Rule 15):**
+> Using `--no-verify` or `-n` with `git commit` or `git push` is **STRICTLY FORBIDDEN**.
+> Bypassing gates undermines repository integrity and risks pushing erroneous or failing code.
+> If a check fails, diagnose and fix the root cause before committing or pushing.
 
 
 ## Design Principles

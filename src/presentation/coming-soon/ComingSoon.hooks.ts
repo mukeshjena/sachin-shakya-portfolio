@@ -1,91 +1,29 @@
 // presentation/coming-soon/ComingSoon.hooks.ts
-// Logic for the ComingSoon component (agent rule #3 — no logic in .tsx).
+// React state and lifecycle orchestration for the ComingSoon view.
+// RULE 3 & RULE 13: Zero computation math, zero hardcoded values, zero CSS.
 
 import { useEffect, useState } from "react";
+import { LAUNCH_DATE_ISO } from "./constants/ComingSoon.constants";
+import { calculateTimeRemaining, type TimeLeftUnit } from "./utils/ComingSoon.utils";
 
-interface TimeLeft {
-  label: string;
-  value: string;
+const targetLaunchDate = new Date(LAUNCH_DATE_ISO);
+
+export interface UseComingSoonResult {
+  readonly timeLeft: readonly TimeLeftUnit[];
 }
 
-interface SocialLink {
-  href: string;
-  label: string;
-  icon: string;
-}
-
-interface ComingSoonState {
-  timeLeft: TimeLeft[];
-  socialLinks: SocialLink[];
-}
-
-// Target launch date — approximately 30 days from project start
-const LAUNCH_DATE = new Date("2026-10-18T00:00:00+05:30");
-
-/** Pads a number to 2 digits */
-function pad(n: number): string {
-  return n.toString().padStart(2, "0");
-}
-
-/** Computes the remaining time until LAUNCH_DATE */
-function computeTimeLeft(): TimeLeft[] {
-  const diff = LAUNCH_DATE.getTime() - Date.now();
-
-  if (diff <= 0) {
-    return [
-      { label: "days", value: "00" },
-      { label: "hours", value: "00" },
-      { label: "mins", value: "00" },
-      { label: "secs", value: "00" },
-    ];
-  }
-
-  const totalSeconds = Math.floor(diff / 1000);
-  const days = Math.floor(totalSeconds / 86400);
-  const hours = Math.floor((totalSeconds % 86400) / 3600);
-  const mins = Math.floor((totalSeconds % 3600) / 60);
-  const secs = totalSeconds % 60;
-
-  return [
-    { label: "days", value: pad(days) },
-    { label: "hours", value: pad(hours) },
-    { label: "mins", value: pad(mins) },
-    { label: "secs", value: pad(secs) },
-  ];
-}
-
-/** Static social / contact links — content will be Firestore-driven from Step 16 onward */
-const STATIC_SOCIAL_LINKS: SocialLink[] = [
-  {
-    href: "https://www.linkedin.com/in/sachin-shakya",
-    label: "LinkedIn",
-    icon: "in",
-  },
-  {
-    href: "mailto:sachin@example.com",
-    label: "Email",
-    icon: "@",
-  },
-  {
-    href: "tel:+919876543210",
-    label: "Call",
-    icon: "tel",
-  },
-];
-
-export function useComingSoon(): ComingSoonState {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft[]>(computeTimeLeft());
+export function useComingSoon(): UseComingSoonResult {
+  const [timeLeft, setTimeLeft] = useState<readonly TimeLeftUnit[]>(() =>
+    calculateTimeRemaining(targetLaunchDate)
+  );
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setTimeLeft(computeTimeLeft());
+    const intervalId = setInterval(() => {
+      setTimeLeft(calculateTimeRemaining(targetLaunchDate));
     }, 1000);
 
-    return () => clearInterval(id);
+    return () => clearInterval(intervalId);
   }, []);
 
-  return {
-    timeLeft,
-    socialLinks: STATIC_SOCIAL_LINKS,
-  };
+  return { timeLeft };
 }

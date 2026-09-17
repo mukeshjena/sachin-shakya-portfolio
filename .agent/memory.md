@@ -118,4 +118,27 @@
 - `npx biome check .` → ✅ 32 files, 0 errors
 - `npm run build` → ✅ 23 modules, 161ms
 
+---
+
+## 2026-09-18 — Universal Separation of Concerns & Git Hook Strict Enforcement
+
+**Branch:** `fix/separation-of-concerns-and-git-hooks` → merged into `main`
+**Key Changes:**
+- **Universal Separation of Concerns (Rule 13 expanded):**
+  - Not just for CSS — covers all constants, hardcoded strings/numbers/labels/metrics, and logic.
+  - `ComingSoon.constants.ts` in `src/presentation/coming-soon/constants/`: defines all text copy, badges, stats, social links, footer, and launch date.
+  - `ComingSoon.utils.ts` in `src/presentation/coming-soon/utils/`: pure calculation and zero-padding logic (`calculateTimeRemaining`, `padZero`).
+  - `ComingSoon.hooks.ts`: purely orchestrates React state and timer interval lifecycle.
+  - `ComingSoon.tsx`: pure declarative JSX template with zero hardcoded text strings, numbers, or logic.
+  - Structure adheres strictly to Rule 2 (max 3 files per folder).
+- **Prohibition of `--no-verify` (Rule 15):**
+  - Explicitly banned `--no-verify` (and `-n`) on BOTH `git commit` and `git push`.
+  - Removed all emergency bypass suggestions from hooks and documentation.
+  - Created `.githooks/pre-push` running Biome lint/format, TypeScript strict typecheck, and Vite production build before every push.
+  - Updated `.githooks/pre-commit` to strictly forbid `--no-verify`.
+- **Documentation:**
+  - Updated `.agent/agent.md` (Rules 3, 7, 13, 15, "What Goes Where" reference, and Pre-Commit & Pre-Push Gates).
+  - Updated `doc/SACHIN-SHAKYA-SITE-IMPLEMENTATION-PLAN.md` (Rules 13, 14, 15, and Pre-Commit & Pre-Push Gates).
+
+
 
