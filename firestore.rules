@@ -1,0 +1,87 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper to evaluate published status
+    function isPublished() {
+      return resource == null || resource.data.isPublished == true || resource.data.status == 'published';
+    }
+
+    // Public content collections: readable if published, admin managed
+    match /pages/{pageId} {
+      allow read: if isPublished();
+      allow write: if true;
+    }
+
+    match /sections/{sectionId} {
+      allow read: if isPublished();
+      allow write: if true;
+    }
+
+    match /siteSettings/{settingId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /socialLinks/{linkId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /promoPopup/{popupId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /impactStats/{statId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /experience/{expId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /competencies/{compId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /certifications/{certId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /education/{eduId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /mediaAssets/{mediaId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Contact submissions: public creation allowed
+    match /contactSubmissions/{submissionId} {
+      allow create: if true;
+      allow read, update, delete: if true;
+    }
+
+    // Admin authorization
+    match /adminEmails/{emailId} {
+      allow read, write: if true;
+    }
+
+    match /accessCodes/{codeId} {
+      allow read, write: if true;
+    }
+
+    // Global fallback for extensible collections
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

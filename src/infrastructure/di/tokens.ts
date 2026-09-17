@@ -28,6 +28,10 @@ export const DI_TOKENS = {
   RequestAccessCode: Symbol("RequestAccessCode"),
   VerifyAccessCode: Symbol("VerifyAccessCode"),
 
+  // ── System / Infrastructure ──────────────────────────────────────────────
+  FirestoreDb: Symbol("FirestoreDb"),
+  EnvConfig: Symbol("EnvConfig"),
+
   // ── Dev / test ────────────────────────────────────────────────────────────
   PingUseCase: Symbol("PingUseCase"),
 } as const;

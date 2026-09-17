@@ -12,11 +12,13 @@
     "check:fix": "biome check --write .",
     "format": "biome format --write .",
     "prepare": "git config core.hooksPath .githooks",
+    "test:firestore": "tsx scripts/test-firestore.ts",
     "seed": "tsx scripts/seed/seed.ts",
     "cleanup": "tsx scripts/cleanup/cleanup.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
+    "firebase": "^12.19.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
@@ -30,6 +32,7 @@
     "autoprefixer": "^10.6.1",
     "postcss": "^8.5.28",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
     "vite-plugin-pwa": "^1.3.0",
