@@ -29,6 +29,7 @@ export interface SeededMediaMap {
   heroPhotoUrl: string;
   experiencePhotoUrl: string;
   aboutPhotoUrl?: string;
+  resumePdfUrl?: string;
   cloudInfraUrl: string;
 }
 
@@ -67,7 +68,16 @@ async function uploadFileToCloudinary(
   bytes?: number;
 }> {
   const fileBuffer = fs.readFileSync(filePath);
-  const base64Data = `data:image/png;base64,${fileBuffer.toString("base64")}`;
+  const ext = path.extname(filePath).toLowerCase();
+  const mimeType =
+    ext === ".pdf"
+      ? "application/pdf"
+      : ext === ".svg"
+        ? "image/svg+xml"
+        : ext === ".jpg" || ext === ".jpeg"
+          ? "image/jpeg"
+          : "image/png";
+  const base64Data = `data:${mimeType};base64,${fileBuffer.toString("base64")}`;
   const timestamp = Math.round(Date.now() / 1000);
 
   const paramsToSign: Record<string, string | number> = {
@@ -86,7 +96,7 @@ async function uploadFileToCloudinary(
   formData.append("folder", folder);
   formData.append("public_id", publicId);
 
-  const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+  const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
   const response = await fetch(uploadUrl, {
     method: "POST",
     body: formData,
@@ -124,6 +134,14 @@ export async function seedMediaAssets(): Promise<SeededMediaMap> {
     const projectPath = path.join(projectAssetsDir, filename);
     if (fs.existsSync(projectPath)) {
       return projectPath;
+    }
+    const publicPath = path.join(process.cwd(), "public", filename);
+    if (fs.existsSync(publicPath)) {
+      return publicPath;
+    }
+    const codeOldPath = path.join(process.cwd(), "code.old", filename);
+    if (fs.existsSync(codeOldPath)) {
+      return codeOldPath;
     }
     return path.join(downloadsDir, filename);
   };
@@ -164,6 +182,14 @@ export async function seedMediaAssets(): Promise<SeededMediaMap> {
       altText: "Sachin Shakya — Enterprise Architecture & Strategic Advisory",
       fallbackUrl:
         "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      key: "asset-resume-pdf",
+      localPath: resolveAssetPath("Sachin_Shakya_Resume.pdf"),
+      folder: CLOUDINARY_FOLDERS.documents,
+      publicIdPrefix: "sachin-shakya-resume",
+      altText: "Sachin Shakya — Lead Cloud Architect & DevOps Consultant Official Résumé (PDF)",
+      fallbackUrl: "/Sachin_Shakya_Resume.pdf",
     },
   ];
 
@@ -241,6 +267,7 @@ export async function seedMediaAssets(): Promise<SeededMediaMap> {
     heroPhotoUrl: results["asset-sachin-hero"],
     experiencePhotoUrl: results["asset-sachin-experience"],
     aboutPhotoUrl: results["asset-sachin-about"],
+    resumePdfUrl: results["asset-resume-pdf"],
     cloudInfraUrl: infraUrl,
   };
 }

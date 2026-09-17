@@ -30,7 +30,7 @@ export async function seedContent(media: SeededMediaMap): Promise<void> {
       location: "Faridabad, Haryana, India",
       logoUrl: media.logoUrl,
       avatarUrl: media.heroPhotoUrl,
-      resumePdfUrl: "/Sachin_Shakya_Resume.pdf",
+      resumePdfUrl: media.resumePdfUrl || "/Sachin_Shakya_Resume.pdf",
       availabilityStatus: "available",
       availabilityNote: "Available for Lead Cloud Architecture & Advisory Roles",
       socialLinks: [

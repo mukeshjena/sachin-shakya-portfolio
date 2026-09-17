@@ -9,6 +9,7 @@ export const CLOUDINARY_FOLDERS = {
   homeHero: `${CLOUDINARY_ROOT_FOLDER}/home/hero`,
   homeImpact: `${CLOUDINARY_ROOT_FOLDER}/home/impact`,
   homeExperience: `${CLOUDINARY_ROOT_FOLDER}/home/experience`,
+  documents: `${CLOUDINARY_ROOT_FOLDER}/documents`,
   promoPopup: `${CLOUDINARY_ROOT_FOLDER}/promo-popup`,
   test: `${CLOUDINARY_ROOT_FOLDER}/test`,
   pages: (slug: string): string => `${CLOUDINARY_ROOT_FOLDER}/pages/${slug}`,
@@ -19,6 +20,7 @@ export type CloudinaryFolderPreset =
   | "homeHero"
   | "homeImpact"
   | "homeExperience"
+  | "documents"
   | "promoPopup"
   | "test";
 
