@@ -21,7 +21,7 @@ This is a **stateful runbook**, not a one-shot prompt. It is designed to be past
 2. Read that step's *Objective*, *Local Inputs Required*, *Actions*, and *Definition of Done*.
 3. Create a new branch for that step only (naming convention below).
 4. Perform the actions. Keep every file between 300–500 lines (hard cap 500). Never put more than 3 files directly inside one folder — if a folder needs a 4th file, split it into subfolders instead.
-5. Update `.agent/memory.md` with a dated entry describing what was done (see Step 2).
+5. Update `.agents/memory.md` with a dated entry describing what was done (see Step 2).
 6. Update the [Status Ledger](#status-ledger) row for that step from `Pending` → `Completed`.
 7. Commit with the message format below, push the step branch, and **merge/push it forward into `release/v1.0.0`** (do not touch `main` yet — see branching model).
 8. Print a short summary of what was delivered and **stop. Ask the human: "Type `continue` to proceed to Step N+1."**
@@ -50,7 +50,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | # | Step | Phase | Status |
 |---|------|-------|--------|
 | 1 | Toolchain & project bootstrap | Foundation | Completed ✅ |
-| 2 | `.gitignore`, `.agent/` memory system, strict rules file | Foundation | Completed ✅ |
+| 2 | `.gitignore`, `.agents/` memory system, strict rules file | Foundation | Completed ✅ |
 | 3 | Clean Architecture skeleton + DI container | Foundation | Completed ✅ |
 | 4 | Coming-soon page, initial commit, `develop` + `release/v1.0.0` branches | Foundation | Completed ✅ |
 | 5 | First Cloudflare Worker deploy via Wrangler | Foundation | Completed ✅ |
@@ -160,9 +160,11 @@ presentation/     → React components (.tsx, view-only) + hooks (.ts, all logic
 
 ```
 sachin-shakya-site/
-├── .agent/
+├── .agents/
 │   ├── agent.md              # skills, rules, principles (Step 2)
-│   └── memory.md             # append-only session memory log (Step 2)
+│   ├── memory.md             # append-only session memory log (Step 2)
+│   ├── rules/                # modular architecture, design, and git rules
+│   └── skills/               # specialized engineer, design, and SEO skills
 ├── .github/workflows/
 │   └── deploy-cloudflare.yml # CI/CD (Step 6)
 ├── public/
@@ -261,7 +263,7 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 1. Confirm `node -v` → v24.x.
 2. `npm create vite@latest . -- --template react-ts` (into the already-forked repo working copy).
 3. Install Tailwind CSS (v4 config), PostCSS/Autoprefixer.
-4. Install and configure Biome (`biome init`) — set line-length rules to help enforce the 500-LOC file cap during review (not auto-enforced by the linter, but documented in `.agent/agent.md`).
+4. Install and configure Biome (`biome init`) — set line-length rules to help enforce the 500-LOC file cap during review (not auto-enforced by the linter, but documented in `.agents/agent.md`).
 5. Add `vite-plugin-pwa` and register manifest placeholder (icons come in Step 26).
 6. Verify `npm run dev` boots a blank page.
 **Definition of Done:** Fresh app builds and runs locally; Biome check passes on scaffold; no ESLint/Prettier remnants left in the fork.
@@ -269,11 +271,11 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 
 ---
 
-### Step 2 — `.gitignore`, `.agent/` Memory System, Strict Rules File
+### Step 2 — `.gitignore`, `.agents/` Memory System, Strict Rules File
 **Objective:** Guarantee cross-session continuity so no future chat/agent session re-litigates decisions, and lock in the client's non-negotiable rules.
 **Actions:**
 1. `.gitignore`: `node_modules`, `dist`, `.env`, `.env.*`, `.wrangler`, `*.log`, `.DS_Store`.
-2. Create `.agent/agent.md` containing, in clearly labelled sections:
+2. Create `.agents/agent.md` containing, in clearly labelled sections:
    - **Skills:** senior React/TS developer, cloud/DevOps engineer, UI/UX designer, SEO specialist, QA reviewer.
    - **Rules (strict, non-negotiable):**
      - No file exceeds 500 lines (target 300–500).
@@ -286,9 +288,9 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
      - Clean Architecture + DI boundaries must not be crossed (presentation never imports Firebase/Cloudinary directly).
    - **Design principles:** sci-fi-but-professional "instrument panel" palette (reuse tokens from current `index.html`), depth via layered animated backgrounds (not shadows), Framer Motion for UI, Three.js for background/hero only.
    - **SEO principles:** reference `DIIRA-INDUSTRIAL-FUEL` implementation (Step 25 has the checklist).
-3. Create `.agent/memory.md` as an append-only log. Seed it with an entry: `## 2026-09-18 — Project initialized. Plan document created.`
+3. Create `.agents/memory.md` as an append-only log. Seed it with an entry: `## 2026-09-18 — Project initialized. Plan document created.`
 4. Every subsequent step in this document ends by appending a new dated entry here — this is what prevents context loss across chat sessions.
-**Definition of Done:** `.agent/agent.md` and `.agent/memory.md` exist, committed; rules are unambiguous enough that a new agent session reading only this file could continue work correctly.
+**Definition of Done:** `.agents/agent.md` and `.agents/memory.md` exist, committed; rules are unambiguous enough that a new agent session reading only this file could continue work correctly.
 **Git:** branch `step/02-agent-memory-rules`.
 
 ---
@@ -391,7 +393,7 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 2. `scripts/seed/seed-media.ts`: for each local file and each online image URL, compute a stable hash/key (e.g. filename or URL hash) and check `mediaAssets` for that key before uploading — skip if already present, otherwise upload to the correct Cloudinary subfolder (Step 8) and write the resulting secure URL + `public_id` into `mediaAssets` and into the referencing content document.
 3. `scripts/seed/seed.ts`: orchestrates media seeding first, then content seeding (so content docs can reference final Cloudinary URLs).
 4. `scripts/cleanup/cleanup.ts`: deletes every document across all collections **and** calls the Cloudinary Admin API to delete everything under `sachin-shakya/` — used for full resets during development only, gated behind a `--yes-i-am-sure` flag.
-5. Document in `.agent/agent.md`: *"Any new implementation that introduces new content/media MUST update `seed-content.ts`/`seed-media.ts` so the seed file always reflects current site truth."* (client rule #10).
+5. Document in `.agents/agent.md`: *"Any new implementation that introduces new content/media MUST update `seed-content.ts`/`seed-media.ts` so the seed file always reflects current site truth."* (client rule #10).
 **Definition of Done:** Running `npm run seed` twice in a row produces zero duplicate Firestore docs and zero duplicate Cloudinary assets; `npm run cleanup -- --yes-i-am-sure` empties both stores.
 **Git:** branch `step/10-seed-cleanup-scripts`.
 
@@ -596,7 +598,7 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 1. Lighthouse pass on Performance/Accessibility/Best Practices (target ≥ 90 each), with special attention to the Three.js hero's mobile frame budget (Step 15's viewport-pause guard should already help here).
 2. Accessibility: focus states on every interactive element (including the custom cursor — desktop-only, never removes default focus rings for keyboard users), proper `alt` text pulled from `mediaAssets.altText`, sufficient contrast in both themes.
 3. Add a CI gate: GitHub Actions job runs `biome ci` and fails the build on violations (extends the pipeline from Step 6).
-4. Manual audit pass against `.agent/agent.md` rules: grep the repo for `box-shadow`, `debounce`, emoji characters, and files >500 lines — fix any violations found.
+4. Manual audit pass against `.agents/agent.md` rules: grep the repo for `box-shadow`, `debounce`, emoji characters, and files >500 lines — fix any violations found.
 **Definition of Done:** CI gate is green; audit grep commands return zero matches; Lighthouse scores meet targets on both mobile and desktop presets.
 **Git:** branch `step/27-perf-accessibility-lint`.
 
@@ -610,13 +612,13 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 3. Open PR `release/v1.0.0 → main`, squash or merge-commit per team preference, merge.
 4. Confirm the production CI/CD run (Step 6's pipeline) deploys `main` cleanly to `shakya.mukeshjena.com`.
 5. Tag the release: `git tag v1.0.0 && git push origin v1.0.0`.
-6. Final `.agent/memory.md` entry: `## <date> — v1.0.0 released to production.`
+6. Final `.agents/memory.md` entry: `## <date> — v1.0.0 released to production.`
 **Definition of Done:** `main` and `shakya.mukeshjena.com` are identical and fully functional; all 28 ledger rows show `Completed`.
 **Git:** merge `release/v1.0.0` → `main` directly (no intermediate `step/*` branch for this final step).
 
 ---
 
-## 7. `.agent/agent.md` — Starter Template
+## 7. `.agents/agent.md` — Starter Template
 
 ```markdown
 # Agent Operating Rules — Sachin Shakya Site

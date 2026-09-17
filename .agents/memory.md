@@ -216,3 +216,27 @@
     2. `ui-polish-critique/SKILL.md` with `anti_patterns_checklist.md`.
     3. `devops-portfolio-seo/SKILL.md` — Enterprise JSON-LD Schema.org, OpenGraph, dynamic sitemap, Core Web Vitals.
 - Strict pause enforced: Waiting for user to explicitly type `continue` before starting Step 7.
+
+---
+
+## 2026-09-18 — Consolidated Single `.agents` Customization & Memory Hub
+
+**Key Changes:**
+- **Single Folder Architecture:**
+  - Removed duplicate `.agent/` folder entirely. Everything is unified in `.agents/`.
+  - Moved and combined `agent.md` and `memory.md` into `.agents/agent.md` and `.agents/memory.md`.
+  - Updated all plan links and documentation references to point to `.agents/`.
+- **Complete 6-Persona Skill Suite (`.agents/skills/`):**
+  1. `modern-ui-ux-design` — Sci-fi instrument panel, shadow-free surfaces, color tokens, micro-interactions, typography, 8pt grid.
+  2. `ui-polish-critique` — 5-step critique workflow and anti-patterns checklist.
+  3. `devops-portfolio-seo` — Schema.org JSON-LD, OpenGraph, sitemap, Core Web Vitals.
+  4. `senior-react-typescript-engineer` — Clean Architecture, DI container, Rule 13 separation of concerns, strict TS.
+  5. `cloud-devops-engineer` — Cloudflare Workers, Firebase Native mode, multi-tab cache, atomic CI/CD pipeline.
+  6. `qa-reviewer-audit` — Automated pre-commit audit, accessibility (WCAG AA), bundle budget check, lint verification.
+- **Rules Suite (`.agents/rules/`):**
+  - `clean-architecture-and-code-standards.md`
+  - `design-aesthetics-and-standards.md`
+  - `git-workflow-and-branching-order.md`
+  - `reference-odina-diira.md`
+- **Cross-Session Continuity:**
+  - `.agents/agent.md` and `.agents/memory.md` now serve as the permanent, unified context source across all IDE sessions.
