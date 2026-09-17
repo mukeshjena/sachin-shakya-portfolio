@@ -310,4 +310,32 @@
   - CI/CD deployment succeeded in 52s.
   - Verified live `/api/config` returning full runtime configuration from Cloudflare Worker secrets.
 
+---
+
+## 2026-09-18 — Telemetry & FinOps Cost Comparison Charts Integration
+
+**Commit:** `docs: integrate telemetry and cost comparison charts into implementation plan and design standards`
+
+**What was done:**
+- **Updated `doc/SACHIN-SHAKYA-SITE-IMPLEMENTATION-PLAN.md`:**
+  - **Section 2 (Tech Stack):** Added custom declarative responsive SVG telemetry chart components with zero bundle bloat and strict Clean Architecture separation (chart coordinates, scale generators, and formatters in `.utils.ts`; state/scrubbers in `.hooks.ts`; hairline borders and tokens in `.css`).
+  - **Section 5 (Content & Data Model):** Added `telemetryMetrics` collection for multi-series historical and comparison datasets powering 4 interactive instrument-panel graphs.
+  - **Step 9 (Domain Model & Firestore Schema):** Added domain entity models: `TelemetryMetric`, `CostComparisonSeries`, `MTTRBenchmark`, `AutomationEfficiencyMetric`, `ResourceDistributionPoint`.
+  - **Step 10 (Seed Script):** Mandated deterministic seeding of multi-point datasets for:
+    1. FinOps Monthly Cloud Spend & Savings Trajectory (12-month curve from $450K/mo baseline down to $280K/mo, reflecting $170K/mo delta and $2.04M annual milestone).
+    2. Incident MTTR Benchmark (P1–P3 breakdown, 120m → 72m, 40% reduction).
+    3. DevOps Engineering Automation (manual hours 35h/wk → 8h/wk, 30–40% manual effort reduction).
+    4. Multi-Cloud Fleet Distribution (2,000+ resources across Azure 55%, AWS 30%, Hybrid/GCP 15%).
+  - **Step 16 (Home Sections):** Upgraded Impact section into an executive **FinOps & Cloud Telemetry Command Center** with interactive multi-graph switcher tabs (Area/Dual-Line, Grouped Bar, Waterfall, Segmented Donut).
+  - **Step 17 (Dynamic Page Engine):** Added support for dynamic pages to embed and configure Telemetry Chart sections.
+  - **Step 23 (Content Management Modules):** Added CMS editing capabilities for chart series, baseline values, target numbers, and telemetry timestamps.
+- **Updated `.agents/rules/design-aesthetics-and-standards.md`:**
+  - Added Section 11: "Data Visualization & Telemetry Charts Standard (Instrument Panel Graphs)" enforcing shadow-free visualization, hairline grids, token series mapping (`var(--amber)`, `var(--cyan)`, `var(--live)`), monospaced tabular typography (`font-mono tabular-nums`), and Universal Separation of Concerns (Rule 13).
+- **Updated `.agents/agent.md`:**
+  - Expanded Senior React/TS and UI/UX specialist persona descriptions to mandate interactive telemetry graphs and FinOps cost comparison visualization rules.
+- **Updated `.agents/skills/modern-ui-ux-design/`:**
+  - Added Section 6 to `SKILL.md` for telemetry data visualization.
+  - Added Blueprint 4: "Telemetry & Cost Comparison Chart Blueprint" to `references/component_design_blueprints.md`.
+
+
 

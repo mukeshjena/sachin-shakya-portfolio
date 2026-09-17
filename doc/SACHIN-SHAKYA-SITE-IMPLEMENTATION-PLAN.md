@@ -103,6 +103,7 @@ These are **your local Windows paths**. The executing agent must read them direc
 
 - **Frontend:** React 18 + Vite + TypeScript, Node **v24**
 - **Styling:** Tailwind CSS (flat design — **no box-shadows**, no debounced inputs anywhere per client's strict instruction #12)
+- **Data Visualization & Telemetry Charts:** Custom declarative responsive SVG telemetry chart components with zero bundle bloat, strict Clean Architecture separation (chart coordinates, scale generators, and formatters in `.utils.ts`; state/scrubbers in `.hooks.ts`; hairline borders and tokens in `.css`), strictly shadow-free and emoji-free.
 - **Animation:** Framer Motion (UI motion), Three.js via `@react-three/fiber` + `@react-three/drei` (animated background / blackhole hero)
 - **Icons:** `react-icons/pi` (Phosphor) or `react-icons/io5` in **outline** variants only — Cupertino/iOS-style outline icons, **zero emojis** anywhere in code or content
 - **Backend-as-a-service:** Firebase (Firestore Native mode, free Spark plan) for all content, admin config, OTP codes, contact submissions
@@ -239,6 +240,7 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 | `pages` | every page incl. built-ins (`home`) and admin-created ones, each with `slug`, `title`, `sectionOrder[]`, `isPublished` | `index.html` current single-page structure becomes the seeded `home` page |
 | `sections` | ordered content blocks per page (`impact`, `experience`, `capabilities`, `credentials`, `contact`, plus any admin-added ones) | existing section copy: "Numbers I am accountable for", "Four roles, one direction of travel", "Filter by what you are hiring for", "Certified, schooled and recognised", "Let's talk about your cloud bill" |
 | `impactStats` | $170K/month savings, 40% MTTR improvement, 30–40% manual effort reduction, 2000+ resources, 10-engineer team | Key Achievements block |
+| `telemetryMetrics` | Multi-series historical and comparison datasets powering interactive instrument-panel graphs: (1) FinOps Cloud Spend & Savings Curve ($170K/mo delta, cumulative $2.04M/yr savings), (2) Incident MTTR Reduction Benchmark (P1–P3 breakdown, 40% reduction), (3) DevOps Automation Efficiency (manual hrs vs automated pipeline runs), (4) Multi-Cloud Fleet Distribution (2,000+ resources across Azure 55%, AWS 30%, Hybrid/GCP 15%), (5) Enterprise Availability SLA (99.99%) | Key Achievements block + FinOps & Telemetry Command Center |
 | `experience` | Eptura, LTIMindtree, TCS (Downer), TCS (ABN AMRO) — dates, bullets, awards | Professional Experience block |
 | `competencies` | Cloud Platforms, Services, Monitoring, DevOps, AI Tools, Databases, Security, ITSM | Core Competencies block |
 | `certifications` | AZ-104, AZ-900, DP-900, SC-900, CLF-C01, ITIL Foundation | Certifications block |
@@ -375,26 +377,37 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 ---
 
 ### Step 9 — Domain Model & Firestore Schema
-**Objective:** Finalize entity shapes before any repository code is written.
+**Objective:** Finalize entity shapes before any repository code is written, including multi-series telemetry and cost comparison charts.
 **Actions:**
 1. Implement domain entities/value objects from Section 5's table as TypeScript types/classes in `domain/entities/` and `domain/value-objects/` (`Slug` value object enforces URL-safe, unique slugs).
-2. Write the Firestore schema doc (`docs/firestore-schema.md`) mapping each collection to its TypeScript entity, 1:1.
-3. Define composite indexes needed (e.g. `pages` by `isPublished + order`).
+2. Implement telemetry & chart domain entities:
+   - `TelemetryMetric`: metric identifier, title, subtitle, unit, baselineValue, targetValue, changePercentage, timeframe.
+   - `CostComparisonSeries`: multi-month timeline points (`month`, `baselineSpend`, `optimizedSpend`, `savingsDelta`, `milestone`).
+   - `MTTRBenchmark`: incident severity levels (`tier`, `preAutomationMinutes`, `postAutomationMinutes`, `improvementPercent`, `sampleSize`).
+   - `AutomationEfficiencyMetric`: task categories (`category`, `manualHours`, `automatedHours`, `frequency`, `savingsPercentage`).
+   - `ResourceDistributionPoint`: platform breakdown (`platform`, `resourceCount`, `percentage`, `keyServices[]`).
+3. Write the Firestore schema doc (`docs/firestore-schema.md`) mapping each collection (`pages`, `sections`, `impactStats`, `telemetryMetrics`, etc.) to its TypeScript entity, 1:1.
+4. Define composite indexes needed (e.g. `pages` by `isPublished + order`, `telemetryMetrics` by `category + order`).
 **Definition of Done:** Entities compile; schema doc committed; indexes declared in `firestore.indexes.json`.
 **Git:** branch `step/09-domain-model-schema`.
 
 ---
 
 ### Step 10 — Idempotent Seed Script + Cleanup Script
-**Objective:** One command populates Firebase + Cloudinary from the résumé content and reference images with **no duplicates on re-run**, and one command wipes everything.
+**Objective:** One command populates Firebase + Cloudinary from the résumé content, reference images, and rich telemetry chart datasets with **no duplicates on re-run**, and one command wipes everything.
 **Local Inputs Required:** 📁 `C:\Users\LenovO\Downloads\sachin-logo.png`, `sachin-one.png`, `sachin-two.png`; plus a short list of royalty-free stock image URLs (cloud/server-room/network themed) chosen for placeholder sections per requirement #22.
 **Actions:**
-1. `scripts/seed/seed-content.ts`: writes/updates Firestore docs using **deterministic IDs** (e.g. slugified keys like `impact-savings`, `exp-eptura`) rather than auto-IDs — this is what makes reseeding non-duplicating. Use `set(..., { merge: true })`.
-2. `scripts/seed/seed-media.ts`: for each local file and each online image URL, compute a stable hash/key (e.g. filename or URL hash) and check `mediaAssets` for that key before uploading — skip if already present, otherwise upload to the correct Cloudinary subfolder (Step 8) and write the resulting secure URL + `public_id` into `mediaAssets` and into the referencing content document.
-3. `scripts/seed/seed.ts`: orchestrates media seeding first, then content seeding (so content docs can reference final Cloudinary URLs).
-4. `scripts/cleanup/cleanup.ts`: deletes every document across all collections **and** calls the Cloudinary Admin API to delete everything under `sachin-shakya/` — used for full resets during development only, gated behind a `--yes-i-am-sure` flag.
-5. Document in `.agents/agent.md`: *"Any new implementation that introduces new content/media MUST update `seed-content.ts`/`seed-media.ts` so the seed file always reflects current site truth."* (client rule #10).
-**Definition of Done:** Running `npm run seed` twice in a row produces zero duplicate Firestore docs and zero duplicate Cloudinary assets; `npm run cleanup -- --yes-i-am-sure` empties both stores.
+1. `scripts/seed/seed-content.ts`: writes/updates Firestore docs using **deterministic IDs** (e.g. slugified keys like `impact-savings`, `telemetry-finops-monthly`, `telemetry-mttr-benchmarks`, `exp-eptura`) rather than auto-IDs — this is what makes reseeding non-duplicating. Use `set(..., { merge: true })`.
+2. Seed deterministic multi-series datasets for all telemetry charts:
+   - **FinOps Monthly Cloud Spend & Savings Series:** 12-month trajectory starting from $450K/mo down to $280K/mo, reflecting the $170K/month savings run-rate ($2.04M annual milestone) with annotated milestones (Azure workload rightsizing, Reserved Instance/Savings Plan coverage reaching 85%, idle resource reclamation).
+   - **Incident MTTR Benchmark Series:** Pre vs Post automation MTTR in minutes across P1 (180m → 90m), P2 (120m → 65m), and P3 (60m → 35m) reflecting the 40% overall MTTR reduction.
+   - **DevOps Engineering Automation Series:** Manual sysadmin hours (35 hrs/wk) vs Automated IaC/pipeline execution (8 hrs/wk) reflecting 30–40% manual effort reduction.
+   - **Multi-Cloud Fleet Distribution Series:** 2,000+ managed cloud resources breakdown (Azure: 1,100 resources [55%], AWS: 600 resources [30%], Hybrid/GCP: 300 resources [15%]).
+3. `scripts/seed/seed-media.ts`: for each local file and each online image URL, compute a stable hash/key (e.g. filename or URL hash) and check `mediaAssets` for that key before uploading — skip if already present, otherwise upload to the correct Cloudinary subfolder (Step 8) and write the resulting secure URL + `public_id` into `mediaAssets` and into the referencing content document.
+4. `scripts/seed/seed.ts`: orchestrates media seeding first, then content seeding (so content docs can reference final Cloudinary URLs).
+5. `scripts/cleanup/cleanup.ts`: deletes every document across all collections **and** calls the Cloudinary Admin API to delete everything under `sachin-shakya/` — used for full resets during development only, gated behind a `--yes-i-am-sure` flag.
+6. Document in `.agents/agent.md`: *"Any new implementation that introduces new content/media MUST update `seed-content.ts`/`seed-media.ts` so the seed file always reflects current site truth."* (client rule #10).
+**Definition of Done:** Running `npm run seed` twice in a row produces zero duplicate Firestore docs and zero duplicate Cloudinary assets; `npm run cleanup -- --yes-i-am-sure` empties both stores; chart telemetry collections are fully populated.
 **Git:** branch `step/10-seed-cleanup-scripts`.
 
 ---
@@ -461,26 +474,39 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 
 ---
 
-### Step 16 — Home Sections From Résumé Content
-**Objective:** Rebuild the current `index.html` sections as dynamic React components, content-driven from Firestore.
+### Step 16 — Home Sections From Résumé Content (Telemetry & FinOps Command Center)
+**Objective:** Rebuild the current `index.html` sections as dynamic React components driven from Firestore, upgrading the Impact section into a state-of-the-art **FinOps & Cloud Telemetry Command Center** with multiple interactive graphs.
 **Local Inputs Required:** 📁 `sachin-two.png` (About/impact section supporting image, if the client wants a face/photo-style visual next to a bio blurb).
 **Actions:**
-1. `sections/impact/`: animated counters for the résumé's key numbers (`~$170K/month`, `~40% MTTR`, `30–40% automation`, `2000+ resources`, `10 engineers led`) — data from `impactStats` collection, count-up animation via Framer Motion, triggered on scroll-into-view.
+1. `sections/impact/` (Executive FinOps & Telemetry Command Center):
+   - **Executive Counter Badges:** Animated count-up metrics for `$170K/month` Cloud Cost Savings, `40% MTTR` Reduction, `30–40%` Automation Efficiency, `2,000+` Managed Cloud Resources, `99.99%` Service Availability — count-up animations via Framer Motion triggered on scroll-into-view.
+   - **Interactive Multi-Graph Telemetry Suite (Instrument Panel Graphs):**
+     * **Graph 1: FinOps Monthly Cloud Spend & Savings Trajectory (Area & Dual-Line Chart):**
+       - Plots 12-month cloud expenditure curve comparing baseline spend ($450K/mo) against post-optimization spend ($280K/mo), highlighting the **$170,000 / month recurring reduction** and cumulative savings trajectory ($2.04M/yr milestone).
+       - Features interactive hover scrubbers with monospaced tabular readouts (`font-mono tabular-nums`) and milestone markers (Workload Rightsizing, Reserved Instance/Savings Plan coverage reaching 85%, idle resource reclamation, compute storage tiering).
+     * **Graph 2: Incident MTTR & Reliability Reduction Benchmark (Grouped Comparison Bar Chart):**
+       - Visualizes Mean Time to Resolution across incident severities (P1: Critical Outage, P2: High Impact, P3: Medium/Degradation) before vs after Datadog/Dynatrace APM, synthetic monitoring, and self-healing automated runbooks (overall **40% MTTR reduction** from 120m average down to 72m).
+     * **Graph 3: DevOps Engineering Automation & Manual Effort Reduction (Comparative Waterfall / Timeline Chart):**
+       - Displays manual operational hours (35+ hrs/week) dropping to <10 hrs/week (**30%–40% manual effort reduction**), alongside deployment frequency acceleration (from bi-weekly manual release windows to daily automated zero-downtime CI/CD deployments).
+     * **Graph 4: Multi-Cloud Fleet & Workload Distribution (Segmented Donut / Arc Telemetry Diagram):**
+       - Visual telemetry breakdown of **2,000+ managed cloud resources**: Microsoft Azure (55% — AKS, Cosmos DB, App Services, ExpressRoute), AWS (30% — EKS, EC2, RDS, S3), and Hybrid / GCP (15% — On-prem hybrid links, GKE), highlighting 95%+ IaC coverage.
+   - **Interactive Metric Switcher Tabs:** Tabbed navigation allowing users to seamlessly toggle between FinOps Cost Analytics, MTTR Reliability, Automation Gains, and Fleet Capacity.
+   - **Strict Aesthetic Discipline:** 100% shadow-free surfaces (`shadow-none`), clean 1px hairline gridlines (`border-[var(--line)]`), monospaced tabular typography (`font-mono tabular-nums`), frosted glass tooltip telemetry pills (`backdrop-blur-xl`), and token accents (`var(--amber)` for optimized, `var(--cyan)` for baseline, `var(--live)` for status).
 2. `sections/experience/`: timeline of the four roles (Eptura → LTIMindtree → TCS/Downer → TCS/ABN AMRO) with dates, bullets, and awards, data from `experience` collection — mirrors "Four roles, one direction of travel" heading already in `index.html`.
 3. `sections/capabilities/`: filterable competency grid (Cloud Platforms, Monitoring, DevOps, AI Tools, Databases, Security, ITSM) from `competencies` collection — mirrors "Filter by what you are hiring for."
 4. `sections/credentials/`: certifications + education, from `certifications`/`education` collections — mirrors "Certified, schooled and recognised."
 5. Optional new **About** content block using `sachin-one.png`/`sachin-two.png` if the client confirms during review (flagged as an open question in Section 8 below rather than assumed).
-**Definition of Done:** Home page visually reconstructs the current `index.html` content and structure, but every string/number/image comes from Firestore, none hardcoded.
+**Definition of Done:** Home page renders the executive FinOps command center with all 4 interactive, responsive telemetry graphs and counters alongside Experience, Capabilities, and Credentials; 100% Firestore data-driven; passes all shadow-free and emoji-free checks.
 **Git:** branch `step/16-home-sections`.
 
 ---
 
 ### Step 17 — Dynamic Page Engine
-**Objective:** Let the admin create entirely new pages later, reusing the same section/content mechanism as Home.
+**Objective:** Let the admin create entirely new pages later, reusing the same section/content mechanism as Home (including embedding Telemetry & FinOps Chart modules).
 **Local Inputs Required:** 📁 `D:\MyFiles\p2m-solutions\p2m-projects\DIIRA-INDUSTRIAL-FUEL` (reference for the page-builder + nav-linking pattern).
 **Actions:**
 1. Study the DIIRA project's page model (how it stores dynamic pages, how nav entries auto-link, how section order/visibility is toggled) and adapt the same shape into this repo's `pages`/`sections` collections (already scaffolded in Step 9).
-2. `DynamicPage.tsx` + `DynamicPage.hooks.ts`: resolves `:slug` route → fetches the page doc → renders its `sectionOrder[]` by mapping each section type to its section component (same components built in Steps 15–16, generalized to accept arbitrary page context, not just `home`).
+2. `DynamicPage.tsx` + `DynamicPage.hooks.ts`: resolves `:slug` route → fetches the page doc → renders its `sectionOrder[]` by mapping each section type to its section component (including `TelemetryChartSection`, `ImpactSection`, `ExperienceSection`, generalized to accept arbitrary page context).
 3. Route registration is **fully dynamic** — the router reads published `pages` from Firestore at boot (via `SiteConfigProvider`) rather than a static route table, so a brand-new admin-created page appears without a code deploy.
 4. Section/page **shuffle (reorder)** capability lives in the domain layer as a `ReorderSections` use-case (drag-and-drop UI wired in Step 23).
 **Definition of Done:** Manually adding a `pages` doc + a couple of `sections` docs in the Firestore console immediately produces a working new route with header/footer nav entries, with zero code changes.
@@ -545,13 +571,19 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 ---
 
 ### Step 23 — Content Management Modules
-**Objective:** The actual editing surface: pages, sections, logo, text, social links, hide/show, reorder.
+**Objective:** The actual editing surface: pages, sections, telemetry charts & FinOps metrics, logo, text, social links, hide/show, reorder.
 **Actions:**
 1. `PageEditor.tsx`/`.hooks.ts`: create/rename/delete pages, set slug, toggle `showInHeader`/`showInFooter`, publish/unpublish.
 2. `SectionEditor.tsx`/`.hooks.ts`: add/remove sections on a page, drag-to-reorder (calls the `ReorderSections` use-case from Step 17), per-section hide/show toggle, rich-text/plain-text field editing per section's schema.
-3. Global site settings screen: logo replacement (routes through the media manager, Step 24), tagline/footer text editing, social link CRUD (platform + URL + order + visible toggle).
-4. Every list row uses the `ThreeDotMenu` from Step 22 — no visible per-row icon buttons.
-**Definition of Done:** The client can, without touching code: rename the site, swap the logo, add a new page, add a section to it, reorder sections, hide a section, and see all of it live within a second.
+3. Telemetry & FinOps Chart Management:
+   - Dedicated chart editor in admin dashboard allowing configuration of metric series (`telemetryMetrics` collection):
+     * FinOps monthly cloud spend datapoints, baseline/optimized numbers, milestone labels.
+     * MTTR benchmark times per severity level (P1, P2, P3).
+     * Automation hours and manual effort ratios.
+     * Cloud resource counts per platform (Azure, AWS, GCP).
+4. Global site settings screen: logo replacement (routes through the media manager, Step 24), tagline/footer text editing, social link CRUD (platform + URL + order + visible toggle).
+5. Every list row uses the `ThreeDotMenu` from Step 22 — no visible per-row icon buttons.
+**Definition of Done:** The client can, without touching code: rename the site, swap the logo, add a new page, add/edit telemetry chart metrics and cost comparisons, reorder sections, hide a section, and see all of it live within a second.
 **Git:** branch `step/23-content-management`.
 
 ---

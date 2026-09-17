@@ -74,3 +74,16 @@ This skill guides you to craft high-prestige, authoritative cloud architecture a
 ## 5. Dual Chrome Layout
 - **Desktop (≥ 768px)**: Web header with logo, dynamic links, status beacon, and theme toggle.
 - **Mobile (< 768px)**: Mobile app header at top, floating pill dock at bottom with safe-area spacing and animated active-pill indicator.
+
+---
+
+## 6. Telemetry & Cost Comparison Charts (Instrument Panel Data Visualization)
+- **Multi-Graph Telemetry Suite**: Prominently feature interactive graphs for FinOps cost reduction ($170K/mo savings curve), incident MTTR reduction (40% faster recovery), automation efficiency (manual hours vs automated pipelines), and multi-cloud fleet distribution (2,000+ resources across Azure, AWS, and GCP).
+- **Shadow-Free Precision**: No `box-shadow` or filter drops. Depth via 1px hairline gridlines (`var(--line)`), layered card surfaces (`var(--ink-800)` / `var(--ink-700)`), and modern rounded corners (`rounded-xl`).
+- **Token-Accented Data Series**:
+  - Target / Optimized Metric: `var(--amber)`
+  - Baseline / Pre-Optimization Metric: `var(--cyan)`
+  - Live Status / Uptime: `var(--live)`
+  - Gridlines & Axis Dividers: `var(--line)`
+- **Tabular Precision**: Monospaced tabular figures (`font-mono tabular-nums`) across all axes, timestamps, delta percentages, and currency values.
+- **Frosted Telemetry Tooltips**: `backdrop-blur-xl`, `bg-[var(--ink-900)]/90`, `border border-[var(--line)]`, rounded pill or card, with zero zoom or scale distortion.

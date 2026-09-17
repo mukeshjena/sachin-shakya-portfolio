@@ -72,3 +72,22 @@ When writing, editing, or refactoring frontend code (HTML, CSS, React, TypeScrip
 ## 10. 8-Point Spacing Grid
 - Maintain consistent 8px multiples (`gap-2`, `gap-4`, `gap-6`, `gap-8`, `p-4`, `p-6`, `p-8`, `py-16`, `py-24`).
 - Ensure breathable padding within cards and balanced section rhythms.
+
+## 11. Data Visualization & Telemetry Charts Standard (Instrument Panel Graphs)
+When designing and implementing cost comparison charts, MTTR benchmarks, and cloud telemetry visualizations:
+- **Strictly Shadow-Free Visualization:** Absolutely zero `box-shadow` or `filter: drop-shadow()` on chart canvases, SVG paths, bars, or interactive tooltips.
+- **Hairline Telemetry Grid:** Gridlines must use subtle 1px hairline strokes (`var(--line)` or `rgba(130, 180, 200, 0.12)`). Never use heavy contrasting borders.
+- **Palette Token Mapping:**
+  - **Optimized / Post-Automation / Target Series:** `var(--amber)` (`#ffb020`) — highlights the $170K/mo savings curve and reduced MTTR.
+  - **Baseline / Pre-Automation Series:** `var(--cyan)` (`#49c7e8`) — represents initial expenditure and legacy incident resolution times.
+  - **Uptime / SLA / Availability Track:** `var(--live)` (`#3fd08a`) — denotes healthy fleet state and 99.99% uptime.
+  - **Axes & Tick Dividers:** `var(--ink-600)` / `var(--line)`.
+  - **Chart Card Container:** `var(--ink-800)` canvas with `border border-[var(--line)]` and modern rounded corners (`rounded-xl` or `rounded-2xl`).
+- **Typography Discipline:** All numbers, currencies (`$170K/mo`), time values (`72m`), percentages (`-40%`), and axis ticks MUST use monospaced tabular figures (`font-mono tabular-nums`).
+- **Non-Distorting Interactivity:** Zero scale zoom (`hover:scale-*` strictly banned). Scrubbing over data points illuminates hairline crosshairs and displays a frosted liquid-glass telemetry pill (`backdrop-blur-xl`, `bg-[var(--ink-900)]/90`, `border border-[var(--line)]`, `rounded-lg`).
+- **Universal Separation of Concerns (Rule 13):**
+  - Path geometry, scale math, curve interpolation, and number formatting live in `*Chart.utils.ts`.
+  - Baseline metrics, milestone copy, axis labels, and thresholds live in `*Chart.constants.ts`.
+  - Active hover indices, scrubbers, and tab switches live in `*Chart.hooks.ts`.
+  - Pure declarative SVG/JSX markup lives in `*Chart.tsx`.
+  - Co-located token styling lives in `*Chart.css`.

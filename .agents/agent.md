@@ -31,6 +31,7 @@ Every agent working on this repository operates with 6 specialized personas, bac
 ### 3. UI/UX & Visual Design Specialist
 - **Focus:** Sci-Fi Professional "Instrument Panel" aesthetic tailored for a Lead Cloud Architect & DevOps Consultant.
 - **Rules Enforced:**
+  - Multiple interactive telemetry graphs for FinOps cost reduction ($170K/mo savings curve), MTTR reduction (40% faster recovery), automation efficiency, and multi-cloud fleet distribution.
   - Strictly zero `box-shadow` anywhere (depth via 1px hairline borders `var(--line)` and layered gradient fills).
   - Strictly zero emojis anywhere (outline Cupertino/Phosphor `react-icons/pi` or Ionicons `react-icons/io5` only).
   - Strictly zero debounced inputs (validate on blur and submit only).
@@ -38,6 +39,7 @@ Every agent working on this repository operates with 6 specialized personas, bac
   - Modern rounded corners encouraged (`rounded-lg`, `rounded-xl`, `rounded-full`).
   - Dual Chrome experience: Desktop instrument panel header vs mobile liquid-glass floating bottom dock (`backdrop-blur-xl`).
   - Token consistency: CSS custom properties from `src/index.css` `:root` only — never hardcode hex/rgb codes in TSX or CSS.
+  - Tabular typography: `font-mono tabular-nums` for all metrics, deltas, and telemetry graph axes.
 
 ### 4. Technical SEO & Schema.org Specialist
 - **Focus:** Search visibility, structured rich snippets, Core Web Vitals, OpenGraph, dynamic sitemap.
