@@ -50,3 +50,48 @@
 - `.agent/` folder committed to git so any agent in any future session can read the rules
 - `memory.md` is append-only by convention — never edit past entries, only add new dated blocks
 - All 12 client rules are numbered and cross-referenced to plan document rule numbers where applicable
+
+---
+
+## 2026-09-18 — Step 3: Clean Architecture Skeleton + DI Container (Completed ✅)
+
+**Branch:** `step/03-clean-architecture-di` → merged into `main`
+**Commit:** `5d74211 feat(step-03): clean architecture skeleton + DI container + domain interfaces`
+
+**What was done:**
+- Created full four-layer folder skeleton: `domain/`, `application/`, `infrastructure/`, `presentation/`
+- **Domain entities** (all in `src/domain/entities/`, max 3 files per folder rule satisfied):
+  - `Page.ts` — Page entity with SEO fields, nav flags, sectionOrder[]
+  - `Section.ts` — Section entity with SectionType union, type-erased content bag
+  - `MediaAsset.ts` — Cloudinary asset tracker with usageRefs for cascade-delete
+- **Value objects** (`src/domain/value-objects/`):
+  - `Slug.ts` — enforces URL-safe slugs, `tryCreate()` factory for safe parsing
+  - `AccessCode.ts` — validates 6-digit numeric OTP, `generate()` uses `crypto.getRandomValues()`
+- **Repository interfaces** — split to satisfy 3-file-per-folder rule:
+  - `domain/repositories/content/`: IPageRepository, ISectionRepository, IMediaRepository
+  - `domain/repositories/admin/`: IAdminAccessRepository, IContactRepository, IEmailSender
+- **DI Infrastructure** (`src/infrastructure/di/`):
+  - `tokens.ts` — unique Symbols for all 6 repos + 6 use-cases + PingUseCase
+  - `container.ts` — hand-rolled typed Container class with `register/resolve/has/clear` + `singleton()` helper
+  - `bootstrap.ts` — single registration point, pre-commented stubs for Steps 7–18
+- **Application layer**:
+  - `application/use-cases/ping/PingUseCase.ts` — throwaway verification use-case
+  - `application/dto/PageDTO.ts` — serializes Page entity to React-safe primitives
+  - `application/dto/SectionDTO.ts` — serializes Section entity
+- **Presentation layer**:
+  - `presentation/shared/useContainer.ts` — the ONLY way components access DI
+  - `App.hooks.ts` — resolves PingUseCase and calls execute()
+  - `App.tsx` — zero-logic, calls useAppPing() hook
+  - `main.tsx` — calls bootstrapContainer() before React tree mounts
+
+**Verification:**
+- `npm run build` → ✅ 22 modules, 195ms, TypeScript strict mode passed
+- `npx biome check .` → ✅ 29 files, 0 errors (5 auto-fixed)
+- DI chain verified: App.tsx → App.hooks.ts → useContainer() → PingUseCase.execute() → "pong"
+
+**Key decisions:**
+- No tsyringe/inversify — hand-rolled container keeps bundle well under Cloudflare Workers 1 MB limit
+- 6 repository interfaces split across 2 subfolders (content/ + admin/) to respect 3-file-per-folder rule
+- `singleton()` helper is a closure wrapper, not framework magic — zero overhead
+- bootstrap.ts pre-comments every future registration so nothing is missed in later steps
+
