@@ -158,6 +158,31 @@
 - Confirmed live HTTP 200 response serving HTML, bundled CSS/JS, and PWA manifest.
 - Status Ledger updated: Step 5 → `Completed ✅`.
 
+---
+
+## 2026-09-18 — Step 6: Atomic CI/CD Pipeline (GitHub Actions)
+
+**Branch:** `step/06-cicd-pipeline` → merged into `release/v1.0.0`, `main`, and `develop`
+**Commit:** `feat(step-06): atomic ci/cd pipeline via github actions`
+
+**What was done:**
+- Configured GitHub Secrets on `mukeshjena/sachin-shakya-portfolio`:
+  - `CLOUDFLARE_ACCOUNT_ID` (`42dd65dfa56dd247b6a172a6bdaae4b2`)
+  - `CLOUDFLARE_API_TOKEN` (reused verified token from ODINA project per Rule 16)
+- Created `.github/workflows/deploy-cloudflare.yml` adapting canonical ODINA & DIIRA patterns:
+  1. Triggers: push to `main`, PRs into `main` and `release/v1.0.0`, `workflow_dispatch`.
+  2. Concurrency: `group: production-cloudflare-deploy` with `cancel-in-progress: true`.
+  3. Pre-flight secrets audit.
+  4. Node 24 setup with npm caching.
+  5. Biome code quality check.
+  6. TypeScript strict typecheck.
+  7. Vite production build.
+  8. Bundle size budget validation (<1000 KB index, <3000 KB total JS).
+  9. Atomic zero-downtime deploy to Cloudflare Workers via `npx wrangler deploy`.
+- Verified live GitHub Actions run on `main`: Run `#35277357086` succeeded in 30s.
+- Status Ledger updated: Step 6 → `Completed ✅`.
+
+
 
 
 
