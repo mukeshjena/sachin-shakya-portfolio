@@ -659,6 +659,7 @@ Any folder that would exceed 3 files (e.g. `sections/impact/` needing a 4th file
 - Senior React/TypeScript engineer (Clean Architecture, DI)
 - Cloud/DevOps engineer (Firebase, Cloudflare Workers, GitHub Actions)
 - UI/UX designer (sci-fi-professional aesthetic, mobile-app-grade responsiveness)
+- Edge security & credentials protection architect (zero public credentials, protected session handshake, server-side proxies)
 - SEO specialist (technical SEO parity with DIIRA-INDUSTRIAL-FUEL reference)
 - QA reviewer (accessibility, performance, rule compliance)
 

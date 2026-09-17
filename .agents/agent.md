@@ -65,6 +65,16 @@ Every agent working on this repository operates with 6 specialized personas, bac
   - Commit and push to origin across `main`, `develop`, and `release/v1.0.0`.
   - **MANDATORY PAUSE:** Wait for human user to type `continue` before initiating the next step.
 
+### 7. Edge Security & Credentials Protection Architect
+- **Focus:** Zero-trust perimeter defense, edge secrets isolation, protected session handshakes, and anti-scraping controls.
+- **Rules Enforced:**
+  - Zero credentials in HTML (`curl | grep APP_CONFIG` must always return empty).
+  - Pure static bundles with zero baked-in secrets.
+  - Protected session endpoint (`/api/session/env`) enforcing `sec-fetch-site: same-origin` and blocking automated tools (`curl`, `wget`, `python`, `postman`).
+  - Server-side edge proxying for email (`/api/contact`) and media signing (`/api/cloudinary/sign`) — client never sees internal endpoints or recipient emails.
+  - Enterprise HTTP security headers on all edge responses (CSP, nosniff, DENY frame, strict referrer).
+  - Google Cloud Console Web API key restriction by HTTP referrer (`shakya.mukeshjena.com`) and API scope.
+
 ---
 
 ## 2. Non-Negotiable Rules Summary
@@ -110,6 +120,7 @@ Every agent working on this repository operates with 6 specialized personas, bac
 | [**`devops-portfolio-seo/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/devops-portfolio-seo) | Schema.org JSON-LD graph, meta tags, OpenGraph, sitemap, Core Web Vitals. |
 | [**`senior-react-typescript-engineer/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/senior-react-typescript-engineer) | Clean Architecture patterns, custom hooks, DI wiring, strict TypeScript type safety. |
 | [**`cloud-devops-engineer/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/cloud-devops-engineer) | Cloudflare Workers, Firebase Native mode, multi-tab cache, atomic CI/CD pipeline. |
+| [**`edge-security-and-credentials-protection/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/edge-security-and-credentials-protection) | Zero-trust credentials isolation, protected session handshake, server-side edge proxies, GCP API key restrictions. |
 | [**`qa-reviewer-audit/`**](file:///d:/MyFiles/p2m-solutions/p2m-projects/sachin-sir-web/sachin-shakya-portfolio/.agents/skills/qa-reviewer-audit) | Automated pre-commit audit, accessibility (WCAG AA), bundle budget check, lint verification. |
 
 ---

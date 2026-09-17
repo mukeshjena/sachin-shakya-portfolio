@@ -366,6 +366,25 @@
   - `src/infrastructure/di/bootstrap.ts`: Registered `() => getDb()` and `() => getEnv()` factories.
   - `src/main.tsx`: Asynchronously calls `await loadRemoteEnvConfig()` before DI container bootstrap.
 
+---
+
+## 2026-09-18 — Edge Security & Credentials Protection Skill Created
+
+**Commit:** `feat(skill): add edge-security-and-credentials-protection skill and reference guides`
+
+**What was done:**
+- **Created `.agents/skills/edge-security-and-credentials-protection/`:**
+  - `SKILL.md`: Comprehensive skill definition covering zero credentials in HTML, protected session handshake, server-side edge proxies, security headers, and GCP API key restrictions.
+  - `references/credential_isolation_rules.md`: Secrets classification matrix and build-time/runtime isolation rules.
+  - `references/server_side_proxy_patterns.md`: Blueprints for `/api/contact` email proxy and `/api/cloudinary/*` signed upload gateway.
+  - `references/gcp_api_key_restrictions.md`: Step-by-step runbook for Google Cloud Console HTTP referrer and API lockdown.
+- **Updated `.agents/agent.md`:**
+  - Added Persona #7: Edge Security & Credentials Protection Architect.
+  - Added skill mapping to Section 4 (Dedicated Skills table).
+- **Updated `doc/SACHIN-SHAKYA-SITE-IMPLEMENTATION-PLAN.md`:**
+  - Added Edge Security skill to Section 7 skills list.
+
+
 
 
 
