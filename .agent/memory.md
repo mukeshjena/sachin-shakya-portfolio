@@ -140,5 +140,24 @@
   - Updated `.agent/agent.md` (Rules 3, 7, 13, 15, "What Goes Where" reference, and Pre-Commit & Pre-Push Gates).
   - Updated `doc/SACHIN-SHAKYA-SITE-IMPLEMENTATION-PLAN.md` (Rules 13, 14, 15, and Pre-Commit & Pre-Push Gates).
 
+---
+
+## 2026-09-18 — Step 5: First Cloudflare Worker Deploy via Wrangler
+
+**Branch:** `step/05-cloudflare-first-deploy` → merged into `release/v1.0.0`, `main`, and `develop`
+**Commit:** `feat(step-05): first cloudflare worker deploy via wrangler`
+
+**What was done:**
+- Installed `wrangler` (v4.134.0) as devDependency.
+- Created `wrangler.toml` configuring Cloudflare Workers Static Assets (`./dist` directory, SPA routing mode).
+- Configured routes:
+  - Custom domain: `shakya.mukeshjena.com`
+  - Workers dev endpoint: `https://sachin-shakya-portfolio.muk3shjena.workers.dev`
+- Added `"deploy": "npm run build && wrangler deploy"` script to `package.json`.
+- Deployed via `npx wrangler deploy` under Account ID `42dd65dfa56dd247b6a172a6bdaae4b2`.
+- Confirmed live HTTP 200 response serving HTML, bundled CSS/JS, and PWA manifest.
+- Status Ledger updated: Step 5 → `Completed ✅`.
+
+
 
 
