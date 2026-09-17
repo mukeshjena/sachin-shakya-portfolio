@@ -447,6 +447,37 @@
   - **Updated `.agents/agent.md` & `doc/SACHIN-SHAKYA-SITE-IMPLEMENTATION-PLAN.md`:**
     - Integrated Rules 17, 18, and 19 into the non-negotiable rules summary and agent persona instructions.
 
+---
+
+## 2026-09-18 — Step 9: Domain Model & Firestore Schema (Completed ✅)
+
+**Branch:** `step/09-domain-model-schema`
+**Commit:** `feat(step-09): domain model entities, firestore schema documentation, and composite indexes`
+
+**What was done:**
+- **Subfolder Entity Architecture (Strict Rule 2 & 4 Enforcement):**
+  - Restructured `src/domain/entities/` into 4 focused subfolders with ≤ 3 files per directory:
+    - `content/`: `Page.ts`, `Section.ts` (with `telemetry` section type), `MediaAsset.ts`
+    - `telemetry/`: `TelemetryMetric.ts`, `CostComparisonSeries.ts`, `MTTRBenchmark.ts`
+    - `profile/`: `Experience.ts`, `Competency.ts`, `Certification.ts` (includes `EducationRecord`)
+    - `admin/`: `SiteSettings.ts`, `ContactSubmission.ts`, `PromoPopup.ts`
+- **Updated Existing Consumer Import Paths:**
+  - `src/domain/repositories/content/ISectionRepository.ts`
+  - `src/domain/repositories/content/IPageRepository.ts`
+  - `src/domain/repositories/content/IMediaRepository.ts`
+  - `src/application/dto/PageDTO.ts`
+  - `src/application/dto/SectionDTO.ts`
+- **Firestore Database Schema Documentation:**
+  - Authored `doc/firestore-schema.md` and `docs/firestore-schema.md`: 1:1 mapping table between Firestore collections and TypeScript domain entities, field specifications, offline multi-tab IndexedDB cache strategy, and deterministic ID naming schemes.
+- **Composite Query Indexes Declared (`firestore.indexes.json`):**
+  - Declared multi-field composite indexes for `pages` (`isPublished + order`), `sections` (`pageId + order`), `telemetryMetrics` (`category + order`), `competencies` (`category + order`), and `contactSubmissions` (`isArchived + createdAt`).
+- **Local Verification & Quality Gates:**
+  - Biome linter and formatter: 0 errors (`npm run check`).
+  - Strict TypeScript typecheck: 0 errors (`npm run typecheck`).
+  - Production build: successfully built client assets (`npm run build`).
+  - Integration tests: `npm run test:firestore` & `npm run test:cloudinary` passed.
+
+
 
 
 

@@ -1,8 +1,8 @@
-// domain/entities/Page.ts
+// domain/entities/content/Page.ts
 // Pure domain entity — zero framework imports allowed in this file.
 // Any change here must also update scripts/seed/seed-content.ts (agent rule #9).
 
-import type { Slug } from "../value-objects/Slug";
+import type { Slug } from "../../value-objects/Slug";
 
 /**
  * Represents a publishable page on the site.

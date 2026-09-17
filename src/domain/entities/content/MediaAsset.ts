@@ -1,4 +1,4 @@
-// domain/entities/MediaAsset.ts
+// domain/entities/content/MediaAsset.ts
 // Pure domain entity — zero framework imports allowed in this file.
 
 /**

@@ -1,7 +1,7 @@
 // domain/repositories/content/IPageRepository.ts
 // Interface only — zero framework or infrastructure imports.
 
-import type { CreatePageInput, Page, UpdatePageInput } from "../../entities/Page";
+import type { CreatePageInput, Page, UpdatePageInput } from "../../entities/content/Page";
 import type { Slug } from "../../value-objects/Slug";
 
 /**

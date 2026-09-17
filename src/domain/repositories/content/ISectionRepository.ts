@@ -1,7 +1,11 @@
 // domain/repositories/content/ISectionRepository.ts
 // Interface only — zero framework or infrastructure imports.
 
-import type { CreateSectionInput, Section, UpdateSectionInput } from "../../entities/Section";
+import type {
+  CreateSectionInput,
+  Section,
+  UpdateSectionInput,
+} from "../../entities/content/Section";
 
 /**
  * Contract for all section persistence operations.

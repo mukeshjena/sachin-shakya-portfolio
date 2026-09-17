@@ -1,7 +1,7 @@
 // application/dto/SectionDTO.ts
 // Data Transfer Object for Section — serializable shape returned to the presentation layer.
 
-import type { Section, SectionType } from "../../domain/entities/Section";
+import type { Section, SectionType } from "../../domain/entities/content/Section";
 
 /** Presentation-safe representation of a Section */
 export interface SectionDTO {

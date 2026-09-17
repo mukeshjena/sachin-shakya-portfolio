@@ -1,7 +1,7 @@
 // domain/repositories/content/IMediaRepository.ts
 // Interface only — zero framework or infrastructure imports.
 
-import type { CreateMediaAssetInput, MediaAsset } from "../../entities/MediaAsset";
+import type { CreateMediaAssetInput, MediaAsset } from "../../entities/content/MediaAsset";
 
 /**
  * Contract for media asset persistence.

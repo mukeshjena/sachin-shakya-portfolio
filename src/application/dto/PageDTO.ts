@@ -3,7 +3,7 @@
 // DTOs are plain serializable objects; they convert domain entities (which may contain
 // value objects like Slug) into primitives safe for React state and JSON serialization.
 
-import type { Page } from "../../domain/entities/Page";
+import type { Page } from "../../domain/entities/content/Page";
 
 /** Presentation-safe representation of a Page */
 export interface PageDTO {

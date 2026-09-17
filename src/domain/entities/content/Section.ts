@@ -1,4 +1,4 @@
-// domain/entities/Section.ts
+// domain/entities/content/Section.ts
 // Pure domain entity — zero framework imports allowed in this file.
 
 /**
@@ -8,6 +8,7 @@
 export type SectionType =
   | "hero"
   | "impact"
+  | "telemetry"
   | "experience"
   | "capabilities"
   | "credentials"
