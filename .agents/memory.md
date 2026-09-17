@@ -477,6 +477,49 @@
   - Production build: successfully built client assets (`npm run build`).
   - Integration tests: `npm run test:firestore` & `npm run test:cloudinary` passed.
 
+---
+
+## 2026-09-18 — Step 10: Idempotent Seed Script + Cleanup Script (Completed ✅)
+
+**Branch:** `step/10-seed-cleanup-scripts`
+**Commit:** `feat(step-10): idempotent seed script and cleanup script for firestore and cloudinary`
+
+**What was done:**
+- **Cloudinary Idempotent Media Seeding (`scripts/seed/seed-media.ts`):**
+  - Reads local assets (`sachin-logo.png`, `sachin-one.png`, `sachin-two.png`) from `C:\Users\LenovO\Downloads\`.
+  - Checks Firestore `mediaAssets` collection before uploading. If already uploaded (matched by tag or deterministic asset ID), skips re-uploading and logs `[CACHED]`.
+  - On first run, computes SHA-1 signature and uploads directly via Cloudinary REST API to folder structure:
+    - `sachin-shakya/logo/`
+    - `sachin-shakya/home/hero/`
+    - `sachin-shakya/home/experience/`
+  - Saves metadata record to Firestore collection `mediaAssets`.
+- **Firestore Full Schema Content Seeding (`scripts/seed/seed-content.ts`):**
+  - Populates 10 Firestore collections with 100% deterministic document IDs and `setDoc(..., { merge: true })`:
+    - `siteSettings/global`: executive headline, bio, contact emails, social links, SEO defaults, telemetry highlights.
+    - `pages/home` & `pages/about`: core page records with navigation metadata.
+    - `sections/*`: 8 rich home sections including `hero`, `telemetry-overview`, `cost-optimization`, `mttr-benchmarks`, `experience`, `competencies`, `certifications`, `contact`.
+    - `telemetryMetrics/*`: 6 high-impact metrics ($170K/mo savings, 40% MTTR, 2,000+ cloud resources, 99.99% availability, 30-40% effort reduction, 8 enterprise certifications).
+    - `telemetryCostSeries/finops-12m-trajectory`: 12-month data series showing $450K/mo baseline to $280K/mo optimized curve.
+    - `telemetryBenchmarks/incident-mttr-comparison`: P1, P2, P3 incident MTTR comparison series showing 40% reduction.
+    - `experience/*`: 4 full enterprise positions (Eptura Lead Cloud Architect, Downer Infrastructure Specialist, LTIMindtree Azure SME, ABN AMRO / TCS Specialist).
+    - `competencies/*`: 16 multi-cloud competencies across Cloud Platforms, IaC & Automation, Observability & SRE, and Enterprise Architecture.
+    - `certifications/*`: 8 industry certifications (AZ-104, AZ-900, DP-900, SC-900, CLF-C01, ITIL Foundation, Kubernetes & Terraform).
+    - `promoPopup/active-lead-magnet`: executive lead magnet and advisory consultation popup.
+- **Master Seed Orchestrator (`scripts/seed/seed.ts`):**
+  - Orchestrates media seeding first, extracts live CDN URLs, injects URLs into content seed, and runs sequentially with comprehensive telemetry reporting.
+- **Safe Teardown Script (`scripts/cleanup/cleanup.ts`):**
+  - Gated by mandatory `--yes-i-am-sure` CLI flag.
+  - Queries Cloudinary assets under `sachin-shakya/` and deletes them via authenticated Cloudinary API.
+  - Batches deletions across all 10 Firestore collections in batches of 500.
+- **Idempotency Verification:**
+  - Seed Run 1: Successfully uploaded 3 Cloudinary assets, created all documents across 10 collections in 32s.
+  - Seed Run 2: Read cached media assets from Firestore, 0 duplicate uploads, merged all documents in 6s. Zero duplicate records.
+- **Quality Gates:**
+  - Biome linter and formatter: 0 errors, 0 warnings (`npm run check`).
+  - Strict TypeScript check: 0 errors (`npm run typecheck`).
+  - Production build: passed cleanly (`npm run build`).
+
+
 
 
 
