@@ -69,7 +69,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 12 | Design tokens + dark/light theme (localStorage) | Core | Completed ✅ |
 | 13 | Global providers (Theme, Auth, SiteConfig, Errors) | Core | Completed ✅ |
 | 14 | App shell: header, iOS-liquid-glass bottom nav, footer | Public UI | Completed ✅ |
-| 15 | Sci-fi hero: Three.js "blackhole" + Framer Motion + custom cursor | Public UI | Pending |
+| 15 | Sci-fi hero: Three.js "blackhole" + Framer Motion + custom cursor | Public UI | Completed ✅ |
 | 16 | Home sections from résumé content (Impact/Experience/Capabilities/Credentials) | Public UI | Pending |
 | 17 | Dynamic page engine (admin-created pages, slugs, section shuffle) | Public UI | Pending |
 | 18 | Contact form + email API integration | Public UI | Pending |

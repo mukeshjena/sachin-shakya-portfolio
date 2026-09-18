@@ -677,9 +677,43 @@
   - `npx tsx scripts/test-shell-e2e.ts` → ✅ 100% passed (DI resolution, Firestore nav fetch, site settings, and link declarations).
   - `npx tsx scripts/test-providers-e2e.ts` → ✅ 100% passed.
   - `npx tsx scripts/test-pipeline-e2e.ts` → ✅ 100% passed.
-  - `npx biome check .` → ✅ 115 files, 0 errors.
+---
+
+## 2026-09-18 — Step 15: Sci-Fi Hero Subsystem (Three.js Blackhole + Framer Motion + Custom Cursor) (Completed ✅)
+
+**Branch:** `step/15-blackhole-hero` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `04dba10 feat(step-15): sci-fi hero (three.js blackhole scene, framer motion entrance, custom cursor)`
+
+**What was done:**
+- **Three.js Blackhole Scene & Shaders (`src/presentation/hero/scene/`):**
+  - Created `BlackholeHero.shaders.ts`: Custom GLSL shaders for Keplerian accretion particles (with distance-based attenuation, circular discard, and color mixing) and relativistic event horizon corona (with Fresnel edge glow and dark event horizon singularity core).
+  - Created `BlackholeHero.scene.ts`: Pure Three.js scene controller encapsulated with BufferGeometry, ShaderMaterial, requestAnimationFrame render loop, subtle pointer parallax interpolation (`lerp`), and complete cleanup/disposal methods (`dispose()`).
+- **Hero Telemetry & Motion Constants (`src/presentation/hero/constants/`):**
+  - Created `hero.constants.ts`: Verified telemetry metrics ($170K/mo savings, -40% MTTR, 2,000+ resources), verified stack badges (Azure, AWS, K8s, Terraform, Datadog, FinOps), and Framer Motion staggered entrance container/item variants.
+- **Custom Precision Cursor (`src/presentation/hero/cursor/`):**
+  - Created `CustomCursor.tsx`, `useCustomCursor.ts`, `CustomCursor.types.ts`: Smooth spring physics (`framer-motion` `useSpring`), dynamic scaling on interactive element hover (`a, button, input`), automatic touch device suppression (`pointer: coarse`), and accessibility prefers-reduced-motion check.
+- **Sci-Fi Hero Presentation Component (`src/presentation/hero/`):**
+  - Created `BlackholeHero.tsx`: Asymmetric 60/40 executive composition with live interactive canvas, technical eyebrow, headline, subheadline, dual action buttons (Contact & Download Résumé), telemetry KPI strip, infrastructure badges, and verified identity photo card with hairline borders.
+  - Created `BlackholeHero.hooks.ts`: Dynamic data fetching from Firestore, `IntersectionObserver` pause guard (freezes 3D render loop when scrolled offscreen for zero CPU/GPU overhead), and `prefers-reduced-motion` compliance.
+  - Created `BlackholeHero.types.ts`: Strongly-typed state interfaces.
+- **App Integration (`src/App.tsx`):**
+  - Integrated `<CustomCursor />` and `<BlackholeHero />` into the master layout.
+- **Architectural & Aesthetic Invariants Met:**
+  - Strictly shadow-free (0 `box-shadow` or `shadow-*`).
+  - Strictly emoji-free (all iconography rendered via `react-icons/io5`).
+  - Max 3 files per directory across all folders (`scene/`, `constants/`, `cursor/`, `hero/`).
+  - Max 500 lines per file (all files between 20 and 236 LOC).
+  - Clean Architecture & Universal Separation of Concerns (Rule 13) enforced.
+- **Verification:**
+  - `npx tsx scripts/test-hero-e2e.ts` → ✅ 100% passed (Three.js controller, custom GLSL shaders, telemetry constants, Firestore page & site settings bindings).
+  - `npx tsx scripts/test-shell-e2e.ts` → ✅ 100% passed.
+  - `npx tsx scripts/test-providers-e2e.ts` → ✅ 100% passed.
+  - `npx tsx scripts/test-pipeline-e2e.ts` → ✅ 100% passed.
+  - `npx biome check .` → ✅ 125 files, 0 errors.
   - `npx tsc -b` → ✅ strict type check passed.
-  - `npx vite build --logLevel silent` → ✅ build succeeded.
+  - `npx vite build --logLevel silent` → ✅ production build passed.
+  - Automated pre-commit hook passed without `--no-verify`.
+  - Non-blocking CI/CD check verified via `gh run list --limit 1` (Workflow run 35357934555 started).
 
 
 
