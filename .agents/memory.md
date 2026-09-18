@@ -934,6 +934,42 @@
 - `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
 - `npx vite build --logLevel silent` → ✅ Production build succeeded.
 - `npx tsx scripts/test-contact-e2e.ts` → ✅ 100% passed.
-- Pre-commit automated quality gate passed cleanly on git commit.
 - Sequential branch promotion completed: `step/18-contact-form-email` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+
+---
+
+## 2026-09-18 — Step 19: Promo Popup (Completed ✅)
+
+**Branch:** `step/19-promo-popup` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `a1d075b feat(step-19): promo popup — admin-controlled consultative modal, Firestore persistence, and transactional email integration`
+
+**What was done:**
+1. **Domain Layer (`src/domain/repositories/promo/IPromoPopupRepository.ts`):**
+   - Defined `IPromoPopupRepository` contract with `get(): Promise<PromoPopup | null>` and `update(input: UpdatePromoPopupInput): Promise<PromoPopup>`.
+   - Strictly partitioned into `promo/` subfolder adhering to the max-3-files folder rule.
+2. **Application Layer (`src/application/`):**
+   - `dto/promo/PromoPopupDTO.ts`: DTO serializer converting domain entity into presentation-safe primitives.
+   - `use-cases/promo/GetPromoPopupUseCase.ts`: Query use-case resolving singleton `promoPopup/global` from Firestore.
+   - `use-cases/promo/SubmitPromoInquiryUseCase.ts`: Validates inquiry parameters, records submission into `contactSubmissions` with `source: "promo-popup"`, and dispatches transactional notification email to `sachin.shakya@live.com` via `IEmailSender`.
+3. **Infrastructure Layer (`src/infrastructure/`):**
+   - `FirestorePromoPopupRepository.ts`: Concrete repository implemented using Firebase Firestore native mode SDK reading `promoPopup/global`.
+   - `tokens.ts` & `bootstrap.ts`: Registered `PromoPopupRepository`, `GetPromoPopup`, and `SubmitPromoInquiry` DI tokens and singletons.
+4. **Presentation Layer (`src/presentation/promo/`):**
+   - `constants/promo.constants.ts`: Complete copy, focus options, timings, and `sessionStorage` keys (`sachin_promo_dismissed_session`, `sachin_promo_submitted_session`).
+   - `PromoPopupModal.types.ts`: Strictly typed view model and form state.
+   - `PromoPopupModal.hooks.ts`: Manages dwell delay timer (default 6s), session-storage frequency guard, blur-only validation (zero debounce per Rule 12), and keyboard (`Escape`) handling.
+   - `PromoPopupModal.tsx`: Pure declarative split-panel desktop layout and compact mobile sheet. Strictly shadow-free (`shadow-none`), emoji-free (`react-icons/io5`), with hairline border styling.
+5. **Global Assembly (`src/App.tsx`):**
+   - Mounted `<PromoPopupModal />` inside `<AppProviders>` alongside `<AppLayout>` to enable non-disruptive consultation prompts across all routes.
+6. **Automated Verification (`scripts/test-promo-popup-e2e.ts`):**
+   - Verified DI resolution, Firestore config fetch, input rejection on short name / invalid email, and successful `promo-popup` submission creation with 100% test pass.
+
+**Verification:**
+- `npx biome check .` → ✅ 178 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build succeeded.
+- `npx tsx scripts/test-promo-popup-e2e.ts` → ✅ 100% passed.
+- Pre-commit automated quality gate passed cleanly on git commit.
+- Sequential branch promotion completed: `step/19-promo-popup` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+
 
