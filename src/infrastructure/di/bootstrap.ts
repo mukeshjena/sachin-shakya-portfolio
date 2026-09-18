@@ -3,17 +3,21 @@
 // This is the ONLY file that imports both infrastructure classes and DI tokens together.
 // Import this once at app startup (main.tsx), before any component renders.
 
-import { GetFooterNavPagesUseCase } from "../../application/use-cases/pages/GetFooterNavPagesUseCase";
-import { GetHeaderNavPagesUseCase } from "../../application/use-cases/pages/GetHeaderNavPagesUseCase";
-import { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages/GetPublishedPageBySlugUseCase";
+import { ReorderSectionsUseCase } from "../../application/use-cases/pages/mutation/ReorderSectionsUseCase";
+import { GetFooterNavPagesUseCase } from "../../application/use-cases/pages/nav/GetFooterNavPagesUseCase";
+import { GetHeaderNavPagesUseCase } from "../../application/use-cases/pages/nav/GetHeaderNavPagesUseCase";
+import { GetPageSectionsUseCase } from "../../application/use-cases/pages/query/GetPageSectionsUseCase";
+import { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages/query/GetPublishedPageBySlugUseCase";
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
 import { GetSiteSettingsUseCase } from "../../application/use-cases/settings/GetSiteSettingsUseCase";
 import { SubscribeSiteSettingsUseCase } from "../../application/use-cases/settings/SubscribeSiteSettingsUseCase";
 import type { IPageRepository } from "../../domain/repositories/content/IPageRepository";
+import type { ISectionRepository } from "../../domain/repositories/content/ISectionRepository";
 import type { ISiteSettingsRepository } from "../../domain/repositories/settings/ISiteSettingsRepository";
 import { CloudinaryMediaUploader } from "../cloudinary/CloudinaryMediaUploader";
 import { getDb } from "../firebase/firebaseClient";
 import { FirestorePageRepository } from "../repositories/content/FirestorePageRepository";
+import { FirestoreSectionRepository } from "../repositories/content/FirestoreSectionRepository";
 import { FirestoreSiteSettingsRepository } from "../repositories/settings/FirestoreSiteSettingsRepository";
 import { getEnv } from "../system/env";
 import { container, singleton } from "./container";
@@ -39,23 +43,46 @@ export function bootstrapContainer(): void {
     singleton(() => new PingUseCase())
   );
 
-  // ── Content & Settings repositories (Step 11 & 13) ─────────────────────────
+  // ── Content & Settings repositories (Step 11, 13 & 17) ─────────────────────
   container.register(
     DI_TOKENS.PageRepository,
     singleton(() => new FirestorePageRepository())
+  );
+  container.register(
+    DI_TOKENS.SectionRepository,
+    singleton(() => new FirestoreSectionRepository())
   );
   container.register(
     DI_TOKENS.SiteSettingsRepository,
     singleton(() => new FirestoreSiteSettingsRepository())
   );
 
-  // ── Use-cases (Step 11, 13 & 14) ───────────────────────────────────────────
+  // ── Use-cases (Step 11, 13, 14 & 17) ───────────────────────────────────────
   container.register(
     DI_TOKENS.GetPublishedPageBySlug,
     singleton(
       () =>
         new GetPublishedPageBySlugUseCase(
           container.resolve<IPageRepository>(DI_TOKENS.PageRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.GetPageSections,
+    singleton(
+      () =>
+        new GetPageSectionsUseCase(
+          container.resolve<ISectionRepository>(DI_TOKENS.SectionRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.ReorderSections,
+    singleton(
+      () =>
+        new ReorderSectionsUseCase(
+          container.resolve<IPageRepository>(DI_TOKENS.PageRepository),
+          container.resolve<ISectionRepository>(DI_TOKENS.SectionRepository)
         )
     )
   );

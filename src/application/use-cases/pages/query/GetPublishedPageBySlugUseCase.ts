@@ -1,12 +1,16 @@
-// application/use-cases/pages/GetPublishedPageBySlugUseCase.ts
+// application/use-cases/pages/query/GetPublishedPageBySlugUseCase.ts
 // Use-case for retrieving a published page by its URL slug.
 // Pure application orchestration: domain entities -> PageDTO. Zero framework dependencies.
 
-import type { IPageRepository } from "../../../domain/repositories/content/IPageRepository";
-import { Slug } from "../../../domain/value-objects/Slug";
-import { type PageDTO, toPageDTO } from "../../dto/PageDTO";
+import type { IPageRepository } from "../../../../domain/repositories/content/IPageRepository";
+import { Slug } from "../../../../domain/value-objects/Slug";
+import { type PageDTO, toPageDTO } from "../../../dto/PageDTO";
 
-export class GetPublishedPageBySlugUseCase {
+export interface IGetPublishedPageBySlugUseCase {
+  execute(rawSlug: string): Promise<PageDTO | null>;
+}
+
+export class GetPublishedPageBySlugUseCase implements IGetPublishedPageBySlugUseCase {
   private readonly pageRepository: IPageRepository;
 
   constructor(pageRepository: IPageRepository) {

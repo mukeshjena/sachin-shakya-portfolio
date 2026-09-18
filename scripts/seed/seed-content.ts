@@ -90,6 +90,32 @@ export async function seedContent(media: SeededMediaMap): Promise<void> {
     { merge: true }
   );
 
+  // 2b. Dynamic Page Example ('cloud-architecture')
+  console.log("Seeding pages/cloud-architecture (dynamic page)...");
+  await setDoc(
+    doc(db, "pages", "cloud-architecture"),
+    {
+      id: "cloud-architecture",
+      slug: "cloud-architecture",
+      title: "Architecture & FinOps",
+      sectionOrder: [
+        "arch-telemetry-0",
+        "arch-capabilities-1",
+        "arch-experience-2",
+        "arch-custom-3",
+      ],
+      isPublished: true,
+      showInHeader: true,
+      showInFooter: true,
+      seoTitle: "Enterprise Multi-Cloud & FinOps Architecture — Sachin Shakya",
+      seoDescription:
+        "Comprehensive architectural blueprint and live telemetry demonstrating $170K/mo savings, 40% MTTR reduction, and 2,000+ managed cloud resources.",
+      seoImage: media.heroPhotoUrl,
+      updatedAt: timestamp,
+    },
+    { merge: true }
+  );
+
   // 3. Sections
   console.log("Seeding sections...");
   const sections = [
@@ -187,6 +213,73 @@ export async function seedContent(media: SeededMediaMap): Promise<void> {
         heading: "Let's Talk About Your Cloud Architecture",
         subheading:
           "Direct engagement inquiry for consulting, FinOps audits, or senior leadership roles.",
+      },
+    },
+    // Dynamic Page sections: cloud-architecture
+    {
+      id: "arch-telemetry-0",
+      pageId: "cloud-architecture",
+      type: "telemetry",
+      title: "FinOps Telemetry Command Center",
+      order: 0,
+      isVisible: true,
+      content: {},
+    },
+    {
+      id: "arch-capabilities-1",
+      pageId: "cloud-architecture",
+      type: "capabilities",
+      title: "Architectural Capabilities",
+      order: 1,
+      isVisible: true,
+      content: {},
+    },
+    {
+      id: "arch-experience-2",
+      pageId: "cloud-architecture",
+      type: "experience",
+      title: "Enterprise Engagements",
+      order: 2,
+      isVisible: true,
+      content: {},
+    },
+    {
+      id: "arch-custom-3",
+      pageId: "cloud-architecture",
+      type: "custom",
+      title: "Governance & Automation Framework",
+      order: 3,
+      isVisible: true,
+      content: {
+        eyebrow: "ARCHITECTURE STANDARD // ENTERPRISE READINESS",
+        headline: "High-Availability Multi-Region Cloud Foundations",
+        subheadline:
+          "Standardized Terraform modular patterns, automated drift remediation, and enterprise guardrails ensuring zero unplanned downtime across mission-critical services.",
+        body: "All infrastructure deployments are managed as immutable code via GitOps pipelines with integrated FinOps cost checks, least-privilege RBAC policies, and comprehensive Datadog/Dynatrace observability telemetry.",
+        ctaText: "Return to Mission Control",
+        ctaUrl: "/",
+        secondaryCtaText: "Review Credentials",
+        secondaryCtaUrl: "/#credentials",
+        items: [
+          {
+            title: "Terraform Enterprise IaC",
+            description:
+              "100% codified multi-cloud environments with automated policy-as-code linting.",
+            tag: "INFRASTRUCTURE",
+          },
+          {
+            title: "Automated FinOps Invariants",
+            description:
+              "Continuous right-sizing, anomaly detection, and automated reservation management.",
+            tag: "FINOPS",
+          },
+          {
+            title: "Zero-Downtime Releases",
+            description:
+              "Canary deployments and automated circuit breaking with 99.99% availability.",
+            tag: "RELIABILITY",
+          },
+        ],
       },
     },
   ];

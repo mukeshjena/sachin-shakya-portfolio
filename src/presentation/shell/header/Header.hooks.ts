@@ -3,7 +3,7 @@
 // Adheres strictly to Universal Separation of Concerns (Rule 13).
 
 import { useEffect, useMemo, useState } from "react";
-import type { IGetHeaderNavPagesUseCase } from "../../../application/use-cases/pages/GetHeaderNavPagesUseCase";
+import type { IGetHeaderNavPagesUseCase } from "../../../application/use-cases/pages/nav/GetHeaderNavPagesUseCase";
 import { DI_TOKENS } from "../../../infrastructure/di/tokens";
 import { useSiteConfig } from "../../providers/site-config/useSiteConfig";
 import { useContainer } from "../../shared/useContainer";

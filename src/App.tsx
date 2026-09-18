@@ -6,6 +6,7 @@ import { useAppState } from "./App.hooks";
 import { BlackholeHero } from "./presentation/hero/BlackholeHero";
 import { CustomCursor } from "./presentation/hero/cursor/CustomCursor";
 import { ExecutiveOverview } from "./presentation/overview/ExecutiveOverview";
+import { DynamicPage } from "./presentation/pages/dynamic/DynamicPage";
 import { PipelineTest } from "./presentation/pages/pipeline-test/PipelineTest";
 import { AppProviders } from "./presentation/providers/AppProviders";
 import { CapabilitiesSection } from "./presentation/sections/capabilities/CapabilitiesSection";
@@ -15,7 +16,7 @@ import { TelemetrySection } from "./presentation/sections/telemetry/TelemetrySec
 import { AppLayout } from "./presentation/shell/layout/AppLayout";
 
 function App() {
-  const { showPipelineTest } = useAppState();
+  const { showPipelineTest, isDynamicRoute, activeSlug } = useAppState();
 
   return (
     <AppProviders>
@@ -27,6 +28,8 @@ function App() {
               <PipelineTest />
             </div>
           </div>
+        ) : isDynamicRoute ? (
+          <DynamicPage slug={activeSlug} />
         ) : (
           <>
             <BlackholeHero />

@@ -3,7 +3,7 @@
 // Universal Separation of Concerns (Rule 13).
 
 import { useEffect, useMemo, useState } from "react";
-import type { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages/GetPublishedPageBySlugUseCase";
+import type { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages/query/GetPublishedPageBySlugUseCase";
 import { DI_TOKENS } from "../../infrastructure/di/tokens";
 import { useSiteConfig } from "../providers/site-config/useSiteConfig";
 import { useContainer } from "../shared/useContainer";

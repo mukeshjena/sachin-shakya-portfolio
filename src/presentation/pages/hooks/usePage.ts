@@ -4,7 +4,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { PageDTO } from "../../../application/dto/PageDTO";
-import type { GetPublishedPageBySlugUseCase } from "../../../application/use-cases/pages/GetPublishedPageBySlugUseCase";
+import type { GetPublishedPageBySlugUseCase } from "../../../application/use-cases/pages/query/GetPublishedPageBySlugUseCase";
 import { DI_TOKENS } from "../../../infrastructure/di/tokens";
 import { useContainer } from "../../shared/useContainer";
 
