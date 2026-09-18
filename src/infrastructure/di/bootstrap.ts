@@ -9,7 +9,9 @@ import { RemoveAdminEmailUseCase } from "../../application/use-cases/admin-users
 import { RequestAccessCodeUseCase } from "../../application/use-cases/auth/RequestAccessCodeUseCase";
 import { VerifyAccessCodeUseCase } from "../../application/use-cases/auth/VerifyAccessCodeUseCase";
 import { SubmitContactFormUseCase } from "../../application/use-cases/contact/SubmitContactFormUseCase";
+import { DeletePageUseCase } from "../../application/use-cases/pages/mutation/DeletePageUseCase";
 import { ReorderSectionsUseCase } from "../../application/use-cases/pages/mutation/ReorderSectionsUseCase";
+import { SavePageUseCase } from "../../application/use-cases/pages/mutation/SavePageUseCase";
 import { GetFooterNavPagesUseCase } from "../../application/use-cases/pages/nav/GetFooterNavPagesUseCase";
 import { GetHeaderNavPagesUseCase } from "../../application/use-cases/pages/nav/GetHeaderNavPagesUseCase";
 import { GetPageSectionsUseCase } from "../../application/use-cases/pages/query/GetPageSectionsUseCase";
@@ -17,8 +19,11 @@ import { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
 import { GetPromoPopupUseCase } from "../../application/use-cases/promo/GetPromoPopupUseCase";
 import { SubmitPromoInquiryUseCase } from "../../application/use-cases/promo/SubmitPromoInquiryUseCase";
+import { SaveSectionUseCase } from "../../application/use-cases/sections/SaveSectionUseCase";
 import { GetSiteSettingsUseCase } from "../../application/use-cases/settings/GetSiteSettingsUseCase";
 import { SubscribeSiteSettingsUseCase } from "../../application/use-cases/settings/SubscribeSiteSettingsUseCase";
+import { UpdateSiteSettingsUseCase } from "../../application/use-cases/settings/UpdateSiteSettingsUseCase";
+import { SaveTelemetryMetricsUseCase } from "../../application/use-cases/telemetry/SaveTelemetryMetricsUseCase";
 import type { IAdminAccessRepository } from "../../domain/repositories/admin/IAdminAccessRepository";
 import type { IContactRepository } from "../../domain/repositories/admin/IContactRepository";
 import type { IEmailSender } from "../../domain/repositories/admin/IEmailSender";
@@ -26,6 +31,7 @@ import type { IPageRepository } from "../../domain/repositories/content/IPageRep
 import type { ISectionRepository } from "../../domain/repositories/content/ISectionRepository";
 import type { IPromoPopupRepository } from "../../domain/repositories/promo/IPromoPopupRepository";
 import type { ISiteSettingsRepository } from "../../domain/repositories/settings/ISiteSettingsRepository";
+import type { ITelemetryRepository } from "../../domain/repositories/telemetry/ITelemetryRepository";
 import { CloudinaryMediaUploader } from "../cloudinary/CloudinaryMediaUploader";
 import { EmailApiSender } from "../email/EmailApiSender";
 import { getDb } from "../firebase/firebaseClient";
@@ -35,6 +41,7 @@ import { FirestorePromoPopupRepository } from "../repositories/admin/FirestorePr
 import { FirestorePageRepository } from "../repositories/content/FirestorePageRepository";
 import { FirestoreSectionRepository } from "../repositories/content/FirestoreSectionRepository";
 import { FirestoreSiteSettingsRepository } from "../repositories/settings/FirestoreSiteSettingsRepository";
+import { FirestoreTelemetryRepository } from "../repositories/telemetry/FirestoreTelemetryRepository";
 import { FirestoreRealtimeSyncService } from "../services/realtime/FirestoreRealtimeSyncService";
 import { getEnv } from "../system/env";
 import { container, singleton } from "./container";
@@ -92,6 +99,10 @@ export function bootstrapContainer(): void {
   container.register(
     DI_TOKENS.AdminAccessRepository,
     singleton(() => new FirestoreAdminAccessRepository())
+  );
+  container.register(
+    DI_TOKENS.TelemetryRepository,
+    singleton(() => new FirestoreTelemetryRepository())
   );
 
   // ── Use-cases (Step 11, 13, 14 & 17) ───────────────────────────────────────
@@ -227,6 +238,46 @@ export function bootstrapContainer(): void {
       () =>
         new RemoveAdminEmailUseCase(
           container.resolve<IAdminAccessRepository>(DI_TOKENS.AdminAccessRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.SavePage,
+    singleton(
+      () => new SavePageUseCase(container.resolve<IPageRepository>(DI_TOKENS.PageRepository))
+    )
+  );
+  container.register(
+    DI_TOKENS.DeletePage,
+    singleton(
+      () => new DeletePageUseCase(container.resolve<IPageRepository>(DI_TOKENS.PageRepository))
+    )
+  );
+  container.register(
+    DI_TOKENS.SaveSection,
+    singleton(
+      () =>
+        new SaveSectionUseCase(
+          container.resolve<ISectionRepository>(DI_TOKENS.SectionRepository),
+          container.resolve<IPageRepository>(DI_TOKENS.PageRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.UpdateSiteSettings,
+    singleton(
+      () =>
+        new UpdateSiteSettingsUseCase(
+          container.resolve<ISiteSettingsRepository>(DI_TOKENS.SiteSettingsRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.SaveTelemetryMetrics,
+    singleton(
+      () =>
+        new SaveTelemetryMetricsUseCase(
+          container.resolve<ITelemetryRepository>(DI_TOKENS.TelemetryRepository)
         )
     )
   );

@@ -21,6 +21,7 @@ export const DI_TOKENS = {
   MediaUploader: Symbol("IMediaUploader"),
   PromoPopupRepository: Symbol("IPromoPopupRepository"),
   SiteSettingsRepository: Symbol("ISiteSettingsRepository"),
+  TelemetryRepository: Symbol("ITelemetryRepository"),
 
   // ── Application-layer use-cases ───────────────────────────────────────────
   // (populated as use-cases are implemented in Steps 11+)
@@ -40,6 +41,11 @@ export const DI_TOKENS = {
   GetAuthorizedEmails: Symbol("GetAuthorizedEmails"),
   AddAdminEmail: Symbol("AddAdminEmail"),
   RemoveAdminEmail: Symbol("RemoveAdminEmail"),
+  SavePage: Symbol("SavePage"),
+  DeletePage: Symbol("DeletePage"),
+  SaveSection: Symbol("SaveSection"),
+  UpdateSiteSettings: Symbol("UpdateSiteSettings"),
+  SaveTelemetryMetrics: Symbol("SaveTelemetryMetrics"),
 
   // ── System / Infrastructure ──────────────────────────────────────────────
   RealtimeSyncService: Symbol("IRealtimeSyncService"),

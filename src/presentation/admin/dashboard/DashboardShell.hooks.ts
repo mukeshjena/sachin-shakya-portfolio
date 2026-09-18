@@ -1,10 +1,17 @@
 // presentation/admin/dashboard/DashboardShell.hooks.ts
-// Hook coordinating realtime Firestore listeners, navigation tabs, and telemetry stats.
-// Clean Architecture: consumes useRealtimeSync and useAuth without raw SDK imports.
+// Hook coordinating realtime Firestore listeners, navigation tabs, telemetry stats, and modal dialogs.
+// Clean Architecture: consumes useContainer, useRealtimeSync, and useAuth without raw SDK imports.
 
 import { useCallback, useMemo, useState } from "react";
+import type { IDeletePageUseCase } from "../../../application/use-cases/pages/mutation/DeletePageUseCase";
+import type { IReorderSectionsUseCase } from "../../../application/use-cases/pages/mutation/ReorderSectionsUseCase";
+import type { ISaveSectionUseCase } from "../../../application/use-cases/sections/SaveSectionUseCase";
+import type { Section } from "../../../domain/entities/content/Section";
+import { DI_TOKENS } from "../../../infrastructure/di/tokens";
 import { useAuth } from "../../providers/auth/useAuth";
 import { useRealtimeSync } from "../../shared/hooks/useRealtimeSync";
+import type { MenuItemAction } from "../../shared/menu/ThreeDotMenu.types";
+import { useContainer } from "../../shared/useContainer";
 import type { DashboardTabId } from "./constants/dashboard.constants";
 import type {
   DashboardContactItem,
@@ -18,10 +25,81 @@ interface AdminEmailDoc {
   readonly email?: string;
 }
 
+const DEFAULT_SECTIONS: readonly Section[] = [
+  {
+    id: "impact",
+    pageId: "home",
+    type: "impact",
+    title: "FinOps Telemetry & Enterprise Impact",
+    content: {},
+    order: 0,
+    isVisible: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "experience",
+    pageId: "home",
+    type: "experience",
+    title: "Executive Experience Timeline",
+    content: {},
+    order: 1,
+    isVisible: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "capabilities",
+    pageId: "home",
+    type: "capabilities",
+    title: "Cloud & DevOps Architecture Capabilities",
+    content: {},
+    order: 2,
+    isVisible: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "credentials",
+    pageId: "home",
+    type: "credentials",
+    title: "Certifications & Telemetry Badges",
+    content: {},
+    order: 3,
+    isVisible: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "contact",
+    pageId: "home",
+    type: "contact",
+    title: "Consultation & Leadership Advisory",
+    content: {},
+    order: 4,
+    isVisible: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
+
 export function useDashboardShell(): DashboardShellViewModel {
   const { user, logout } = useAuth();
+  const deletePageUseCase = useContainer<IDeletePageUseCase>(DI_TOKENS.DeletePage);
+  const reorderSectionsUseCase = useContainer<IReorderSectionsUseCase>(DI_TOKENS.ReorderSections);
+  const saveSectionUseCase = useContainer<ISaveSectionUseCase>(DI_TOKENS.SaveSection);
+
   const [activeTab, setActiveTab] = useState<DashboardTabId>("overview");
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false);
+
+  // Modal State
+  const [isPageModalOpen, setIsPageModalOpen] = useState<boolean>(false);
+  const [pageToEdit, setPageToEdit] = useState<DashboardPageItem | null>(null);
+
+  const [isSectionModalOpen, setIsSectionModalOpen] = useState<boolean>(false);
+  const [sectionToEdit, setSectionToEdit] = useState<Section | null>(null);
+
+  const [isTelemetryModalOpen, setIsTelemetryModalOpen] = useState<boolean>(false);
 
   // Realtime multi-tab subscribers
   const {
@@ -41,6 +119,15 @@ export function useDashboardShell(): DashboardShellViewModel {
     isLoading: isAdminDocsLoading,
     lastSyncedAt: adminsSyncedAt,
   } = useRealtimeSync<AdminEmailDoc>("adminEmails");
+
+  const { data: realtimeSections } = useRealtimeSync<Section>("sections", {
+    orderByField: "order",
+    orderDirection: "asc",
+  });
+
+  const sections = useMemo(() => {
+    return realtimeSections.length > 0 ? realtimeSections : DEFAULT_SECTIONS;
+  }, [realtimeSections]);
 
   const toggleMobileNav = useCallback(() => {
     setIsMobileNavOpen((prev) => !prev);
@@ -66,7 +153,6 @@ export function useDashboardShell(): DashboardShellViewModel {
     return {
       pageCount: pages.length,
       inquiryCount: contacts.length,
-      // Ensure at least root admin is accounted for if collection is empty
       adminCount: Math.max(adminDocs.length, 1),
       lastSyncedAt: latestTimestamp > 0 ? new Date(latestTimestamp) : null,
       isSyncing: isPagesLoading || isContactsLoading || isAdminDocsLoading,
@@ -83,16 +169,195 @@ export function useDashboardShell(): DashboardShellViewModel {
     isAdminDocsLoading,
   ]);
 
+  // Page Actions
+  const openCreatePage = useCallback(() => {
+    setPageToEdit(null);
+    setIsPageModalOpen(true);
+  }, []);
+
+  const openEditPage = useCallback((page: DashboardPageItem) => {
+    setPageToEdit(page);
+    setIsPageModalOpen(true);
+  }, []);
+
+  const closePageModal = useCallback(() => {
+    setIsPageModalOpen(false);
+    setPageToEdit(null);
+  }, []);
+
+  const handleDeletePage = useCallback(
+    async (pageId: string, slug: string) => {
+      if (slug === "home" || pageId === "home") {
+        alert("The primary root 'home' page is immutable and cannot be deleted.");
+        return;
+      }
+      const confirmed = window.confirm(
+        `Are you sure you want to permanently delete page '/${slug}'?`
+      );
+      if (!confirmed) return;
+
+      try {
+        await deletePageUseCase.execute({ id: pageId, slug });
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "Failed to delete page.");
+      }
+    },
+    [deletePageUseCase]
+  );
+
+  const getPageRowActions = useCallback(
+    (pageId: string, slug: string): MenuItemAction[] => {
+      const targetPage = pages.find((p) => p.id === pageId) || {
+        id: pageId,
+        slug,
+        title: slug,
+        isPublished: true,
+        showInHeader: true,
+        showInFooter: true,
+      };
+
+      return [
+        {
+          id: `edit-${pageId}`,
+          label: "Edit Page",
+          onClick: () => {
+            openEditPage(targetPage);
+          },
+        },
+        {
+          id: `preview-${pageId}`,
+          label: "Preview Live",
+          onClick: () => {
+            window.open(`/${slug === "home" ? "" : slug}`, "_blank");
+          },
+        },
+        {
+          id: `delete-${pageId}`,
+          label: "Delete Page",
+          danger: true,
+          onClick: () => {
+            handleDeletePage(pageId, slug);
+          },
+        },
+      ];
+    },
+    [pages, openEditPage, handleDeletePage]
+  );
+
+  // Section Actions
+  const openEditSection = useCallback((section: Section) => {
+    setSectionToEdit(section);
+    setIsSectionModalOpen(true);
+  }, []);
+
+  const closeSectionModal = useCallback(() => {
+    setIsSectionModalOpen(false);
+    setSectionToEdit(null);
+  }, []);
+
+  const handleMoveSection = useCallback(
+    async (sectionId: string, direction: "up" | "down") => {
+      const idx = sections.findIndex((s) => s.id === sectionId);
+      if (idx === -1) return;
+      if (direction === "up" && idx === 0) return;
+      if (direction === "down" && idx === sections.length - 1) return;
+
+      const targetIdx = direction === "up" ? idx - 1 : idx + 1;
+      const reordered = [...sections];
+      const temp = reordered[idx];
+      const target = reordered[targetIdx];
+      if (!temp || !target) return;
+
+      reordered[idx] = target;
+      reordered[targetIdx] = temp;
+
+      try {
+        await reorderSectionsUseCase.execute(
+          temp.pageId || "home",
+          reordered.map((s) => s.id)
+        );
+      } catch (err) {
+        console.error("Failed to reorder sections:", err);
+      }
+    },
+    [sections, reorderSectionsUseCase]
+  );
+
+  const handleToggleSectionVisibility = useCallback(
+    async (section: Section) => {
+      try {
+        await saveSectionUseCase.execute({
+          id: section.id,
+          pageId: section.pageId || "home",
+          type: section.type,
+          title: section.title,
+          isVisible: !section.isVisible,
+          content: section.content || {},
+        });
+      } catch (err) {
+        console.error("Failed to toggle section visibility:", err);
+      }
+    },
+    [saveSectionUseCase]
+  );
+
+  // Telemetry Actions
+  const openTelemetryModal = useCallback(() => {
+    setIsTelemetryModalOpen(true);
+  }, []);
+
+  const closeTelemetryModal = useCallback(() => {
+    setIsTelemetryModalOpen(false);
+  }, []);
+
+  // Contact Actions
+  const getContactRowActions = useCallback(
+    (contactId: string, email?: string): MenuItemAction[] => [
+      {
+        id: `copy-email-${contactId}`,
+        label: "Copy Email",
+        onClick: () => {
+          if (email) {
+            navigator.clipboard.writeText(email);
+          }
+        },
+      },
+    ],
+    []
+  );
+
   return {
     activeTab,
     setActiveTab: handleTabSelect,
     metrics,
     pages,
     contacts,
+    sections,
     currentUserEmail: user?.email || null,
     isMobileNavOpen,
     toggleMobileNav,
     closeMobileNav,
     handleLogout: logout,
+
+    // Modals
+    isPageModalOpen,
+    pageToEdit,
+    openCreatePage,
+    openEditPage,
+    closePageModal,
+    getPageRowActions,
+
+    isSectionModalOpen,
+    sectionToEdit,
+    openEditSection,
+    closeSectionModal,
+    handleMoveSection,
+    handleToggleSectionVisibility,
+
+    isTelemetryModalOpen,
+    openTelemetryModal,
+    closeTelemetryModal,
+
+    getContactRowActions,
   };
 }

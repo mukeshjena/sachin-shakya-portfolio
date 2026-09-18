@@ -32,7 +32,7 @@ export interface Page {
 }
 
 /** Used when creating a new page (ID + timestamps are assigned by the repository) */
-export type CreatePageInput = Omit<Page, "id" | "createdAt" | "updatedAt"> & {
+export type CreatePageInput = Omit<Page, "id" | "slug" | "createdAt" | "updatedAt"> & {
   slug: string; // raw string, repository converts to Slug value object
 };
 

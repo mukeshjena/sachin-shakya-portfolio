@@ -127,22 +127,23 @@ export class FirestorePageRepository implements IPageRepository {
     const now = new Date();
     const isoString = now.toISOString();
 
-    const payload: FirestorePageDoc = {
+    const rawPayload: Record<string, unknown> = {
       slug: slugObj.toString(),
       title: input.title,
       sectionOrder: input.sectionOrder ?? [],
       isPublished: input.isPublished,
       showInHeader: input.showInHeader,
       showInFooter: input.showInFooter,
-      seoTitle: input.seoTitle,
-      seoDescription: input.seoDescription,
-      seoImage: input.seoImage,
       createdAt: isoString,
       updatedAt: isoString,
     };
 
+    if (input.seoTitle !== undefined) rawPayload.seoTitle = input.seoTitle;
+    if (input.seoDescription !== undefined) rawPayload.seoDescription = input.seoDescription;
+    if (input.seoImage !== undefined) rawPayload.seoImage = input.seoImage;
+
     const docRef = doc(db, COLLECTION_NAME, docId);
-    await setDoc(docRef, payload, { merge: true });
+    await setDoc(docRef, rawPayload, { merge: true });
 
     return {
       id: docId,
@@ -170,10 +171,18 @@ export class FirestorePageRepository implements IPageRepository {
     }
 
     const now = new Date();
-    const updatePayload: Partial<FirestorePageDoc> = {
-      ...updates,
+    const updatePayload: Record<string, unknown> = {
       updatedAt: now.toISOString(),
     };
+
+    if (updates.title !== undefined) updatePayload.title = updates.title;
+    if (updates.sectionOrder !== undefined) updatePayload.sectionOrder = updates.sectionOrder;
+    if (updates.isPublished !== undefined) updatePayload.isPublished = updates.isPublished;
+    if (updates.showInHeader !== undefined) updatePayload.showInHeader = updates.showInHeader;
+    if (updates.showInFooter !== undefined) updatePayload.showInFooter = updates.showInFooter;
+    if (updates.seoTitle !== undefined) updatePayload.seoTitle = updates.seoTitle;
+    if (updates.seoDescription !== undefined) updatePayload.seoDescription = updates.seoDescription;
+    if (updates.seoImage !== undefined) updatePayload.seoImage = updates.seoImage;
 
     await updateDoc(docRef, updatePayload);
 
