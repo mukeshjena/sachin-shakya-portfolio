@@ -1,6 +1,7 @@
 // presentation/admin/dashboard/DashboardShell.types.ts
 // Type contracts for the DashboardShell presentation component and its tabs.
 
+import type { MediaAsset } from "../../../domain/entities/content/MediaAsset";
 import type { Section } from "../../../domain/entities/content/Section";
 import type { MenuItemAction } from "../../shared/menu/ThreeDotMenu.types";
 import type { DashboardTabId } from "./constants/dashboard.constants";
@@ -9,6 +10,7 @@ export interface DashboardMetrics {
   readonly pageCount: number;
   readonly inquiryCount: number;
   readonly adminCount: number;
+  readonly mediaCount: number;
   readonly lastSyncedAt: Date | null;
   readonly isSyncing: boolean;
 }
@@ -29,6 +31,7 @@ export interface DashboardContactItem {
   readonly company?: string;
   readonly message?: string;
   readonly source?: string;
+  readonly isRead?: boolean;
   readonly createdAt?: string;
 }
 
@@ -39,6 +42,7 @@ export interface DashboardShellViewModel {
   readonly pages: readonly DashboardPageItem[];
   readonly contacts: readonly DashboardContactItem[];
   readonly sections: readonly Section[];
+  readonly mediaAssets: readonly MediaAsset[];
   readonly currentUserEmail: string | null;
   readonly isMobileNavOpen: boolean;
   readonly toggleMobileNav: () => void;
@@ -66,6 +70,18 @@ export interface DashboardShellViewModel {
   readonly openTelemetryModal: () => void;
   readonly closeTelemetryModal: () => void;
 
+  // Media Library State
+  readonly isMediaPickerOpen: boolean;
+  readonly openMediaPicker: () => void;
+  readonly closeMediaPicker: () => void;
+  readonly handleDeleteMedia: (id: string, publicId: string) => Promise<void>;
+
   // Contacts Actions
-  readonly getContactRowActions: (contactId: string, email?: string) => MenuItemAction[];
+  readonly handleToggleContactRead: (id: string, currentStatus: boolean) => Promise<void>;
+  readonly handleDeleteContact: (id: string) => Promise<void>;
+  readonly getContactRowActions: (
+    contactId: string,
+    email?: string,
+    isRead?: boolean
+  ) => MenuItemAction[];
 }

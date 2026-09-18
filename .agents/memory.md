@@ -1117,4 +1117,49 @@
 - Pre-commit automated quality gate passed cleanly on git commit without `--no-verify`.
 - Sequential branch promotion completed: `step/23-content-management` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
 
+---
+
+## 2026-09-19 — Step 24: Media Manager (Cloudinary Upload + Preview + Cascade Delete) & Inbound Leads Inbox (Completed ✅)
+
+**Branch:** `step/24-media-manager-inbox` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `feat(admin): implement media manager and inbound leads inbox for step 24`
+
+**What was done:**
+1. **Domain & Repositories Layer (`src/domain/`, `src/infrastructure/repositories/`):**
+   - `src/domain/repositories/admin/IContactRepository.ts`: Added `markUnread(id: string): Promise<void>` and `delete(id: string): Promise<void>`.
+   - `src/infrastructure/repositories/admin/FirestoreContactRepository.ts`: Implemented `markUnread` and `delete` using Firestore `deleteDoc` and `updateDoc({ isRead: false })`.
+   - `src/infrastructure/repositories/content/FirestoreMediaRepository.ts`: Implemented `IMediaRepository` (`getAll`, `getById`, `getByPublicId`, `save`, `delete`, `addUsageRef`, `removeUsageRef`) mapping Cloudinary metadata and Firestore references.
+2. **Application Layer Use-Cases (`src/application/use-cases/`):**
+   - `src/application/use-cases/media/UploadMediaUseCase.ts`: Uploads media to Cloudinary via `IMediaUploader` edge gateway proxy and tracks asset in Firestore.
+   - `src/application/use-cases/media/DeleteMediaUseCase.ts`: Destroys media in Cloudinary via `IMediaUploader.destroy(publicId)` and removes Firestore tracking document.
+   - `src/application/use-cases/media/GetMediaAssetsUseCase.ts`: Fetches all tracked Cloudinary media assets sorted newest first.
+   - `src/application/use-cases/contact/UpdateContactStatusUseCase.ts`: Toggles inquiry read/unread state in the admin leads inbox.
+   - `src/application/use-cases/contact/DeleteContactSubmissionUseCase.ts`: Permanently removes inquiry submissions from Firestore.
+3. **DI Container Registrations (`src/infrastructure/di/`):**
+   - Registered tokens: `UploadMedia`, `DeleteMedia`, `GetMediaAssets`, `UpdateContactStatus`, `DeleteContactSubmission`.
+   - Bootstrapped singletons in `bootstrap.ts` for all 5 use-cases and `MediaRepository`.
+4. **Presentation Layer — Media Picker & Media Manager (`src/presentation/admin/media/`, `src/presentation/admin/dashboard/tabs/media/`):**
+   - `src/presentation/admin/media/`: Created `MediaPicker.types.ts`, `MediaPicker.hooks.ts`, `MediaPicker.tsx` (exactly 3 files). Features drag-and-drop file upload, zero-credential direct edge signing, instant client-side preview via `URL.createObjectURL`, automatic preview URL revocation, folder path selection, and accessible alt text input.
+   - `src/presentation/admin/dashboard/tabs/media/MediaTab.tsx`: Responsive instrument-panel asset grid with thumbnails, format and file-size badges, filter search, copy CDN URL with active clipboard feedback, open in new tab, and Cloudinary cascade-deletion confirmation.
+5. **Presentation Layer — Inbound Leads Inbox (`src/presentation/admin/dashboard/tabs/contacts/ContactsTab.tsx`):**
+   - Filter tabs for "All ({count})" and "Unread ({count})".
+   - Status badges (`READ` / `UNREAD`), source badges (`contact` / `promo`), formatted submission timestamps.
+   - One-click "Mark Read" / "Mark Unread" toggle buttons and lead deletion buttons.
+   - Copy email button with active feedback pill.
+6. **Dashboard Shell Integration (`src/presentation/admin/dashboard/`):**
+   - Updated `dashboard.constants.ts` with `"media"` module.
+   - Subscribed to realtime `mediaAssets` collection in `DashboardShell.hooks.ts`.
+   - Wired `MediaTab`, `ContactsTab` handlers, and `<MediaPicker />` modal into `DashboardShell.tsx`.
+   - Maintained strict Clean Architecture and folder limits (≤ 3 files/folder, max 500 LOC/file).
+7. **Automated Verification (`scripts/test-media-inbox-e2e.ts`):**
+   - Comprehensive test suite testing DI container, `FirestoreMediaRepository` CRUD, usage references, `GetMediaAssetsUseCase`, `DeleteMediaUseCase`, `UpdateContactStatusUseCase` (mark read and mark unread), and `DeleteContactSubmissionUseCase`.
+   - 100% test pass.
+
+**Verification:**
+- `npx biome check .` → ✅ 245 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build verified.
+- `npx tsx scripts/test-media-inbox-e2e.ts` → ✅ 100% passed (5/5).
+
+
 

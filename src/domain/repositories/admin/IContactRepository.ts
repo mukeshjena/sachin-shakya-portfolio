@@ -34,4 +34,10 @@ export interface IContactRepository {
 
   /** Marks a submission as read in the admin inbox */
   markRead(id: string): Promise<void>;
+
+  /** Marks a submission as unread in the admin inbox */
+  markUnread(id: string): Promise<void>;
+
+  /** Permanently deletes a contact submission document */
+  delete(id: string): Promise<void>;
 }

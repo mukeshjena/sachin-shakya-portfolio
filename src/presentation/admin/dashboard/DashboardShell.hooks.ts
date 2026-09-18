@@ -3,9 +3,13 @@
 // Clean Architecture: consumes useContainer, useRealtimeSync, and useAuth without raw SDK imports.
 
 import { useCallback, useMemo, useState } from "react";
+import type { IDeleteContactSubmissionUseCase } from "../../../application/use-cases/contact/DeleteContactSubmissionUseCase";
+import type { IUpdateContactStatusUseCase } from "../../../application/use-cases/contact/UpdateContactStatusUseCase";
+import type { IDeleteMediaUseCase } from "../../../application/use-cases/media/DeleteMediaUseCase";
 import type { IDeletePageUseCase } from "../../../application/use-cases/pages/mutation/DeletePageUseCase";
 import type { IReorderSectionsUseCase } from "../../../application/use-cases/pages/mutation/ReorderSectionsUseCase";
 import type { ISaveSectionUseCase } from "../../../application/use-cases/sections/SaveSectionUseCase";
+import type { MediaAsset } from "../../../domain/entities/content/MediaAsset";
 import type { Section } from "../../../domain/entities/content/Section";
 import { DI_TOKENS } from "../../../infrastructure/di/tokens";
 import { useAuth } from "../../providers/auth/useAuth";
@@ -88,6 +92,13 @@ export function useDashboardShell(): DashboardShellViewModel {
   const deletePageUseCase = useContainer<IDeletePageUseCase>(DI_TOKENS.DeletePage);
   const reorderSectionsUseCase = useContainer<IReorderSectionsUseCase>(DI_TOKENS.ReorderSections);
   const saveSectionUseCase = useContainer<ISaveSectionUseCase>(DI_TOKENS.SaveSection);
+  const deleteMediaUseCase = useContainer<IDeleteMediaUseCase>(DI_TOKENS.DeleteMedia);
+  const updateContactStatusUseCase = useContainer<IUpdateContactStatusUseCase>(
+    DI_TOKENS.UpdateContactStatus
+  );
+  const deleteContactSubmissionUseCase = useContainer<IDeleteContactSubmissionUseCase>(
+    DI_TOKENS.DeleteContactSubmission
+  );
 
   const [activeTab, setActiveTab] = useState<DashboardTabId>("overview");
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false);
@@ -100,6 +111,7 @@ export function useDashboardShell(): DashboardShellViewModel {
   const [sectionToEdit, setSectionToEdit] = useState<Section | null>(null);
 
   const [isTelemetryModalOpen, setIsTelemetryModalOpen] = useState<boolean>(false);
+  const [isMediaPickerOpen, setIsMediaPickerOpen] = useState<boolean>(false);
 
   // Realtime multi-tab subscribers
   const {
@@ -112,7 +124,19 @@ export function useDashboardShell(): DashboardShellViewModel {
     data: contacts,
     isLoading: isContactsLoading,
     lastSyncedAt: contactsSyncedAt,
-  } = useRealtimeSync<DashboardContactItem>("contactSubmissions");
+  } = useRealtimeSync<DashboardContactItem>("contactSubmissions", {
+    orderByField: "createdAt",
+    orderDirection: "desc",
+  });
+
+  const {
+    data: mediaAssets,
+    isLoading: isMediaLoading,
+    lastSyncedAt: mediaSyncedAt,
+  } = useRealtimeSync<MediaAsset>("mediaAssets", {
+    orderByField: "createdAt",
+    orderDirection: "desc",
+  });
 
   const {
     data: adminDocs,
@@ -148,25 +172,30 @@ export function useDashboardShell(): DashboardShellViewModel {
       pagesSyncedAt?.getTime() || 0,
       contactsSyncedAt?.getTime() || 0,
       adminsSyncedAt?.getTime() || 0,
+      mediaSyncedAt?.getTime() || 0,
     ].reduce((max, curr) => (curr > max ? curr : max), 0);
 
     return {
       pageCount: pages.length,
       inquiryCount: contacts.length,
       adminCount: Math.max(adminDocs.length, 1),
+      mediaCount: mediaAssets.length,
       lastSyncedAt: latestTimestamp > 0 ? new Date(latestTimestamp) : null,
-      isSyncing: isPagesLoading || isContactsLoading || isAdminDocsLoading,
+      isSyncing: isPagesLoading || isContactsLoading || isAdminDocsLoading || isMediaLoading,
     };
   }, [
     pages.length,
     contacts.length,
     adminDocs.length,
+    mediaAssets.length,
     pagesSyncedAt,
     contactsSyncedAt,
     adminsSyncedAt,
+    mediaSyncedAt,
     isPagesLoading,
     isContactsLoading,
     isAdminDocsLoading,
+    isMediaLoading,
   ]);
 
   // Page Actions
@@ -310,20 +339,84 @@ export function useDashboardShell(): DashboardShellViewModel {
     setIsTelemetryModalOpen(false);
   }, []);
 
-  // Contact Actions
+  // Media Library Actions
+  const openMediaPicker = useCallback(() => {
+    setIsMediaPickerOpen(true);
+  }, []);
+
+  const closeMediaPicker = useCallback(() => {
+    setIsMediaPickerOpen(false);
+  }, []);
+
+  const handleDeleteMedia = useCallback(
+    async (id: string, publicId: string) => {
+      try {
+        await deleteMediaUseCase.execute({ id, publicId });
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "Failed to delete media asset.");
+      }
+    },
+    [deleteMediaUseCase]
+  );
+
+  // Contact Submission Actions
+  const handleToggleContactRead = useCallback(
+    async (id: string, currentStatus: boolean) => {
+      try {
+        await updateContactStatusUseCase.execute({ id, isRead: !currentStatus });
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "Failed to update inquiry status.");
+      }
+    },
+    [updateContactStatusUseCase]
+  );
+
+  const handleDeleteContact = useCallback(
+    async (id: string) => {
+      const confirmed = window.confirm(
+        "Are you sure you want to permanently delete this inquiry submission?"
+      );
+      if (!confirmed) return;
+
+      try {
+        await deleteContactSubmissionUseCase.execute({ id });
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "Failed to delete inquiry.");
+      }
+    },
+    [deleteContactSubmissionUseCase]
+  );
+
   const getContactRowActions = useCallback(
-    (contactId: string, email?: string): MenuItemAction[] => [
+    (contactId: string, email?: string, isRead?: boolean): MenuItemAction[] => [
       {
-        id: `copy-email-${contactId}`,
-        label: "Copy Email",
+        id: `toggle-read-${contactId}`,
+        label: isRead ? "Mark as Unread" : "Mark as Read",
         onClick: () => {
-          if (email) {
-            navigator.clipboard.writeText(email);
-          }
+          handleToggleContactRead(contactId, isRead ?? false);
+        },
+      },
+      ...(email
+        ? [
+            {
+              id: `copy-email-${contactId}`,
+              label: "Copy Email",
+              onClick: () => {
+                navigator.clipboard.writeText(email);
+              },
+            },
+          ]
+        : []),
+      {
+        id: `delete-${contactId}`,
+        label: "Delete Inquiry",
+        danger: true,
+        onClick: () => {
+          handleDeleteContact(contactId);
         },
       },
     ],
-    []
+    [handleToggleContactRead, handleDeleteContact]
   );
 
   return {
@@ -333,6 +426,7 @@ export function useDashboardShell(): DashboardShellViewModel {
     pages,
     contacts,
     sections,
+    mediaAssets,
     currentUserEmail: user?.email || null,
     isMobileNavOpen,
     toggleMobileNav,
@@ -358,6 +452,15 @@ export function useDashboardShell(): DashboardShellViewModel {
     openTelemetryModal,
     closeTelemetryModal,
 
+    // Media
+    isMediaPickerOpen,
+    openMediaPicker,
+    closeMediaPicker,
+    handleDeleteMedia,
+
+    // Contacts
+    handleToggleContactRead,
+    handleDeleteContact,
     getContactRowActions,
   };
 }

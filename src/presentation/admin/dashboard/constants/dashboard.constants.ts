@@ -20,7 +20,7 @@ export const DASHBOARD_COPY = {
   ACTIONS_LABEL: "Row Actions",
 } as const;
 
-export type DashboardTabId = "overview" | "pages" | "content" | "contacts" | "settings";
+export type DashboardTabId = "overview" | "pages" | "content" | "media" | "contacts" | "settings";
 
 export interface NavTabItem {
   readonly id: DashboardTabId;
@@ -43,6 +43,11 @@ export const DASHBOARD_NAV_TABS: readonly NavTabItem[] = [
     id: "content",
     label: "Content",
     description: "Experience, capabilities, and credentials",
+  },
+  {
+    id: "media",
+    label: "Media",
+    description: "Cloudinary asset library & uploads",
   },
   {
     id: "contacts",

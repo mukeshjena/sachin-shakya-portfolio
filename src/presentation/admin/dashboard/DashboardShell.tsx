@@ -8,6 +8,7 @@ import {
   IoCloseOutline,
   IoDocumentTextOutline,
   IoGridOutline,
+  IoImageOutline,
   IoLayersOutline,
   IoLogOutOutline,
   IoMailOutline,
@@ -18,6 +19,7 @@ import {
 import { PageEditorModal } from "../content/pages/PageEditorModal";
 import { SectionEditorModal } from "../content/sections/SectionEditorModal";
 import { TelemetryEditorModal } from "../content/telemetry/TelemetryEditorModal";
+import { MediaPicker } from "../media/MediaPicker";
 import {
   DASHBOARD_COPY,
   DASHBOARD_NAV_TABS,
@@ -26,6 +28,7 @@ import {
 import { useDashboardShell } from "./DashboardShell.hooks";
 import { ContactsTab } from "./tabs/contacts/ContactsTab";
 import { ContentTab } from "./tabs/content/ContentTab";
+import { MediaTab } from "./tabs/media/MediaTab";
 import { OverviewTab } from "./tabs/overview/OverviewTab";
 import { PagesTab } from "./tabs/pages/PagesTab";
 import { SettingsTab } from "./tabs/settings/SettingsTab";
@@ -38,6 +41,7 @@ export function DashboardShell() {
     pages,
     contacts,
     sections,
+    mediaAssets,
     currentUserEmail,
     isMobileNavOpen,
     toggleMobileNav,
@@ -62,6 +66,15 @@ export function DashboardShell() {
     openTelemetryModal,
     closeTelemetryModal,
 
+    // Media Actions
+    isMediaPickerOpen,
+    openMediaPicker,
+    closeMediaPicker,
+    handleDeleteMedia,
+
+    // Contacts Actions
+    handleToggleContactRead,
+    handleDeleteContact,
     getContactRowActions,
   } = useDashboardShell();
 
@@ -73,6 +86,8 @@ export function DashboardShell() {
         return <IoDocumentTextOutline className="w-4 h-4" aria-hidden="true" />;
       case "content":
         return <IoLayersOutline className="w-4 h-4" aria-hidden="true" />;
+      case "media":
+        return <IoImageOutline className="w-4 h-4" aria-hidden="true" />;
       case "contacts":
         return <IoMailOutline className="w-4 h-4" aria-hidden="true" />;
       case "settings":
@@ -163,6 +178,7 @@ export function DashboardShell() {
               const isActive = activeTab === tab.id;
               let badgeValue: number | string | null = null;
               if (tab.id === "pages") badgeValue = metrics.pageCount;
+              if (tab.id === "media") badgeValue = metrics.mediaCount;
               if (tab.id === "contacts") badgeValue = metrics.inquiryCount;
               if (tab.id === "settings") badgeValue = metrics.adminCount;
 
@@ -271,8 +287,21 @@ export function DashboardShell() {
             />
           )}
 
+          {activeTab === "media" && (
+            <MediaTab
+              mediaAssets={mediaAssets}
+              onOpenMediaPicker={openMediaPicker}
+              onDeleteMedia={handleDeleteMedia}
+            />
+          )}
+
           {activeTab === "contacts" && (
-            <ContactsTab contacts={contacts} getContactRowActions={getContactRowActions} />
+            <ContactsTab
+              contacts={contacts}
+              getContactRowActions={getContactRowActions}
+              onToggleRead={handleToggleContactRead}
+              onDeleteContact={handleDeleteContact}
+            />
           )}
 
           {activeTab === "settings" && <SettingsTab />}
@@ -290,6 +319,8 @@ export function DashboardShell() {
       />
 
       <TelemetryEditorModal isOpen={isTelemetryModalOpen} onClose={closeTelemetryModal} />
+
+      <MediaPicker isOpen={isMediaPickerOpen} onClose={closeMediaPicker} />
     </div>
   );
 }

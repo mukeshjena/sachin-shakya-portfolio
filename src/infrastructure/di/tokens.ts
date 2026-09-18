@@ -46,6 +46,11 @@ export const DI_TOKENS = {
   SaveSection: Symbol("SaveSection"),
   UpdateSiteSettings: Symbol("UpdateSiteSettings"),
   SaveTelemetryMetrics: Symbol("SaveTelemetryMetrics"),
+  UploadMedia: Symbol("UploadMedia"),
+  DeleteMedia: Symbol("DeleteMedia"),
+  GetMediaAssets: Symbol("GetMediaAssets"),
+  UpdateContactStatus: Symbol("UpdateContactStatus"),
+  DeleteContactSubmission: Symbol("DeleteContactSubmission"),
 
   // ── System / Infrastructure ──────────────────────────────────────────────
   RealtimeSyncService: Symbol("IRealtimeSyncService"),

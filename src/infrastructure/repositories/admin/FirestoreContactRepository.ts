@@ -2,7 +2,16 @@
 // Concrete Firestore implementation of IContactRepository.
 // Handles contact submission persistence and admin inbox queries.
 
-import { collection, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import type {
   ContactSubmission,
   CreateContactInput,
@@ -105,5 +114,23 @@ export class FirestoreContactRepository implements IContactRepository {
     const db = getDb();
     const docRef = doc(db, COLLECTION_NAME, id);
     await updateDoc(docRef, { isRead: true });
+  }
+
+  /**
+   * Marks a contact submission as unread in the admin inbox.
+   */
+  async markUnread(id: string): Promise<void> {
+    const db = getDb();
+    const docRef = doc(db, COLLECTION_NAME, id);
+    await updateDoc(docRef, { isRead: false });
+  }
+
+  /**
+   * Permanently deletes a contact submission document.
+   */
+  async delete(id: string): Promise<void> {
+    const db = getDb();
+    const docRef = doc(db, COLLECTION_NAME, id);
+    await deleteDoc(docRef);
   }
 }

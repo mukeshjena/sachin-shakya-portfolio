@@ -78,7 +78,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 21 | Multi-email admin authorization | Admin | Completed ✅ |
 | 22 | Admin dashboard shell (3-dot menus, realtime updates) | Admin | Completed ✅ |
 | 23 | Content management modules (pages/sections/logo/text/social links) | Admin | Completed ✅ |
-| 24 | Media manager (Cloudinary upload+preview+cascade delete) + inbox | Admin | Pending |
+| 24 | Media manager (Cloudinary upload+preview+cascade delete) + inbox | Admin | Completed ✅ |
 | 25 | SEO pass (meta/JSON-LD/sitemap/OG/favicons) | Quality | Pending |
 | 26 | PWA setup (manifest, icons, installability) | Quality | Pending |
 | 27 | Performance, accessibility, Biome lint gate | Quality | Pending |

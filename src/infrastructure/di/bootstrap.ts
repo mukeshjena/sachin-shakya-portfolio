@@ -8,7 +8,12 @@ import { GetAuthorizedEmailsUseCase } from "../../application/use-cases/admin-us
 import { RemoveAdminEmailUseCase } from "../../application/use-cases/admin-users/RemoveAdminEmailUseCase";
 import { RequestAccessCodeUseCase } from "../../application/use-cases/auth/RequestAccessCodeUseCase";
 import { VerifyAccessCodeUseCase } from "../../application/use-cases/auth/VerifyAccessCodeUseCase";
+import { DeleteContactSubmissionUseCase } from "../../application/use-cases/contact/DeleteContactSubmissionUseCase";
 import { SubmitContactFormUseCase } from "../../application/use-cases/contact/SubmitContactFormUseCase";
+import { UpdateContactStatusUseCase } from "../../application/use-cases/contact/UpdateContactStatusUseCase";
+import { DeleteMediaUseCase } from "../../application/use-cases/media/DeleteMediaUseCase";
+import { GetMediaAssetsUseCase } from "../../application/use-cases/media/GetMediaAssetsUseCase";
+import { UploadMediaUseCase } from "../../application/use-cases/media/UploadMediaUseCase";
 import { DeletePageUseCase } from "../../application/use-cases/pages/mutation/DeletePageUseCase";
 import { ReorderSectionsUseCase } from "../../application/use-cases/pages/mutation/ReorderSectionsUseCase";
 import { SavePageUseCase } from "../../application/use-cases/pages/mutation/SavePageUseCase";
@@ -27,17 +32,20 @@ import { SaveTelemetryMetricsUseCase } from "../../application/use-cases/telemet
 import type { IAdminAccessRepository } from "../../domain/repositories/admin/IAdminAccessRepository";
 import type { IContactRepository } from "../../domain/repositories/admin/IContactRepository";
 import type { IEmailSender } from "../../domain/repositories/admin/IEmailSender";
+import type { IMediaRepository } from "../../domain/repositories/content/IMediaRepository";
 import type { IPageRepository } from "../../domain/repositories/content/IPageRepository";
 import type { ISectionRepository } from "../../domain/repositories/content/ISectionRepository";
 import type { IPromoPopupRepository } from "../../domain/repositories/promo/IPromoPopupRepository";
 import type { ISiteSettingsRepository } from "../../domain/repositories/settings/ISiteSettingsRepository";
 import type { ITelemetryRepository } from "../../domain/repositories/telemetry/ITelemetryRepository";
+import type { IMediaUploader } from "../../domain/services/IMediaUploader";
 import { CloudinaryMediaUploader } from "../cloudinary/CloudinaryMediaUploader";
 import { EmailApiSender } from "../email/EmailApiSender";
 import { getDb } from "../firebase/firebaseClient";
 import { FirestoreAdminAccessRepository } from "../repositories/admin/FirestoreAdminAccessRepository";
 import { FirestoreContactRepository } from "../repositories/admin/FirestoreContactRepository";
 import { FirestorePromoPopupRepository } from "../repositories/admin/FirestorePromoPopupRepository";
+import { FirestoreMediaRepository } from "../repositories/content/FirestoreMediaRepository";
 import { FirestorePageRepository } from "../repositories/content/FirestorePageRepository";
 import { FirestoreSectionRepository } from "../repositories/content/FirestoreSectionRepository";
 import { FirestoreSiteSettingsRepository } from "../repositories/settings/FirestoreSiteSettingsRepository";
@@ -79,6 +87,10 @@ export function bootstrapContainer(): void {
   container.register(
     DI_TOKENS.SectionRepository,
     singleton(() => new FirestoreSectionRepository())
+  );
+  container.register(
+    DI_TOKENS.MediaRepository,
+    singleton(() => new FirestoreMediaRepository())
   );
   container.register(
     DI_TOKENS.ContactRepository,
@@ -278,6 +290,51 @@ export function bootstrapContainer(): void {
       () =>
         new SaveTelemetryMetricsUseCase(
           container.resolve<ITelemetryRepository>(DI_TOKENS.TelemetryRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.UploadMedia,
+    singleton(
+      () =>
+        new UploadMediaUseCase(
+          container.resolve<IMediaUploader>(DI_TOKENS.MediaUploader),
+          container.resolve<IMediaRepository>(DI_TOKENS.MediaRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.DeleteMedia,
+    singleton(
+      () =>
+        new DeleteMediaUseCase(
+          container.resolve<IMediaUploader>(DI_TOKENS.MediaUploader),
+          container.resolve<IMediaRepository>(DI_TOKENS.MediaRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.GetMediaAssets,
+    singleton(
+      () =>
+        new GetMediaAssetsUseCase(container.resolve<IMediaRepository>(DI_TOKENS.MediaRepository))
+    )
+  );
+  container.register(
+    DI_TOKENS.UpdateContactStatus,
+    singleton(
+      () =>
+        new UpdateContactStatusUseCase(
+          container.resolve<IContactRepository>(DI_TOKENS.ContactRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.DeleteContactSubmission,
+    singleton(
+      () =>
+        new DeleteContactSubmissionUseCase(
+          container.resolve<IContactRepository>(DI_TOKENS.ContactRepository)
         )
     )
   );
