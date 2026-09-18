@@ -819,3 +819,39 @@
 - Pre-commit automated quality gate passed cleanly on git commit.
 - Sequential branch promotion completed: `step/15c...` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
 - Cloudflare deployment pipeline triggered on `main`.
+
+---
+
+## 2026-09-18 — Step 16: Home Sections From Résumé Content (Telemetry, Experience, Capabilities, Credentials) (Completed ✅)
+
+**Branch:** `step/16-home-sections` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `68c73ef feat(step-16): home sections — FinOps telemetry command center, experience timeline, capabilities, and credentials`
+
+**What was done:**
+1. **FinOps & Cloud Telemetry Command Center (`src/presentation/sections/telemetry/`):**
+   - Built a state-of-the-art interactive telemetry suite with 4 shadow-free SVG charts:
+     - `CostTrajectoryChart.tsx`: 12-month dual-curve area chart comparing baseline spend ($450K/mo) against post-optimization spend ($280K/mo), highlighting the **$170,000 / month recurring reduction** ($2.04M/yr milestone) with interactive mouse scrubbing, crosshairs, and milestone annotations.
+     - `MttrBenchmarkChart.tsx`: Grouped comparison bar chart for Mean Time to Resolution across incident severities (P1: 180m → 90m, P2: 120m → 65m, P3: 60m → 35m, Fleet Avg: 120m → 72m, **40% MTTR reduction**).
+     - `AutomationGainsChart.tsx`: Comparative bar chart demonstrating manual operational toil reduction (35 hrs/wk → 8 hrs/wk, **30–40% manual effort reduction**).
+     - `FleetDistributionChart.tsx`: High-precision segmented SVG telemetry ring chart showing **2,000+ managed cloud resources** (55% Azure, 30% AWS, 15% Hybrid/GCP) with interactive platform breakdown cards.
+   - Interactive metric tab switcher allowing smooth switching between the 4 telemetry views with zero layout shifts.
+   - 4 animated count-up KPI cards for key achievements ($170K/mo savings, 40% MTTR, 2,000+ nodes, 30-40% toil cut).
+2. **Enterprise Experience Timeline (`src/presentation/sections/experience/`):**
+   - Interactive chronological timeline (`id="experience"`, `scroll-mt-20`) with vertical spine and glowing status beacons.
+   - Detailed career engagements for Eptura (Lead Cloud Operations & FinOps Consultant), LTIMindtree (Senior Cloud & DevOps Engineer), TCS // Downer Group (Cloud Infrastructure Specialist), and TCS // ABN AMRO (Infrastructure Operations Analyst).
+   - Real architectural milestones, verified production metrics, and technology stack pills.
+3. **Filterable Technical Capabilities Grid (`src/presentation/sections/capabilities/`):**
+   - Interactive category filter chips (`id="capabilities"`, `scroll-mt-20`) for All Domains, Cloud Platforms, FinOps & Cost, DevOps & IaC, Observability & SRE, Containers & K8s, and Security & ITSM.
+   - 8 high-density instrument cards with hairline borders, tool pills, and enterprise architectural competencies.
+4. **Credentials, Certifications & Recognition (`src/presentation/sections/credentials/`):**
+   - 2-column responsive layout (`id="credentials"`, `scroll-mt-20`): 6 industry certification cards with verification codes (AZ-104, CLF-C01, ITIL 4, SC-900, DP-900, AZ-900) on the left; B.Tech Computer Science degree and corporate awards (TCS Star Performer, Eptura Reliability Excellence) on the right.
+5. **Root Assembly (`src/App.tsx`):**
+   - Composed all home sections in semantic order below the blackhole hero and overview section. All header navigation links (`#top`, `#telemetry`, `#impact`, `#experience`, `#capabilities`, `#credentials`, `#contact`) are now fully live and functional.
+
+**Verification:**
+- `npx biome check .` → ✅ 149 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build succeeded.
+- Pre-commit automated quality gate passed cleanly on git commit.
+- Sequential branch promotion completed: `step/16-home-sections` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+- Cloudflare deployment pipeline triggered on `main`.
