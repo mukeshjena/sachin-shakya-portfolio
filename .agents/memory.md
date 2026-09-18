@@ -972,4 +972,40 @@
 - Pre-commit automated quality gate passed cleanly on git commit.
 - Sequential branch promotion completed: `step/19-promo-popup` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
 
+---
+
+## 2026-09-18 — Step 20: Admin OTP Access Flow (Completed ✅)
+
+**Branch:** `step/20-admin-otp-flow` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `ea3cef1 feat(step-20): admin OTP access flow — passwordless 6-digit verification, rate-limiting, SHA-256 persistence, and OtpInput`
+
+**What was done:**
+1. **Cryptographic Utility (`src/infrastructure/crypto/crypto.utils.ts`):**
+   - Implemented `sha256(text: string): Promise<string>` using native Web Crypto (`crypto.subtle`) for deterministic, zero-plaintext storage of codes and emails.
+2. **Infrastructure Repository (`src/infrastructure/repositories/admin/FirestoreAdminAccessRepository.ts`):**
+   - Implemented `IAdminAccessRepository` with `adminEmails` whitelist support (`getAuthorizedEmails`, `addAuthorizedEmail`, `removeAuthorizedEmail`, `isAuthorizedEmail`) and `accessCodes` persistence (`saveAccessCode`, `findActiveCode`, `markCodeUsed`, `getLastRequestTime`).
+   - Root admin `sachin.shakya@live.com` is unconditionally whitelisted by default.
+3. **Application Layer Use-Cases (`src/application/use-cases/auth/`):**
+   - `RequestAccessCodeUseCase.ts`: Verifies email format, checks whitelist authorization, enforces 60s rate-limiting cooldown, generates 6-digit `AccessCode`, persists SHA-256 hash with 10-minute TTL to `accessCodes`, and transmits high-contrast security email via `IEmailSender`.
+   - `VerifyAccessCodeUseCase.ts`: Computes hashes, verifies against active unexpired code in Firestore, atomically invalidates used code to block replay attacks, and issues 24-hour authenticated session.
+4. **DI Container Registration (`src/infrastructure/di/bootstrap.ts`):**
+   - Registered `AdminAccessRepository`, `RequestAccessCode`, and `VerifyAccessCode` singletons in container.
+5. **Presentation Layer (`src/presentation/admin/login/`):**
+   - `constants/otp.constants.ts`: Copy, timing constants (60s countdown, 10 min TTL), and aria labels.
+   - `components/OtpInput.tsx` & `.hooks.ts`: 6 individual monospace input boxes with auto-focus, auto-advance on digit entry, backspace retreat, and single `onPaste` handler distributing 6 digits across all boxes.
+   - `AdminLogin.tsx` & `.hooks.ts`: 2-step executive authentication console with email entry, cooldown countdown timer, inline error telemetry, and auto-submit on 6th digit.
+   - Wired `AuthProvider.tsx` to `VerifyAccessCodeUseCase` via `useContainer()`.
+   - Wired `/admin`, `#/admin`, `/login`, `#/login` routing in `App.hooks.ts` and `App.tsx`.
+6. **Automated Verification (`scripts/test-admin-otp-e2e.ts`):**
+   - 100% test pass across DI resolution, root admin whitelist, unauthorized email rejection, temporary admin authorization, 6-digit generation, 60s rate-limiting, invalid code rejection, deterministic verification, and replay attack prevention.
+
+**Verification:**
+- `npx biome check .` → ✅ 190 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build succeeded.
+- `npx tsx scripts/test-admin-otp-e2e.ts` → ✅ 100% passed.
+- Pre-commit automated quality gate passed cleanly on git commit.
+- Sequential branch promotion completed: `step/20-admin-otp-flow` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+
+
 

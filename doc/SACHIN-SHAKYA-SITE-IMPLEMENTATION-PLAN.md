@@ -74,7 +74,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 17 | Dynamic page engine (admin-created pages, slugs, section shuffle) | Public UI | Completed ✅ |
 | 18 | Contact form + email API integration | Public UI | Completed ✅ |
 | 19 | Promo popup (image + inquiry form, admin-controlled) | Public UI | Completed ✅ |
-| 20 | Admin OTP access flow (6-digit, auto-advance, paste) | Admin | Pending |
+| 20 | Admin OTP access flow (6-digit, auto-advance, paste) | Admin | Completed ✅ |
 | 21 | Multi-email admin authorization | Admin | Pending |
 | 22 | Admin dashboard shell (3-dot menus, realtime updates) | Admin | Pending |
 | 23 | Content management modules (pages/sections/logo/text/social links) | Admin | Pending |
