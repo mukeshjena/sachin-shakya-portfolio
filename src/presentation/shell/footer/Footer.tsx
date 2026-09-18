@@ -147,10 +147,10 @@ export function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={link.label}
-                      className="p-2.5 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] text-[var(--mist)] hover:text-[var(--paper)] hover:border-[var(--cyan)] transition-all cursor-pointer flex items-center gap-2 text-xs"
+                      title={link.label}
+                      className="w-10 h-10 rounded-full bg-[var(--ink-800)] border border-[var(--line)] text-[var(--mist)] hover:text-[var(--paper)] hover:border-[var(--cyan)] transition-all cursor-pointer flex items-center justify-center"
                     >
                       <Icon className="w-4 h-4" aria-hidden="true" />
-                      <span>{link.label}</span>
                     </a>
                   );
                 })}

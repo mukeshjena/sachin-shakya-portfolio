@@ -1,45 +1,40 @@
 // presentation/hero/constants/hero.constants.ts
-// Telemetry descriptors, copy fallbacks, and animation variants for the Sci-Fi Hero.
+// Telemetry copy, shader configuration presets, and animation variants for 21st.dev Blackhole Hero.
 
-export const HERO_FALLBACK_CONTENT = {
-  eyebrow: "LEAD CLOUD ARCHITECT & FINOPS CONSULTANT",
-  headline: "Enterprise Cloud Reliability at Mission-Critical Scale",
+export const HERO_COPY = {
+  eyebrow: "ENTERPRISE ARCHITECTURE // RELATIVISTIC PRECISION",
+  titleLine1: "Light does not",
+  titleLine2: "leave here",
   subheadline:
-    "Architecting high-availability multi-cloud landing zones across Azure & AWS, slashing monthly cloud expenditure by $170K, and cutting operational incident MTTR by 40%.",
-  ctaPrimary: "View Telemetry",
-  ctaSecondary: "Get Résumé",
-  statusTag: "SYSTEM TELEMETRY // ALL NODES OPERATIONAL",
+    "The ring above the shadow is the far side of the disc, bent over the top. Gravitational precision engineered for mission-critical multi-cloud infrastructure.",
+  ctaPrimary: "Explore Architecture",
+  ctaSecondary: "Mission Telemetry",
+  scrollPrompt: "DISCOVER TELEMETRY",
 } as const;
 
-export const HERO_KEY_METRICS = [
-  {
-    label: "FinOps Cost Savings",
-    value: "$170K/mo",
-    description: "Cloud spend reduction delivered",
-    accent: "amber",
-  },
-  {
-    label: "Incident MTTR",
-    value: "-40%",
-    description: "Mean time to resolution cut",
-    accent: "cyan",
-  },
-  {
-    label: "Managed Fleet",
-    value: "2,000+",
-    description: "Production cloud resources",
-    accent: "live",
-  },
-] as const;
+export const DESKTOP_BLACKHOLE_SETTINGS = {
+  focus: [0.72, 0.46] as const,
+  scrim: "left" as const,
+  scrimStrength: 0.92,
+  distance: 24,
+  elevation: -5.5,
+  fov: 42,
+  glow: 1.0,
+  steps: 300,
+  resolution: 0.72,
+} as const;
 
-export const HERO_INFRA_BADGES = [
-  "Microsoft Azure",
-  "Amazon Web Services",
-  "Kubernetes (AKS/EKS)",
-  "Terraform IaC",
-  "Datadog Telemetry",
-  "FinOps Certified",
-] as const;
+export const MOBILE_BLACKHOLE_SETTINGS = {
+  focus: [0.5, 0.76] as const,
+  scrim: "top" as const,
+  scrimStrength: 0.92,
+  distance: 24,
+  elevation: -7.0,
+  fov: 58,
+  glow: 0.85,
+  steps: 200,
+  resolution: 0.6,
+} as const;
 
 export const HERO_ANIMATION_VARIANTS = {
   container: {
@@ -47,17 +42,17 @@ export const HERO_ANIMATION_VARIANTS = {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.1,
+        staggerChildren: 0.14,
+        delayChildren: 0.15,
       },
     },
   },
   item: {
-    hidden: { opacity: 0, y: 16 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
     },
   },
 } as const;

@@ -5,6 +5,7 @@
 import { useAppState } from "./App.hooks";
 import { BlackholeHero } from "./presentation/hero/BlackholeHero";
 import { CustomCursor } from "./presentation/hero/cursor/CustomCursor";
+import { ExecutiveOverview } from "./presentation/overview/ExecutiveOverview";
 import { PipelineTest } from "./presentation/pages/pipeline-test/PipelineTest";
 import { AppProviders } from "./presentation/providers/AppProviders";
 import { AppLayout } from "./presentation/shell/layout/AppLayout";
@@ -23,7 +24,10 @@ function App() {
             </div>
           </div>
         ) : (
-          <BlackholeHero />
+          <>
+            <BlackholeHero />
+            <ExecutiveOverview />
+          </>
         )}
       </AppLayout>
     </AppProviders>
