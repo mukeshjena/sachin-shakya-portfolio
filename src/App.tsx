@@ -8,6 +8,10 @@ import { CustomCursor } from "./presentation/hero/cursor/CustomCursor";
 import { ExecutiveOverview } from "./presentation/overview/ExecutiveOverview";
 import { PipelineTest } from "./presentation/pages/pipeline-test/PipelineTest";
 import { AppProviders } from "./presentation/providers/AppProviders";
+import { CapabilitiesSection } from "./presentation/sections/capabilities/CapabilitiesSection";
+import { CredentialsSection } from "./presentation/sections/credentials/CredentialsSection";
+import { ExperienceSection } from "./presentation/sections/experience/ExperienceSection";
+import { TelemetrySection } from "./presentation/sections/telemetry/TelemetrySection";
 import { AppLayout } from "./presentation/shell/layout/AppLayout";
 
 function App() {
@@ -27,6 +31,10 @@ function App() {
           <>
             <BlackholeHero />
             <ExecutiveOverview />
+            <TelemetrySection />
+            <ExperienceSection />
+            <CapabilitiesSection />
+            <CredentialsSection />
           </>
         )}
       </AppLayout>
