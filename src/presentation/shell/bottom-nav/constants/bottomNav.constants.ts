@@ -46,13 +46,13 @@ export const MOBILE_BOTTOM_NAV_TABS: readonly MobileBottomNavTab[] = [
   },
   {
     id: "capabilities",
-    label: "Capabilities",
+    label: "Skills",
     href: "#capabilities",
     icon: IoLayersOutline,
   },
   {
     id: "credentials",
-    label: "Credentials",
+    label: "Education",
     href: "#credentials",
     icon: IoShieldCheckmarkOutline,
   },

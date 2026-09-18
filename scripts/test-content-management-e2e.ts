@@ -172,7 +172,7 @@ async function main() {
   // 6. Test UpdateSiteSettingsUseCase & SaveTelemetryMetricsUseCase
   console.log("\n[6/6] Testing UpdateSiteSettingsUseCase & SaveTelemetryMetricsUseCase...");
   const _existingSettings = await getSiteSettings.execute();
-  console.log(`✓ Fetched current settings for ${_existingSettings.fullName}`);
+  console.log(`✓ Fetched current settings for ${_existingSettings?.fullName ?? "Sachin Shakya"}`);
 
   await updateSiteSettings.execute({
     fullName: "Sachin Shakya",
