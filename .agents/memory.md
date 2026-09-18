@@ -712,8 +712,42 @@
   - `npx biome check .` → ✅ 125 files, 0 errors.
   - `npx tsc -b` → ✅ strict type check passed.
   - `npx vite build --logLevel silent` → ✅ production build passed.
-  - Automated pre-commit hook passed without `--no-verify`.
-  - Non-blocking CI/CD check verified via `gh run list --limit 1` (Workflow run 35357934555 started).
+---
+
+## 2026-09-18 — Refinement & Hotfixes: CSP Directives, Header Availability Pill Removal, Concise Button Sizing, Circular Emblem & Code Splitting (Completed ✅)
+
+**Branches:** `fix/csp-header-and-ui-refinements` → `release/v1.0.0` → `main` → `develop`
+**Commits:**
+- `abc523f fix: update csp rules, remove header availability pill, streamline button sizes, and round logo emblem`
+- `a23032c perf(build): code-split vendor chunks in vite.config.ts to satisfy CI bundle budget`
+
+**What was fixed:**
+1. **Content Security Policy (`worker/index.ts`):**
+   - Added `https://fonts.googleapis.com` to `style-src` (resolves Google Fonts stylesheet blocking).
+   - Added `https://fonts.gstatic.com` to `font-src` (resolves Google Fonts webfont asset loading).
+   - Added `https://static.cloudflareinsights.com` to `script-src` (resolves Cloudflare Web Analytics beacon blocking).
+   - Added `https://cloudflareinsights.com` to `connect-src` (permits Cloudflare analytics telemetry pings).
+2. **Desktop Header Cleanup (`src/presentation/shell/header/Header.tsx`):**
+   - Removed the long `[● AVAILABLE FOR LEAD CLOUD ARCHITECTURE & ADVISORY ROLES]` pill element from the header navigation as requested, keeping the top bar minimalist and uncluttered.
+   - Reduced contact CTA label from `"Initiate Contact"` to `"Contact"` and added `whitespace-nowrap`.
+3. **Circular Logo Emblem Polish (`Header.tsx`, `MobileHeader.tsx`, `Footer.tsx`):**
+   - Switched from squarish `rounded-xl object-contain p-1` / `rounded-lg` with awkward empty black corner margins to `rounded-full object-cover`. The circular neon ring logo now fills the boundary with zero unsightly corner space.
+   - Updated monogram fallback badges to `rounded-full`.
+4. **Button Sizing & Text Safety (`src/presentation/hero/`):**
+   - Hero primary CTA changed from `"Explore Architecture Telemetry"` (31 chars) to concise `"View Telemetry"`.
+   - Hero secondary CTA changed from `"Download Executive Résumé"` to concise `"Get Résumé"`.
+   - Added `whitespace-nowrap` and refined button padding (`px-5 py-3`) in `BlackholeHero.tsx` so buttons never wrap awkwardly or break surrounding layouts.
+   - Updated Firestore seeded records via `npm run seed`.
+5. **CI Bundle Budget Enforcement (`vite.config.ts`):**
+   - Configured `build.rollupOptions.output.manualChunks(id)` to cleanly separate vendor dependencies: `three` (Three.js), `framer` (Framer Motion), and `firebase` (Firebase core & Firestore).
+   - Reduced `index-*.js` chunk from 1,449 KB to **284 KB** (passing the 1,000 KB CI budget check). Total JS remains well within the 3,000 KB budget.
+- **Verification:**
+  - `gh run view 35361868171` → ✅ **Passed** (Build, Audit Secrets & Deploy in 1m8s, CI/CD Cloudflare Workers live).
+  - `npx biome check .` → ✅ 0 errors across 125 files.
+  - `npx tsc -b` → ✅ 0 type errors.
+  - `npx vite build` → ✅ 740ms build, index chunk 284 KB.
+  - `npx tsx scripts/test-hero-e2e.ts` → ✅ 100% passed.
+  - `npx tsx scripts/test-shell-e2e.ts` → ✅ 100% passed.
 
 
 
