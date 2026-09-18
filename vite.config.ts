@@ -33,4 +33,21 @@ export default defineConfig({
       "@": "/src",
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes("node_modules/three")) {
+            return "three";
+          }
+          if (id.includes("node_modules/framer-motion")) {
+            return "framer";
+          }
+          if (id.includes("node_modules/firebase") || id.includes("node_modules/@firebase")) {
+            return "firebase";
+          }
+        },
+      },
+    },
+  },
 });
