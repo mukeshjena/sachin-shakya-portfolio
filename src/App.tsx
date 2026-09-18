@@ -3,7 +3,8 @@
 // All logic, state, and DI hooks live in App.hooks.ts.
 
 import { useAppState } from "./App.hooks";
-import { ComingSoon } from "./presentation/coming-soon/ComingSoon";
+import { BlackholeHero } from "./presentation/hero/BlackholeHero";
+import { CustomCursor } from "./presentation/hero/cursor/CustomCursor";
 import { PipelineTest } from "./presentation/pages/pipeline-test/PipelineTest";
 import { AppProviders } from "./presentation/providers/AppProviders";
 import { AppLayout } from "./presentation/shell/layout/AppLayout";
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <AppProviders>
+      <CustomCursor />
       <AppLayout>
         {showPipelineTest ? (
           <div className="p-6 md:p-12 flex items-center justify-center">
@@ -21,7 +23,7 @@ function App() {
             </div>
           </div>
         ) : (
-          <ComingSoon />
+          <BlackholeHero />
         )}
       </AppLayout>
     </AppProviders>
