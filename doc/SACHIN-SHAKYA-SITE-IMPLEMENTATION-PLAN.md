@@ -82,7 +82,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 25 | SEO pass (meta/JSON-LD/sitemap/OG/favicons) | Quality | Completed ✅ |
 | 26 | PWA setup (manifest, icons, installability) | Quality | Completed ✅ |
 | 27 | Performance, accessibility, Biome lint gate | Quality | Completed ✅ |
-| 28 | QA sign-off, merge `release/v1.0.0` → `main`, production cutover | Release | Pending |
+| 28 | QA sign-off, merge `release/v1.0.0` → `main`, production cutover | Release | Completed ✅ |
 
 ---
 
