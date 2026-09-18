@@ -160,7 +160,11 @@ async function main() {
   console.log("==================================================================");
 }
 
-main().catch((err) => {
-  console.error("\n❌ Step 24 Media & Inbox E2E Test Suite FAILED:", err);
-  process.exit(1);
-});
+main()
+  .then(() => {
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.error("\n❌ Step 24 Media & Inbox E2E Test Suite FAILED:", err);
+    process.exit(1);
+  });

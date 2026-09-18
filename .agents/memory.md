@@ -1255,6 +1255,47 @@
 - `npx tsx scripts/test-seo-e2e.ts` → ✅ 100% passed (5/5).
 - `npx tsx scripts/test-media-inbox-e2e.ts` → ✅ 100% passed (5/5).
 
+---
+
+## 2026-09-18 — Step 27: Performance, Accessibility, Lint Gate (Completed ✅)
+
+**Branch:** `step/27-perf-accessibility-lint` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `feat(quality): enforce biome ci gate, refactor scene utils, and verify audit gates for step 27`
+
+**What was done:**
+1. **Rule 4 Line Constraint Refactoring (`src/presentation/hero/scene/`):**
+   - Refactored `BlackholeHero.scene.ts` (previously 745 lines) by extracting pure WebGL program linking, shader compilation, render target management, precision buffer detection, and camera basis math into `BlackholeHero.utils.ts`.
+   - `BlackholeHero.scene.ts` brought down to 461 lines (comfortably below the 500 LOC ceiling).
+   - Preserved exactly 3 files in `src/presentation/hero/scene/`: `scene.ts`, `shaders.ts`, `utils.ts`.
+2. **Rule 4 Directory Constraint Partitioning (`src/presentation/sections/telemetry/charts/`):**
+   - Partitioned the 4 chart files into logical subfolders:
+     - `charts/finops/`: `CostTrajectoryChart.tsx`, `AutomationGainsChart.tsx`
+     - `charts/fleet/`: `FleetDistributionChart.tsx`, `MttrBenchmarkChart.tsx`
+   - Strictly maintains ≤ 3 files per directory rule across all presentation folders.
+3. **CI/CD Quality Gate Extension:**
+   - Added `"check:ci": "biome ci ."` to `package.json`.
+   - Updated Step 4 of `.github/workflows/deploy-cloudflare.yml` to run `npm run check:ci`, failing GitHub Actions builds on any formatting, import sorting, or lint violation.
+4. **Comprehensive Automated Audit Gate (`scripts/test-audit-gates.ts`):**
+   - Automated script enforcing 6 quality standards:
+     - Rule 2: Zero `box-shadow` or Tailwind `shadow-*` utility classes.
+     - Rule 4 / 12: Zero debounced inputs.
+     - Rule 3: Strictly zero emojis across codebase.
+     - Rule 4: Maximum 500 lines per file (all files pass).
+     - Rule 4: Maximum 3 files per folder in presentation/ and infrastructure/ (all folders pass).
+     - Accessibility: All `<img>` tags have descriptive `alt` attributes.
+5. **Fixed Test Runner Termination:**
+   - Updated `scripts/test-media-inbox-e2e.ts` with explicit `process.exit(0)` to prevent hanging Firestore background connections during automated test runs.
+
+**Verification:**
+- `npm run check:ci` → ✅ 266 files checked in 170ms, 0 errors.
+- `npm run typecheck` (`tsc -b`) → ✅ 0 errors.
+- `npx tsx scripts/test-audit-gates.ts` → ✅ 6/6 passed (100%).
+- `npx tsx scripts/test-pwa-e2e.ts` → ✅ 28/28 passed (100%).
+- `npx tsx scripts/test-seo-e2e.ts` → ✅ 5/5 passed (100%).
+- `npx tsx scripts/test-media-inbox-e2e.ts` → ✅ 5/5 passed (100%).
+- `npm run build` → ✅ Built successfully with `dist/sw.js` and `dist/manifest.webmanifest`.
+
+
 
 
 

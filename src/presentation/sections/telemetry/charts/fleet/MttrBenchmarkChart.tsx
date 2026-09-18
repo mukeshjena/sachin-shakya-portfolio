@@ -3,7 +3,7 @@
 // Compares Pre vs Post Automation MTTR in minutes across P1, P2, P3, and Fleet Avg.
 // Strictly shadow-free, monospaced tabular numbers, and zero emojis.
 
-import { MTTR_BENCHMARKS } from "../constants/telemetry.constants";
+import { MTTR_BENCHMARKS } from "../../constants/telemetry.constants";
 
 export function MttrBenchmarkChart() {
   const maxTime = 200; // max minutes on axis

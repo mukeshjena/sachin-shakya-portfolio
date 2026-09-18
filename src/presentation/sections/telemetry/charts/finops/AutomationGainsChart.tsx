@@ -3,7 +3,7 @@
 // Compares manual operational engineering hours with automated IaC/CI-CD execution.
 // Strictly shadow-free, monospaced tabular numbers, and zero emojis.
 
-import { AUTOMATION_METRICS } from "../constants/telemetry.constants";
+import { AUTOMATION_METRICS } from "../../constants/telemetry.constants";
 
 export function AutomationGainsChart() {
   return (

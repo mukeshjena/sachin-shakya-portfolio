@@ -112,9 +112,9 @@ jobs:
         run: timeout 20s npm audit --audit-level=high --fetch-retries=0 || true
         continue-on-error: true
 
-      # Step 4: Code Quality Checks (Biome) & Strict Typecheck
-      - name: Run Biome Linter & Code Quality Check
-        run: npm run check
+      # Step 4: Code Quality Checks (Biome CI Gate) & Strict Typecheck
+      - name: Run Biome CI Linter & Code Quality Gate
+        run: npm run check:ci
 
       - name: Run TypeScript Strict Typecheck
         run: npm run typecheck

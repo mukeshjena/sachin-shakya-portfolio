@@ -4,7 +4,7 @@
 // Strictly shadow-free, monospaced tabular numbers, and zero emojis.
 
 import { useState } from "react";
-import { FLEET_DISTRIBUTION } from "../constants/telemetry.constants";
+import { FLEET_DISTRIBUTION } from "../../constants/telemetry.constants";
 
 export function FleetDistributionChart() {
   const [hoveredPlatform, setHoveredPlatform] = useState<string | null>(null);

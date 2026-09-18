@@ -4,10 +4,10 @@
 // Strictly shadow-free, monospaced tabular figures, and zero emojis.
 
 import { motion } from "framer-motion";
-import { AutomationGainsChart } from "./charts/AutomationGainsChart";
-import { CostTrajectoryChart } from "./charts/CostTrajectoryChart";
-import { FleetDistributionChart } from "./charts/FleetDistributionChart";
-import { MttrBenchmarkChart } from "./charts/MttrBenchmarkChart";
+import { AutomationGainsChart } from "./charts/finops/AutomationGainsChart";
+import { CostTrajectoryChart } from "./charts/finops/CostTrajectoryChart";
+import { FleetDistributionChart } from "./charts/fleet/FleetDistributionChart";
+import { MttrBenchmarkChart } from "./charts/fleet/MttrBenchmarkChart";
 import {
   TELEMETRY_ANIMATION_VARIANTS,
   TELEMETRY_COPY,

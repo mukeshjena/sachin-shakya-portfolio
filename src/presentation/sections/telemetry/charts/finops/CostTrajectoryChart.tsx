@@ -4,7 +4,7 @@
 // Strictly adheres to shadow-free surfaces, monospaced tabular figures, and zero emojis.
 
 import { useMemo, useState } from "react";
-import { MONTHLY_SPEND_SERIES } from "../constants/telemetry.constants";
+import { MONTHLY_SPEND_SERIES } from "../../constants/telemetry.constants";
 
 export function CostTrajectoryChart() {
   const [activeIndex, setActiveIndex] = useState<number>(MONTHLY_SPEND_SERIES.length - 1);

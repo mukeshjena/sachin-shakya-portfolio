@@ -10,104 +10,24 @@ import {
   TEMPORAL_BLEND_SHADER,
   VERTEX_SHADER,
 } from "./BlackholeHero.shaders";
+import type { BlackholeEngineConfig, ProgramInfo, RenderTarget } from "./BlackholeHero.utils";
+import {
+  computeCameraBasis,
+  createQuadBuffer,
+  DEFAULT_BLACKHOLE_CONFIG,
+  DEG_TO_RAD,
+  dropTargets,
+  executeBloomPass,
+  getScrimDirectionCode,
+  hexToLinear,
+  JITTER_SAMPLES,
+  linkProgram,
+  makeTarget,
+  setupPrecisionBuffers,
+} from "./BlackholeHero.utils";
 
-export interface BlackholeEngineConfig {
-  distance: number;
-  elevation: number;
-  azimuth: number;
-  orbitSpeed: number;
-  roll: number;
-  fov: number;
-  diskInner: number;
-  diskOuter: number;
-  diskThickness: number;
-  diskDensity: number;
-  brightness: number;
-  spinSpeed: number;
-  grain: number;
-  doppler: number;
-  hotColor: string;
-  midColor: string;
-  coolColor: string;
-  starBrightness: number;
-  glow: number;
-  exposure: number;
-  vignette: number;
-  steps: number;
-  resolution: number;
-  maxDpr: number;
-  focus: readonly [number, number];
-  scrim: "none" | "left" | "right" | "top" | "bottom";
-  scrimStrength: number;
-  paused: boolean;
-}
-
-export const DEFAULT_BLACKHOLE_CONFIG: BlackholeEngineConfig = {
-  distance: 24,
-  elevation: -5.5,
-  azimuth: 0,
-  orbitSpeed: 0,
-  roll: -20,
-  fov: 42,
-  diskInner: 3,
-  diskOuter: 15,
-  diskThickness: 0.26,
-  diskDensity: 1,
-  brightness: 1,
-  spinSpeed: 0.06,
-  grain: 0.48,
-  doppler: 0.35,
-  hotColor: "#FFF3DE",
-  midColor: "#FF9838",
-  coolColor: "#8E3A0B",
-  starBrightness: 0,
-  glow: 1,
-  exposure: 0.9,
-  vignette: 0.28,
-  steps: 300,
-  resolution: 0.7,
-  maxDpr: 1.75,
-  focus: [0.72, 0.46],
-  scrim: "none",
-  scrimStrength: 0.9,
-  paused: false,
-};
-
-interface ProgramInfo {
-  program: WebGLProgram;
-  u: Record<string, WebGLUniformLocation | null>;
-}
-
-interface RenderTarget {
-  fb: WebGLFramebuffer;
-  tex: WebGLTexture;
-  w: number;
-  h: number;
-}
-
-const DEG_TO_RAD = Math.PI / 180;
-const JITTER_SAMPLES = [
-  [0.5, 0.333],
-  [0.25, 0.667],
-  [0.75, 0.111],
-  [0.125, 0.444],
-  [0.625, 0.778],
-  [0.375, 0.222],
-  [0.875, 0.556],
-  [0.0625, 0.889],
-];
-
-function hexToLinear(hex: string): [number, number, number] {
-  const clean = hex.trim().replace("#", "");
-  const full =
-    clean.length === 3
-      ? clean[0] + clean[0] + clean[1] + clean[1] + clean[2] + clean[2]
-      : clean.slice(0, 6);
-  const val = Number.parseInt(full, 16);
-  return [((val >> 16) & 255) / 255, ((val >> 8) & 255) / 255, (val & 255) / 255].map((c) =>
-    c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
-  ) as [number, number, number];
-}
+export type { BlackholeEngineConfig };
+export { DEFAULT_BLACKHOLE_CONFIG };
 
 export class BlackholeSceneController {
   private canvas: HTMLCanvasElement | null = null;
@@ -219,133 +139,24 @@ export class BlackholeSceneController {
   private setupPrecisionBuffers(): void {
     const gl = this.gl;
     if (!gl) return;
-
-    this.hasHalfFloat = true;
-    this.texType = gl.UNSIGNED_BYTE;
-    this.texFormat = gl.RGBA;
-
-    if (this.isWebGL2) {
-      const gl2 = gl as WebGL2RenderingContext;
-      if (
-        gl2.getExtension("EXT_color_buffer_half_float") ||
-        gl2.getExtension("EXT_color_buffer_float")
-      ) {
-        this.texType = gl2.HALF_FLOAT;
-        this.texFormat = (gl2 as unknown as { RGBA16F: number }).RGBA16F || gl2.RGBA;
-      } else {
-        this.hasHalfFloat = false;
-      }
-    } else {
-      const extHalf = gl.getExtension("OES_texture_half_float");
-      const extColor = gl.getExtension("EXT_color_buffer_half_float");
-      if (extHalf && extColor) {
-        this.texType = extHalf.HALF_FLOAT_OES;
-      } else {
-        this.hasHalfFloat = false;
-      }
-    }
-
-    if (!this.hasHalfFloat) {
-      this.texType = gl.UNSIGNED_BYTE;
-      this.texFormat = gl.RGBA;
-    }
-
-    const hasLinear =
-      this.isWebGL2 || !!gl.getExtension("OES_texture_half_float_linear") || !this.hasHalfFloat;
-    this.filterMode = hasLinear ? gl.LINEAR : gl.NEAREST;
-    this.packFactor = this.hasHalfFloat ? 1 : 0.12;
-  }
-
-  private compileShader(type: number, src: string): WebGLShader | null {
-    const gl = this.gl;
-    if (!gl) return null;
-    const shader = gl.createShader(type);
-    if (!shader) return null;
-    gl.shaderSource(shader, src);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      console.error("[BlackholeEngine] shader failed:", gl.getShaderInfoLog(shader) || "no log");
-      gl.deleteShader(shader);
-      return null;
-    }
-    return shader;
-  }
-
-  private linkProgram(vertSrc: string, fragSrc: string): ProgramInfo | null {
-    const gl = this.gl;
-    if (!gl) return null;
-    const vert = this.compileShader(gl.VERTEX_SHADER, vertSrc);
-    const frag = this.compileShader(gl.FRAGMENT_SHADER, fragSrc);
-    if (!vert || !frag) return null;
-
-    const prog = gl.createProgram();
-    if (!prog) return null;
-    gl.attachShader(prog, vert);
-    gl.attachShader(prog, frag);
-    gl.bindAttribLocation(prog, 0, "aPos");
-    gl.linkProgram(prog);
-    gl.deleteShader(vert);
-    gl.deleteShader(frag);
-
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-      console.error("[BlackholeEngine] link failed:", gl.getProgramInfoLog(prog));
-      return null;
-    }
-
-    const uniforms: Record<string, WebGLUniformLocation | null> = {};
-    const count = gl.getProgramParameter(prog, gl.ACTIVE_UNIFORMS);
-    for (let i = 0; i < count; i++) {
-      const active = gl.getActiveUniform(prog, i);
-      if (active) {
-        uniforms[active.name] = gl.getUniformLocation(prog, active.name);
-      }
-    }
-    return { program: prog, u: uniforms };
-  }
-
-  private makeTarget(w: number, h: number): RenderTarget | null {
-    const gl = this.gl;
-    if (!gl) return null;
-    const tex = gl.createTexture();
-    const fb = gl.createFramebuffer();
-    if (!tex || !fb) return null;
-
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.texImage2D(gl.TEXTURE_2D, 0, this.texFormat, w, h, 0, gl.RGBA, this.texType, null);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, this.filterMode);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this.filterMode);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
-
-    const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    if (status !== gl.FRAMEBUFFER_COMPLETE) {
-      gl.deleteTexture(tex);
-      gl.deleteFramebuffer(fb);
-      return null;
-    }
-    return { fb, tex, w, h };
+    const bufConfig = setupPrecisionBuffers(gl, this.isWebGL2);
+    this.hasHalfFloat = bufConfig.hasHalfFloat;
+    this.texType = bufConfig.texType;
+    this.texFormat = bufConfig.texFormat;
+    this.filterMode = bufConfig.filterMode;
+    this.packFactor = bufConfig.packFactor;
   }
 
   private dropTargets(): void {
     const gl = this.gl;
     if (!gl) return;
-    const list = [
+    dropTargets(gl, [
       this.targetScene,
       this.targetPrev,
       this.targetBlend,
       this.targetBlurA,
       this.targetBlurB,
-    ];
-    for (const t of list) {
-      if (t) {
-        gl.deleteTexture(t.tex);
-        gl.deleteFramebuffer(t.fb);
-      }
-    }
+    ]);
     this.targetScene = null;
     this.targetPrev = null;
     this.targetBlend = null;
@@ -358,11 +169,11 @@ export class BlackholeSceneController {
     const gl = this.gl;
     if (!gl) return false;
 
-    this.marchProg = this.linkProgram(VERTEX_SHADER, BLACKHOLE_FRAGMENT_SHADER);
-    this.blendProg = this.linkProgram(VERTEX_SHADER, TEMPORAL_BLEND_SHADER);
-    this.extractProg = this.linkProgram(VERTEX_SHADER, BLOOM_EXTRACT_SHADER);
-    this.blurProg = this.linkProgram(VERTEX_SHADER, BLOOM_BLUR_SHADER);
-    this.compositeProg = this.linkProgram(VERTEX_SHADER, COMPOSITE_SHADER);
+    this.marchProg = linkProgram(gl, VERTEX_SHADER, BLACKHOLE_FRAGMENT_SHADER);
+    this.blendProg = linkProgram(gl, VERTEX_SHADER, TEMPORAL_BLEND_SHADER);
+    this.extractProg = linkProgram(gl, VERTEX_SHADER, BLOOM_EXTRACT_SHADER);
+    this.blurProg = linkProgram(gl, VERTEX_SHADER, BLOOM_BLUR_SHADER);
+    this.compositeProg = linkProgram(gl, VERTEX_SHADER, COMPOSITE_SHADER);
 
     if (
       !this.marchProg ||
@@ -374,20 +185,15 @@ export class BlackholeSceneController {
       return false;
     }
 
-    this.quadBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.quadBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(0);
-    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-    gl.disable(gl.DEPTH_TEST);
-    gl.disable(gl.BLEND);
-    return true;
+    this.quadBuffer = createQuadBuffer(gl);
+    return Boolean(this.quadBuffer);
   }
 
   private handleResize(): void {
     const container = this.container;
     const canvas = this.canvas;
-    if (!container || !canvas) return;
+    const gl = this.gl;
+    if (!container || !canvas || !gl) return;
 
     const rect = container.getBoundingClientRect();
     const dpr = this.isSoftwareRenderer
@@ -425,14 +231,14 @@ export class BlackholeSceneController {
     canvas.style.height = `${cssH}px`;
 
     this.dropTargets();
-    this.targetScene = this.makeTarget(rendW, rendH);
-    this.targetPrev = this.makeTarget(rendW, rendH);
-    this.targetBlend = this.makeTarget(rendW, rendH);
+    this.targetScene = makeTarget(gl, rendW, rendH, this.texFormat, this.texType, this.filterMode);
+    this.targetPrev = makeTarget(gl, rendW, rendH, this.texFormat, this.texType, this.filterMode);
+    this.targetBlend = makeTarget(gl, rendW, rendH, this.texFormat, this.texType, this.filterMode);
 
     const blurW = Math.max(2, rendW >> 2);
     const blurH = Math.max(2, rendH >> 2);
-    this.targetBlurA = this.makeTarget(blurW, blurH);
-    this.targetBlurB = this.makeTarget(blurW, blurH);
+    this.targetBlurA = makeTarget(gl, blurW, blurH, this.texFormat, this.texType, this.filterMode);
+    this.targetBlurB = makeTarget(gl, blurW, blurH, this.texFormat, this.texType, this.filterMode);
   }
 
   private applyProgram(prog: WebGLProgram): void {
@@ -465,41 +271,8 @@ export class BlackholeSceneController {
     }
 
     const cfg = this.config;
-    const radAz = (cfg.azimuth + cfg.orbitSpeed * timeSec) * DEG_TO_RAD;
-    const radEl = Math.max(-88, Math.min(88, cfg.elevation)) * DEG_TO_RAD;
     const dist = Math.max(2.2, cfg.distance);
-
-    const cosEl = Math.cos(radEl);
-    const camX = dist * cosEl * Math.cos(radAz);
-    const camY = dist * Math.sin(radEl);
-    const camZ = dist * cosEl * Math.sin(radAz);
-
-    const fwdX = -camX / dist;
-    const fwdY = -camY / dist;
-    const fwdZ = -camZ / dist;
-
-    let rgtX = fwdZ;
-    let rgtY = 0;
-    let rgtZ = -fwdX;
-    const rgtLen = Math.hypot(rgtX, rgtY, rgtZ) || 1;
-    rgtX /= rgtLen;
-    rgtY /= rgtLen;
-    rgtZ /= rgtLen;
-
-    const upNormX = rgtY * fwdZ - rgtZ * fwdY;
-    const upNormY = rgtZ * fwdX - rgtX * fwdZ;
-    const upNormZ = rgtX * fwdY - rgtY * fwdX;
-
-    const cosRoll = Math.cos(cfg.roll * DEG_TO_RAD);
-    const sinRoll = Math.sin(cfg.roll * DEG_TO_RAD);
-
-    const finalRightX = rgtX * cosRoll + upNormX * sinRoll;
-    const finalRightY = rgtY * cosRoll + upNormY * sinRoll;
-    const finalRightZ = rgtZ * cosRoll + upNormZ * sinRoll;
-
-    const finalUpX = -rgtX * sinRoll + upNormX * cosRoll;
-    const finalUpY = -rgtY * sinRoll + upNormY * cosRoll;
-    const finalUpZ = -rgtZ * sinRoll + upNormZ * cosRoll;
+    const { camPos, fwd, right, up } = computeCameraBasis(cfg, timeSec);
 
     const hot = hexToLinear(cfg.hotColor);
     const mid = hexToLinear(cfg.midColor);
@@ -514,10 +287,10 @@ export class BlackholeSceneController {
     const mu = this.marchProg.u;
     gl.uniform2f(mu.uRes, this.targetScene.w, this.targetScene.h);
     gl.uniform1f(mu.uTime, timeSec);
-    gl.uniform3f(mu.uCamPos, camX, camY, camZ);
-    gl.uniform3f(mu.uRight, finalRightX, finalRightY, finalRightZ);
-    gl.uniform3f(mu.uUp, finalUpX, finalUpY, finalUpZ);
-    gl.uniform3f(mu.uFwd, fwdX, fwdY, fwdZ);
+    gl.uniform3f(mu.uCamPos, camPos[0], camPos[1], camPos[2]);
+    gl.uniform3f(mu.uRight, right[0], right[1], right[2]);
+    gl.uniform3f(mu.uUp, up[0], up[1], up[2]);
+    gl.uniform3f(mu.uFwd, fwd[0], fwd[1], fwd[2]);
     gl.uniform1f(mu.uTanHalf, Math.tan(Math.max(8, Math.min(110, cfg.fov)) * 0.5 * DEG_TO_RAD));
     gl.uniform2f(mu.uFocus, cfg.focus[0], 1 - cfg.focus[1]);
     gl.uniform1f(
@@ -549,183 +322,131 @@ export class BlackholeSceneController {
     this.applyProgram(this.blendProg.program);
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.targetBlend.fb);
     gl.viewport(0, 0, this.targetBlend.w, this.targetBlend.h);
+
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.targetScene.tex);
+    gl.uniform1i(this.blendProg.u.uCurr, 0);
+
     gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, this.targetPrev.tex);
-    gl.uniform1i(this.blendProg.u.uCur, 0);
+    gl.bindTexture(
+      gl.TEXTURE_2D,
+      this.frameIndex === 0 ? this.targetScene.tex : this.targetPrev.tex
+    );
     gl.uniform1i(this.blendProg.u.uPrev, 1);
     gl.uniform1f(this.blendProg.u.uAlpha, alpha);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 
-    // Swap blend & previous
-    const curResult = this.targetBlend;
-    this.targetBlend = this.targetPrev;
-    this.targetPrev = curResult;
-    this.frameIndex++;
+    const tmp = this.targetPrev;
+    this.targetPrev = this.targetBlend;
+    this.targetBlend = tmp;
 
-    // 3. Bloom extraction pass
-    this.applyProgram(this.extractProg.program);
-    gl.bindFramebuffer(gl.FRAMEBUFFER, this.targetBlurA.fb);
-    gl.viewport(0, 0, this.targetBlurA.w, this.targetBlurA.h);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, curResult.tex);
-    gl.uniform1i(this.extractProg.u.uTex, 0);
-    gl.uniform2f(this.extractProg.u.uTexel, 1 / curResult.w, 1 / curResult.h);
-    gl.uniform1f(this.extractProg.u.uDecode, this.hasHalfFloat ? 0 : 1);
-    gl.uniform1f(this.extractProg.u.uPack, this.packFactor);
-    gl.uniform1f(this.extractProg.u.uThreshold, 0.85);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    // 3. Bloom passes (extract + blur)
+    executeBloomPass(
+      gl,
+      this.extractProg,
+      this.blurProg,
+      this.targetPrev,
+      this.targetBlurA,
+      this.targetBlurB,
+      this.packFactor
+    );
 
-    // 4. Blur passes
-    const blurProg = this.blurProg;
-    if (!blurProg) return;
-
-    const runBlur = (src: RenderTarget, dst: RenderTarget, sx: number, sy: number) => {
-      this.applyProgram(blurProg.program);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, dst.fb);
-      gl.viewport(0, 0, dst.w, dst.h);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, src.tex);
-      gl.uniform1i(blurProg.u.uTex, 0);
-      gl.uniform2f(blurProg.u.uStep, sx / dst.w, sy / dst.h);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-    };
-
-    runBlur(this.targetBlurA, this.targetBlurB, 1, 0);
-    runBlur(this.targetBlurB, this.targetBlurA, 0, 1);
-    runBlur(this.targetBlurA, this.targetBlurB, 2.6, 0);
-    runBlur(this.targetBlurB, this.targetBlurA, 0, 2.6);
-
-    // 5. Final composite pass to screen
+    // 4. Composite pass
     this.applyProgram(this.compositeProg.program);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, this.viewWidth, this.viewHeight);
 
+    const cu = this.compositeProg.u;
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, curResult.tex);
+    gl.bindTexture(gl.TEXTURE_2D, this.targetPrev.tex);
+    gl.uniform1i(cu.uScene, 0);
+
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, this.targetBlurA.tex);
-
-    const cu = this.compositeProg.u;
-    gl.uniform1i(cu.uScene, 0);
     gl.uniform1i(cu.uBloom, 1);
+
+    gl.uniform1f(cu.uGlow, cfg.glow);
+    gl.uniform1f(cu.uExposure, cfg.exposure);
+    gl.uniform1f(cu.uVignette, cfg.vignette);
+    gl.uniform1f(cu.uPackFactor, this.packFactor);
     gl.uniform2f(cu.uRes, this.viewWidth, this.viewHeight);
-    gl.uniform1f(cu.uDecode, this.hasHalfFloat ? 0 : 1);
-    gl.uniform1f(cu.uPack, this.packFactor);
-    gl.uniform1f(cu.uGlow, Math.max(0, cfg.glow) * 0.26);
-    gl.uniform1f(cu.uExposure, Math.max(0.05, cfg.exposure));
-    gl.uniform1f(cu.uVignette, Math.max(0, Math.min(1, cfg.vignette)));
-    gl.uniform1f(
-      cu.uScrimDir,
-      cfg.scrim === "left"
-        ? 1
-        : cfg.scrim === "right"
-          ? 2
-          : cfg.scrim === "top"
-            ? 3
-            : cfg.scrim === "bottom"
-              ? 4
-              : 0
-    );
-    gl.uniform1f(cu.uScrimAmt, Math.max(0, Math.min(1, cfg.scrimStrength)));
-    gl.uniform1f(cu.uSeed, (timeSec * 60) % 1000);
+
+    const scrimDir = getScrimDirectionCode(cfg.scrim);
+    gl.uniform1i(cu.uScrimDir, scrimDir);
+    gl.uniform1f(cu.uScrimStr, Math.max(0, Math.min(1, cfg.scrimStrength)));
+
     gl.drawArrays(gl.TRIANGLES, 0, 3);
+    this.frameIndex++;
   }
 
   private renderLoop = (timestamp: number): void => {
-    if (!this.isRunning) return;
-    this.animFrameId = requestAnimationFrame(this.renderLoop);
-
-    if (!this.isIntersecting) {
-      this.lastTimestamp = timestamp;
+    if (!this.isRunning || !this.isIntersecting || this.config.paused) {
+      this.lastTimestamp = 0;
       return;
     }
 
-    const deltaSec = this.lastTimestamp
-      ? Math.min(0.05, (timestamp - this.lastTimestamp) / 1000)
-      : 0;
-    this.lastTimestamp = timestamp;
-
-    if (!this.config.paused && !this.isReducedMotion) {
-      this.simTime += deltaSec;
+    if (this.lastTimestamp === 0) {
+      this.lastTimestamp = timestamp;
     }
+
+    const dt = Math.min(0.066, (timestamp - this.lastTimestamp) * 0.001);
+    this.lastTimestamp = timestamp;
+    this.simTime += dt;
+
     this.renderFrame(this.simTime);
+    this.animFrameId = requestAnimationFrame(this.renderLoop);
   };
 
   private attachObservers(): void {
-    if (!this.container) return;
+    if (typeof ResizeObserver !== "undefined" && this.container) {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.handleResize();
+      });
+      this.resizeObserver.observe(this.container);
+    }
 
-    this.resizeObserver = new ResizeObserver(() => {
-      this.handleResize();
-      if (this.isReducedMotion || this.config.paused) {
-        this.settle(16);
-      }
-    });
-    this.resizeObserver.observe(this.container);
-
-    this.intersectionObserver = new IntersectionObserver(
-      (entries) => {
-        this.isIntersecting = entries[0]?.isIntersecting ?? true;
-      },
-      { threshold: 0 }
-    );
-    this.intersectionObserver.observe(this.container);
-
-    document.addEventListener("visibilitychange", this.onVisibilityChange);
-    this.canvas?.addEventListener("webglcontextlost", this.onContextLost);
-    this.canvas?.addEventListener("webglcontextrestored", this.onContextRestored);
+    if (typeof IntersectionObserver !== "undefined" && this.container) {
+      this.intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (!entry) return;
+          this.isIntersecting = entry.isIntersecting;
+          if (this.isIntersecting && !this.isReducedMotion && !this.config.paused) {
+            this.lastTimestamp = 0;
+            cancelAnimationFrame(this.animFrameId);
+            this.animFrameId = requestAnimationFrame(this.renderLoop);
+          }
+        },
+        { threshold: 0.05 }
+      );
+      this.intersectionObserver.observe(this.container);
+    }
   }
-
-  private onVisibilityChange = (): void => {
-    this.isIntersecting = !document.hidden;
-    this.lastTimestamp = 0;
-  };
-
-  private onContextLost = (e: Event): void => {
-    e.preventDefault();
-    this.isRunning = false;
-    cancelAnimationFrame(this.animFrameId);
-    if (this.canvas) this.canvas.style.display = "none";
-  };
-
-  private onContextRestored = (): void => {
-    this.viewWidth = 0;
-    this.viewHeight = 0;
-    this.renderWidth = 0;
-    this.renderHeight = 0;
-    if (!this.buildShadersAndGeometry()) {
-      if (this.container) this.container.dataset.webgl = "lost";
-      return;
-    }
-    if (this.canvas) this.canvas.style.display = "";
-    this.handleResize();
-    this.isRunning = true;
-    this.lastTimestamp = 0;
-    this.settle(this.isReducedMotion ? 16 : 1);
-    if (!this.isReducedMotion) {
-      this.animFrameId = requestAnimationFrame(this.renderLoop);
-    }
-  };
 
   updateConfig(newConfig: Partial<BlackholeEngineConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    if (this.isReducedMotion || this.config.paused) {
-      this.settle(2);
-    }
   }
 
   destroy(): void {
+    this.dispose();
+  }
+
+  dispose(): void {
     this.isRunning = false;
     cancelAnimationFrame(this.animFrameId);
 
-    this.resizeObserver?.disconnect();
-    this.intersectionObserver?.disconnect();
-    document.removeEventListener("visibilitychange", this.onVisibilityChange);
-    this.canvas?.removeEventListener("webglcontextlost", this.onContextLost);
-    this.canvas?.removeEventListener("webglcontextrestored", this.onContextRestored);
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
+
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+      this.intersectionObserver = null;
+    }
 
     this.dropTargets();
+
     const gl = this.gl;
     if (gl) {
       if (this.quadBuffer) gl.deleteBuffer(this.quadBuffer);
