@@ -286,3 +286,14 @@ select:focus {
   -webkit-backdrop-filter: none;
   border-bottom: 1px solid transparent;
 }
+
+/* ── FinOps Cost Trajectory SVG Gradient Tokens ────────────────────────── */
+.cost-curve-gradient-start {
+  stop-color: var(--amber);
+  stop-opacity: 0.28;
+}
+
+.cost-curve-gradient-end {
+  stop-color: var(--amber);
+  stop-opacity: 0;
+}

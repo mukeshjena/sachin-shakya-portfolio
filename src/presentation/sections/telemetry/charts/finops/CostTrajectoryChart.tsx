@@ -37,8 +37,8 @@ export function CostTrajectoryChart({
   );
   const monthlyDeltaDisplay = useMemo(() => formatMonthlySavingsDelta(pointsData), [pointsData]);
 
-  // Active hover point state for interactive cursor tracking (null by default)
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  // Active hover point state for interactive cursor tracking (pinned to initial baseline by default)
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(0);
   const activeCoord = hoveredIdx !== null ? geometry.coords[hoveredIdx] : null;
   const activePoint = hoveredIdx !== null ? pointsData[hoveredIdx] : null;
 
@@ -63,16 +63,16 @@ export function CostTrajectoryChart({
   };
 
   return (
-    <figure className="w-full rounded-2xl border border-[rgba(130,180,200,0.16)] bg-gradient-to-br from-[#102a36] to-[#08171f] overflow-hidden select-none m-0">
+    <figure className="w-full rounded-2xl border border-[var(--line)] bg-[var(--ink-850)]/90 backdrop-blur-md overflow-hidden select-none m-0">
       {/* Console Top Header */}
-      <div className="flex items-center justify-between gap-4 px-5 py-3.5 border-b border-[rgba(130,180,200,0.16)] text-[11px] font-mono tracking-widest uppercase text-[#6b8896] bg-[#06121a]/60">
-        <span className="font-semibold text-[#e8f1f4]">Azure cost signal</span>
+      <div className="flex items-center justify-between gap-4 px-5 py-3.5 border-b border-[var(--line)] text-[11px] font-mono tracking-widest uppercase text-[var(--mist-dim)] bg-[var(--ink-800)]/60">
+        <span className="font-semibold text-[var(--paper)]">Azure cost signal</span>
         <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3fd08a] opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3fd08a]" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--live)] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--live)]" />
           </span>
-          <span className="text-[#3fd08a] font-bold">Optimised</span>
+          <span className="text-[var(--live)] font-bold">Optimised</span>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ export function CostTrajectoryChart({
         className="relative p-4 sm:p-6 pb-2 cursor-crosshair bg-transparent"
       >
         {/* Top-Left Tag */}
-        <span className="absolute left-6 top-5 text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[#6b8896] font-medium pointer-events-none">
+        <span className="absolute left-6 top-5 text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[var(--mist-dim)] font-medium pointer-events-none">
           Monthly cloud spend
         </span>
 
@@ -93,12 +93,22 @@ export function CostTrajectoryChart({
           role="img"
           aria-label="Line chart showing monthly Azure cloud spend falling steeply after the cost-optimisation programme and holding at the lower level."
           onMouseMove={handleSvgMouseMove}
-          onMouseLeave={() => setHoveredIdx(null)}
+          onMouseLeave={() => setHoveredIdx(0)}
         >
           <defs>
             <linearGradient id="costGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#ffb020" stopOpacity="0.32" />
-              <stop offset="100%" stopColor="#ffb020" stopOpacity="0" />
+              <stop
+                offset="0%"
+                className="cost-curve-gradient-start"
+                stopColor="var(--amber)"
+                stopOpacity="0.28"
+              />
+              <stop
+                offset="100%"
+                className="cost-curve-gradient-end"
+                stopColor="var(--amber)"
+                stopOpacity="0"
+              />
             </linearGradient>
           </defs>
 
@@ -117,7 +127,7 @@ export function CostTrajectoryChart({
             y1="14"
             x2={geometry.milestoneX}
             y2="192"
-            stroke="#49c7e8"
+            stroke="var(--cyan)"
             strokeWidth="1.5"
             strokeDasharray="3 4"
             initial={{ opacity: 0 }}
@@ -129,7 +139,7 @@ export function CostTrajectoryChart({
           <motion.path
             d={geometry.lineD}
             fill="none"
-            stroke="#ffb020"
+            stroke="var(--amber)"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -143,20 +153,20 @@ export function CostTrajectoryChart({
             <g className="pointer-events-none">
               <line
                 x1={activeCoord.x}
-                y1={14}
+                y1="14"
                 x2={activeCoord.x}
-                y2={192}
-                stroke="#93aeba"
+                y2="192"
+                stroke="var(--mist-dim)"
                 strokeWidth="1"
                 strokeDasharray="2 2"
-                opacity="0.6"
+                opacity="0.5"
               />
               <circle
                 cx={activeCoord.x}
                 cy={activeCoord.y}
                 r="4"
-                fill="#ffb020"
-                stroke="#06121a"
+                fill="var(--amber)"
+                stroke="var(--ink-850)"
                 strokeWidth="2"
               />
             </g>
@@ -166,24 +176,24 @@ export function CostTrajectoryChart({
         {/* Liquid-Glass Telemetry Tooltip on Hover */}
         {activeCoord && activePoint && (
           <div
-            className="absolute z-20 pointer-events-none transform -translate-x-1/2 -translate-y-full px-3 py-2 rounded-lg bg-[#06121a]/95 backdrop-blur-xl border border-[rgba(130,180,200,0.2)] text-left space-y-1 transition-all"
+            className="absolute z-20 pointer-events-none transform -translate-x-1/2 -translate-y-full px-3 py-2 rounded-lg bg-[var(--ink-800)]/95 backdrop-blur-xl border border-[var(--line)] text-left space-y-1 transition-all"
             style={{
               left: `${(activeCoord.x / 560) * 100}%`,
               top: `${Math.max(20, (activeCoord.y / 200) * 100 - 15)}%`,
             }}
           >
-            <div className="flex items-center justify-between gap-3 text-[10px] font-mono text-[#6b8896] uppercase">
-              <span className="font-bold text-[#e8f1f4]">{activePoint.month}</span>
+            <div className="flex items-center justify-between gap-3 text-[10px] font-mono text-[var(--mist-dim)] uppercase">
+              <span className="font-bold text-[var(--paper)]">{activePoint.month}</span>
               {activePoint.milestone && (
-                <span className="text-[#49c7e8] truncate max-w-[140px]">
+                <span className="text-[var(--cyan)] truncate max-w-[140px]">
                   {activePoint.milestone}
                 </span>
               )}
             </div>
             <div className="flex items-center gap-2 text-xs font-mono tabular-nums">
-              <span className="text-[#ffb020] font-bold">${activePoint.optimized}K</span>
-              <span className="text-[#6b8896] line-through">${activePoint.baseline}K</span>
-              <span className="text-[#3fd08a] font-semibold text-[10px]">
+              <span className="text-[var(--amber)] font-bold">${activePoint.optimized}K</span>
+              <span className="text-[var(--mist-dim)] line-through">${activePoint.baseline}K</span>
+              <span className="text-[var(--live)] font-semibold text-[10px]">
                 −${activePoint.baseline - activePoint.optimized}K
               </span>
             </div>
@@ -192,31 +202,31 @@ export function CostTrajectoryChart({
 
         {/* Bottom-Right Tag (Image 1 Parity) */}
         <div className="absolute right-6 bottom-4 text-right pointer-events-none space-y-0.5">
-          <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider text-[#ffb020] block">
+          <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider text-[var(--amber)] block">
             {monthlyDeltaDisplay}
           </span>
-          <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[#ffb020] block font-semibold">
+          <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[var(--amber)] block font-semibold">
             AFTER OPTIMISATION
           </span>
         </div>
       </section>
 
       {/* Readout Telemetry Figures */}
-      <figcaption className="grid grid-cols-2 border-t border-[rgba(130,180,200,0.16)] bg-[#06121a]/40">
-        <div className="p-4 sm:p-6 border-r border-[rgba(130,180,200,0.16)]">
-          <strong className="block font-mono text-2xl sm:text-4xl font-bold tracking-tight text-[#e8f1f4] tabular-nums">
+      <figcaption className="grid grid-cols-2 border-t border-[var(--line)] bg-[var(--ink-800)]/40">
+        <div className="p-4 sm:p-6 border-r border-[var(--line)]">
+          <strong className="block font-mono text-2xl sm:text-4xl font-bold tracking-tight text-[var(--paper)] tabular-nums">
             {annualSavingsDisplay}
           </strong>
-          <small className="block mt-1 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase text-[#6b8896]">
+          <small className="block mt-1 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase text-[var(--mist-dim)]">
             ANNUAL CLOUD SAVINGS
           </small>
         </div>
 
         <div className="p-4 sm:p-6">
-          <strong className="block font-mono text-2xl sm:text-4xl font-bold tracking-tight text-[#e8f1f4] tabular-nums">
+          <strong className="block font-mono text-2xl sm:text-4xl font-bold tracking-tight text-[var(--paper)] tabular-nums">
             −{mttrReductionPercent}%
           </strong>
-          <small className="block mt-1 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase text-[#6b8896]">
+          <small className="block mt-1 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase text-[var(--mist-dim)]">
             FASTER INCIDENT RESOLUTION
           </small>
         </div>
