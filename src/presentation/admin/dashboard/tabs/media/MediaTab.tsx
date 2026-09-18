@@ -57,11 +57,11 @@ export const MediaTab: React.FC<MediaTabProps> = ({
               <IoImageOutline className="w-4 h-4" />
             </div>
             <h3 className="text-lg font-bold tracking-tight text-[var(--paper)]">
-              Cloudinary Media Assets
+              Media Asset Vault
             </h3>
           </div>
           <p className="text-xs text-[var(--mist)] mt-1">
-            Edge-signed media library with real-time Cloudinary asset tracking and cascade deletion.
+            Edge-signed media library with real-time asset tracking and cascade deletion.
           </p>
         </div>
 
@@ -150,11 +150,11 @@ export const MediaTab: React.FC<MediaTabProps> = ({
                         },
                         {
                           id: `delete-${asset.id}`,
-                          label: "Delete from Cloudinary",
+                          label: "Delete Asset",
                           danger: true,
                           onClick: () => {
                             const confirmed = window.confirm(
-                              `Permanently delete "${asset.publicId}" from Cloudinary?`
+                              `Permanently delete "${asset.publicId}" from media library?`
                             );
                             if (confirmed) {
                               onDeleteMedia(asset.id, asset.publicId);
@@ -222,7 +222,7 @@ export const MediaTab: React.FC<MediaTabProps> = ({
                         type="button"
                         onClick={() => {
                           const confirmed = window.confirm(
-                            `Permanently delete "${asset.publicId}" from Cloudinary?`
+                            `Permanently delete "${asset.publicId}" from media library?`
                           );
                           if (confirmed) {
                             onDeleteMedia(asset.id, asset.publicId);

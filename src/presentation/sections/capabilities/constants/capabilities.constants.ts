@@ -7,6 +7,7 @@ export type CapabilityCategory =
   | "cloud"
   | "finops"
   | "devops"
+  | "ai"
   | "observability"
   | "containers"
   | "security";
@@ -21,17 +22,18 @@ export interface CapabilityCardItem {
 }
 
 export const CAPABILITIES_COPY = {
-  eyebrow: "TECHNICAL COMPETENCIES // ENTERPRISE PROFICIENCY",
+  eyebrow: "CAPABILITIES // 9 YEARS IN PRODUCTION",
   headline: "Filter by What You Are Hiring For",
   subheadline:
-    "Nine years across multi-cloud production architecture, FinOps governance, and continuous automation. Select a domain below to inspect specific proficiencies.",
+    "Pick a domain to narrow the stack. Grouped from hands-on enterprise cloud operations, automated runbooks, and multi-cloud platform leadership.",
   filterCategories: [
-    { key: "all" as const, label: "All Domains" },
+    { key: "all" as const, label: "All" },
     { key: "cloud" as const, label: "Cloud Platforms" },
-    { key: "finops" as const, label: "FinOps & Cost" },
     { key: "devops" as const, label: "DevOps & IaC" },
-    { key: "observability" as const, label: "Observability & SRE" },
+    { key: "ai" as const, label: "AI Tooling" },
+    { key: "observability" as const, label: "Observability" },
     { key: "containers" as const, label: "Containers & K8s" },
+    { key: "finops" as const, label: "Cost Governance" },
     { key: "security" as const, label: "Security & ITSM" },
   ],
 } as const;
@@ -56,10 +58,10 @@ export const CAPABILITY_CARDS: readonly CapabilityCardItem[] = [
   {
     id: "finops-cost",
     category: "finops",
-    title: "FinOps & Cloud Cost Governance",
+    title: "CloudOps & Cost Optimization",
     subtitle: "$170K/MONTH VERIFIED RUN-RATE REDUCTION",
     description:
-      "Establishing enterprise FinOps operating models, automated cost anomaly detection, and capacity planning delivering millions in annual savings.",
+      "Establishing enterprise CloudOps operating models, automated cost anomaly detection, and capacity planning delivering millions in annual savings.",
     skills: [
       "Azure Cost Management",
       "AWS Cost Explorer",
@@ -103,6 +105,22 @@ export const CAPABILITY_CARDS: readonly CapabilityCardItem[] = [
       "Docker BuildKit",
       "SonarQube",
       "Blue/Green Deployments",
+    ],
+  },
+  {
+    id: "ai-engineering",
+    category: "ai",
+    title: "AI-Assisted Engineering",
+    subtitle: "30% LESS DEV EFFORT ON CLOUDOPS TOIL",
+    description:
+      "Accelerating cloud automation scripting, YAML pipeline authoring, and incident troubleshooting with cutting-edge AI engineering tools.",
+    skills: [
+      "Claude Code",
+      "GitHub Copilot",
+      "ChatGPT",
+      "Microsoft Copilot",
+      "Warp AI Terminal",
+      "Automated Runbooks",
     ],
   },
   {

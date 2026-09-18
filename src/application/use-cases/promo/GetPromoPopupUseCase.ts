@@ -6,7 +6,7 @@ import type { IPromoPopupRepository } from "../../../domain/repositories/promo/I
 import { type PromoPopupDTO, toPromoPopupDTO } from "../../dto/promo/PromoPopupDTO";
 
 export interface IGetPromoPopupUseCase {
-  execute(): Promise<PromoPopupDTO | null>;
+  execute(includeDisabled?: boolean): Promise<PromoPopupDTO | null>;
 }
 
 export class GetPromoPopupUseCase implements IGetPromoPopupUseCase {
@@ -18,11 +18,14 @@ export class GetPromoPopupUseCase implements IGetPromoPopupUseCase {
 
   /**
    * Resolves the singleton promo popup configuration.
-   * Returns null if missing or explicitly disabled.
+   * Returns null if missing or explicitly disabled unless includeDisabled is true.
    */
-  async execute(): Promise<PromoPopupDTO | null> {
+  async execute(includeDisabled = false): Promise<PromoPopupDTO | null> {
     const promo = await this.promoRepository.get();
-    if (!promo?.isEnabled) {
+    if (!promo) {
+      return null;
+    }
+    if (!includeDisabled && !promo.isEnabled) {
       return null;
     }
     return toPromoPopupDTO(promo);

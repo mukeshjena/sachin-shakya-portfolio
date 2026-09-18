@@ -15,6 +15,8 @@ export interface PromoPopup {
   readonly displayDelaySeconds: number;
   /** Days before popup reappears after user dismissal */
   readonly recurrenceDays: number;
+  /** Display frequency: once per session or each time page loads */
+  readonly frequency?: "session" | "always";
   readonly createdAt: Date;
   readonly updatedAt: Date;
 }

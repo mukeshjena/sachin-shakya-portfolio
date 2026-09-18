@@ -11,7 +11,7 @@ import {
   IoTrashOutline,
 } from "react-icons/io5";
 import { useAuthorizedEmailsManager } from "./AuthorizedEmailsManager.hooks";
-import { AUTH_EMAILS_COPY } from "./constants/auth-emails.constants";
+import { AUTH_EMAILS_COPY, isPermanentRootAdmin } from "./constants/auth-emails.constants";
 
 export function AuthorizedEmailsManager() {
   const {
@@ -119,7 +119,7 @@ export function AuthorizedEmailsManager() {
           </div>
         ) : (
           emails.map((email) => {
-            const isRoot = email.toLowerCase() === AUTH_EMAILS_COPY.ROOT_ADMIN_EMAIL;
+            const isRoot = isPermanentRootAdmin(email);
 
             return (
               <div

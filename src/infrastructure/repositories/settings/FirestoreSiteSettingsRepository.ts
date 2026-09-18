@@ -48,13 +48,13 @@ function mapDocToSiteSettings(data: FirestoreSiteSettingsDoc): SiteSettings {
   return {
     id: "global",
     fullName: data.fullName ?? "Sachin Shakya",
-    headline: data.headline ?? "Lead Cloud Architect & DevOps Consultant",
+    headline: data.headline ?? "Technical Lead — CloudOps & DevOps Consultant",
     shortBio:
       data.shortBio ??
-      "Results-driven Cloud Architect with 8+ years architecting enterprise multi-cloud platforms, FinOps governance, and automated CI/CD pipelines.",
-    email: data.email ?? "sachin.shakya@live.com",
-    phone: data.phone ?? "+91 99112 00473",
-    location: data.location ?? "Faridabad, Haryana, India",
+      "Results-driven CloudOps Lead with ~9 years architecting enterprise multi-cloud platforms, cloud cost governance, and automated CI/CD pipelines.",
+    email: data.email ?? "sachinshakya69@gmail.com",
+    phone: data.phone ?? "+91 99530 60735",
+    location: data.location ?? "Faridabad, Haryana 121005, India",
     logoUrl: data.logoUrl ?? "/assets/sachin-logo.png",
     avatarUrl: data.avatarUrl,
     resumePdfUrl: data.resumePdfUrl ?? "/Sachin_Shakya_Resume.pdf",

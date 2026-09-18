@@ -9,11 +9,7 @@ import {
   IoCloseOutline,
   IoShieldCheckmarkOutline,
 } from "react-icons/io5";
-import {
-  CONSULTATION_INTEREST_OPTIONS,
-  PROMO_COPY,
-  PROMO_METRICS,
-} from "./constants/promo.constants";
+import { CONSULTATION_INTEREST_OPTIONS, PROMO_COPY } from "./constants/promo.constants";
 import { usePromoPopupModal } from "./PromoPopupModal.hooks";
 
 export function PromoPopupModal() {
@@ -66,45 +62,41 @@ export function PromoPopupModal() {
           <IoCloseOutline className="w-5 h-5" aria-hidden="true" />
         </button>
 
-        {/* Left Column: Executive Branding & Telemetry (Desktop Only) */}
-        <div className="hidden md:flex flex-col justify-between w-5/12 p-8 bg-[var(--ink-900)] border-r border-[var(--line)] rounded-l-2xl">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--ink-800)] border border-[var(--line)] text-[10px] font-mono uppercase tracking-widest text-[var(--amber)]">
+        {/* Left Column: Sachin's Portrait & Verification Telemetry (Desktop Only) */}
+        <div className="hidden md:flex flex-col justify-between w-5/12 relative overflow-hidden bg-[var(--ink-900)] border-r border-[var(--line)] rounded-l-2xl min-h-[480px]">
+          {/* Background Portrait */}
+          <img
+            src="/assets/sachin-two.png"
+            alt="Sachin Shakya — Technical Lead — CloudOps"
+            className="absolute inset-0 w-full h-full object-cover object-top"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink-900)] via-[var(--ink-900)]/40 to-[var(--ink-900)]/60" />
+
+          {/* Top Pill */}
+          <div className="relative z-10 p-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--ink-900)]/80 backdrop-blur-md border border-[var(--line)] text-[10px] font-mono uppercase tracking-widest text-[var(--amber)]">
               <IoShieldCheckmarkOutline
                 className="w-3.5 h-3.5 text-[var(--amber)]"
                 aria-hidden="true"
               />
               <span>{badgeText}</span>
             </div>
-
-            <h3 className="mt-5 text-2xl font-bold tracking-tight text-[var(--paper)] leading-snug">
-              Executive Cloud Architecture & FinOps Advisory
-            </h3>
-
-            <p className="mt-3 text-xs text-[var(--mist)] leading-relaxed">
-              Engage directly with Sachin Shakya to audit your enterprise infrastructure, rightsize
-              Azure/AWS instances, and eliminate deployment bottlenecks.
-            </p>
-
-            {/* Telemetry Metrics Bar */}
-            <div className="mt-8 grid grid-cols-3 gap-2 p-3 bg-[var(--ink-850)] border border-[var(--line)] rounded-xl">
-              {PROMO_METRICS.map((metric) => (
-                <div key={metric.label} className="text-center">
-                  <div className="text-sm font-mono font-bold tabular-nums text-[var(--amber)]">
-                    {metric.value}
-                  </div>
-                  <div className="text-[10px] uppercase font-mono tracking-wider text-[var(--mist-dim)] mt-0.5">
-                    {metric.label}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
-          <div className="pt-6 border-t border-[var(--line)]">
-            <div className="flex items-center gap-2 text-[11px] font-mono text-[var(--live)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--live)] animate-pulse" />
-              <span>{PROMO_COPY.TELEMETRY_PILL}</span>
+          {/* Bottom Telemetry Card Overlay */}
+          <div className="relative z-10 p-6 space-y-3">
+            <div className="p-4 rounded-xl bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)] space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-[var(--paper)]">Sachin Shakya</span>
+                <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
+              </div>
+              <div className="text-[11px] font-mono text-[var(--cyan)]">
+                Technical Lead — CloudOps
+              </div>
+              <div className="pt-2 border-t border-[var(--line-soft)] flex items-center justify-between text-[10px] font-mono">
+                <span className="text-[var(--mist-dim)]">VERIFIED IMPACT</span>
+                <span className="text-[var(--amber)] font-bold tabular-nums">$170K/MO SAVED</span>
+              </div>
             </div>
           </div>
         </div>
@@ -267,7 +259,7 @@ export function PromoPopupModal() {
                   <button
                     type="submit"
                     disabled={status === "submitting"}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[var(--amber)] hover:bg-[var(--amber-deep)] text-[var(--ink-900)] text-xs font-mono font-semibold tracking-wide transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--amber)] hover:bg-[var(--amber-deep)] text-[#06121a] text-xs font-mono font-bold tracking-wider transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border border-[var(--amber)] select-none"
                   >
                     <span>{status === "submitting" ? PROMO_COPY.SUBMITTING : ctaText}</span>
                     <IoArrowForwardOutline className="w-3.5 h-3.5" aria-hidden="true" />

@@ -13,7 +13,7 @@ export const PROMO_DEFAULTS = {
 } as const;
 
 export const PROMO_COPY = {
-  DEFAULT_BADGE: "FINOPS & DEVOPS CONSULTATION",
+  DEFAULT_BADGE: "CLOUDOPS & DEVOPS CONSULTATION",
   DEFAULT_HEADING: "Optimize Your Cloud Infrastructure",
   DEFAULT_SUBHEADING:
     "Looking to reduce Azure/AWS spend or accelerate your DevOps delivery pipeline? Let's schedule a 30-minute cloud architecture review.",
@@ -31,13 +31,13 @@ export const PROMO_COPY = {
   FOCUS_LABEL: "Consultation Focus",
   MESSAGE_LABEL: "Specific Workload / Scope (Optional)",
   MESSAGE_PLACEHOLDER:
-    "e.g. Multi-cloud Kubernetes migration, FinOps cost reclamation, CI/CD MTTR reduction...",
+    "e.g. Multi-cloud Kubernetes migration, Cloud cost reclamation, CI/CD MTTR reduction...",
   DISMISS_BUTTON: "Maybe Later",
   TELEMETRY_PILL: "DIRECT ARCHITECT ENGAGEMENT // < 24H SLA",
 } as const;
 
 export const CONSULTATION_INTEREST_OPTIONS = [
-  { value: "FinOps Cost Optimization", label: "FinOps Cost Optimization ($170K/mo Benchmark)" },
+  { value: "Cloud Cost Optimization", label: "Cloud Cost Optimization ($170K/mo Benchmark)" },
   { value: "Multi-Cloud Architecture", label: "Multi-Cloud Architecture (Azure / AWS / GCP)" },
   { value: "Kubernetes & Containers", label: "Kubernetes Orchestration (AKS / EKS / Helm)" },
   { value: "DevOps & CI/CD Automation", label: "CI/CD & DevOps Automation (40% MTTR Reduction)" },

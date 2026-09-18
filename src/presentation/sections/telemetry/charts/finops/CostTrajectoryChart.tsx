@@ -244,7 +244,7 @@ export function CostTrajectoryChart() {
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-1 rounded-full bg-[var(--amber)] inline-block" />
-              <span className="text-[var(--paper)]">Post-FinOps Trajectory ($280K/mo)</span>
+              <span className="text-[var(--paper)]">Post-Optimization Trajectory ($280K/mo)</span>
             </div>
           </div>
           <div className="text-[10px] text-[var(--amber)] font-semibold">

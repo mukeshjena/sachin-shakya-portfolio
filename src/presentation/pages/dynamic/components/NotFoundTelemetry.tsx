@@ -20,10 +20,7 @@ export function NotFoundTelemetry({ slug, onReturnHome }: NotFoundTelemetryProps
       <div className="max-w-2xl mx-auto px-6 text-center space-y-8 relative z-10">
         {/* Beacon Badge */}
         <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
-          <IoWarningOutline
-            className="w-4 h-4 text-[var(--amber)] animate-pulse"
-            aria-hidden="true"
-          />
+          <IoWarningOutline className="w-4 h-4 text-[var(--amber)]" aria-hidden="true" />
           <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
             TELEMETRY SIGNAL LOSS {"//"} CODE 404
           </span>

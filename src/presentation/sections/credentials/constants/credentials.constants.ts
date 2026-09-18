@@ -81,27 +81,53 @@ export const CERTIFICATIONS: readonly CertificationItem[] = [
 
 export const EDUCATION_RECORDS: readonly EducationItem[] = [
   {
-    degree: "Bachelor of Technology (B.Tech)",
-    field: "Computer Science & Engineering",
-    institution: "Kurukshetra University, India",
-    period: "2011 — 2015",
+    degree: "MCA — Master of Computer Applications",
+    field: "Computer Applications (74.10%)",
+    institution: "D.A.V. Institute of Management, Faridabad",
+    period: "2020",
+  },
+  {
+    degree: "B.Sc. Electronics",
+    field: "Electronics & Communications (68.98%)",
+    institution: "Delhi University, New Delhi",
+    period: "2017",
+  },
+  {
+    degree: "Higher Secondary (Class XII)",
+    field: "Science Stream (86.00%)",
+    institution: "Haryana Board of School Education, Rohtak",
+    period: "2013",
   },
 ] as const;
 
 export const HONORS_AWARDS: readonly AwardItem[] = [
   {
-    title: "Star Performer Award",
-    organization: "Tata Consultancy Services",
-    year: "2020",
-    description:
-      "Awarded for flawless zero-downtime execution of Downer Group enterprise database migration to Azure SQL MI.",
-  },
-  {
-    title: "Excellence in Cloud Reliability",
-    organization: "Eptura Inc.",
+    title: "SpotON-HatsOff Award",
+    organization: "LTIMindtree",
     year: "2023",
     description:
-      "Recognized for delivering $170K/month recurring FinOps savings and slashing incident MTTR by 40%.",
+      "Awarded for cross-functional automation delivery and cloud cost savings for global healthcare clients.",
+  },
+  {
+    title: "Leadership-Gracias Award",
+    organization: "LTIMindtree",
+    year: "2022",
+    description:
+      "Recognized for outstanding engineering team excellence, mentorship, and cloud delivery standards.",
+  },
+  {
+    title: "TCS Kaizen Award",
+    organization: "Tata Consultancy Services",
+    year: "2021",
+    description:
+      "Awarded for conceptualizing and implementing seven high-impact cloud process improvement ideas.",
+  },
+  {
+    title: "Star Performer of the Month",
+    organization: "TCS BFSI Vertical",
+    year: "2018",
+    description:
+      "Recognized for critical process automation achieving 18% headcount and 20% throughput gains for ABN AMRO.",
   },
 ] as const;
 

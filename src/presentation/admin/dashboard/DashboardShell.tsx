@@ -125,7 +125,7 @@ export function DashboardShell() {
                 </span>
               </div>
               <div className="flex items-center gap-2 mt-0.5 text-[10px] font-mono text-[var(--live)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--live)] animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--live)]" />
                 <span className="uppercase tracking-wider">
                   {DASHBOARD_COPY.LIVE_SYNC_ACTIVE} &bull; {DASHBOARD_COPY.STATUS_ONLINE}
                 </span>

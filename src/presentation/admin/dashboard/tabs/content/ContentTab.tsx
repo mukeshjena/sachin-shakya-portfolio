@@ -39,7 +39,7 @@ export const ContentTab: React.FC<ContentTabProps> = ({
           </div>
           <div>
             <h3 className="text-base font-bold text-[var(--paper)]">
-              FinOps & Infrastructure Telemetry
+              CloudOps & Cost Optimization Telemetry
             </h3>
             <p className="text-xs text-[var(--mist)] mt-0.5">
               12-month cloud cost curve ($170K/mo target), MTTR reduction %, and fleet stats.

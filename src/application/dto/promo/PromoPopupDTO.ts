@@ -14,6 +14,7 @@ export interface PromoPopupDTO {
   readonly imageUrl?: string;
   readonly displayDelaySeconds: number;
   readonly recurrenceDays: number;
+  readonly frequency?: "session" | "always";
   readonly updatedAtIso: string;
 }
 
@@ -29,6 +30,7 @@ export function toPromoPopupDTO(entity: PromoPopup): PromoPopupDTO {
     imageUrl: entity.imageUrl,
     displayDelaySeconds: entity.displayDelaySeconds,
     recurrenceDays: entity.recurrenceDays,
+    frequency: entity.frequency || "session",
     updatedAtIso: entity.updatedAt.toISOString(),
   };
 }

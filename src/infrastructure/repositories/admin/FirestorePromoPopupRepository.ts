@@ -21,6 +21,7 @@ interface FirestorePromoDoc {
   imageUrl?: string;
   displayDelaySeconds?: number;
   recurrenceDays?: number;
+  frequency?: "session" | "always";
   createdAt?: string | { toDate: () => Date };
   updatedAt?: string | { toDate: () => Date };
 }
@@ -45,13 +46,14 @@ function mapDocToPromo(data: FirestorePromoDoc): PromoPopup {
     subheading:
       data.subheading ??
       "Looking to reduce Azure/AWS spend or accelerate your DevOps delivery pipeline? Let's schedule a 30-minute cloud architecture review.",
-    badgeText: data.badgeText ?? "FINOPS & DEVOPS CONSULTATION",
+    badgeText: data.badgeText ?? "CLOUDOPS & SRE CONSULTATION",
     ctaText: data.ctaText ?? "Schedule Cloud Review",
     ctaLink: data.ctaLink ?? "#contact",
     imageUrl: data.imageUrl,
     displayDelaySeconds:
       typeof data.displayDelaySeconds === "number" ? data.displayDelaySeconds : 6,
     recurrenceDays: typeof data.recurrenceDays === "number" ? data.recurrenceDays : 7,
+    frequency: data.frequency === "always" ? "always" : "session",
     createdAt: parseDate(data.createdAt),
     updatedAt: parseDate(data.updatedAt),
   };

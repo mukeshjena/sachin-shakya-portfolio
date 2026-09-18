@@ -7,6 +7,7 @@ export const AUTH_EMAILS_COPY = {
   SUBTITLE: "Manage whitelisted team members authorized to request cryptographic OTP entry.",
   BADGE: "ACCESS CONTROL POLICY",
   ROOT_ADMIN_EMAIL: "sachin.shakya@live.com",
+  ROOT_ADMIN_EMAILS: ["sachin.shakya@live.com", "muk3shjena@gmail.com"] as readonly string[],
   ROOT_BADGE: "ROOT ARCHITECT (PERMANENT)",
   TEAM_BADGE: "DELEGATED ADMIN",
   ADD_HEADING: "Authorize New Administrator",
@@ -22,3 +23,9 @@ export const AUTH_EMAILS_COPY = {
   SUCCESS_REMOVED: "Administrator authorization successfully revoked.",
   ROOT_CANNOT_DELETE: "Security Lock: Primary root administrator cannot be revoked.",
 } as const;
+
+export function isPermanentRootAdmin(email: string): boolean {
+  return (AUTH_EMAILS_COPY.ROOT_ADMIN_EMAILS as readonly string[]).includes(
+    email.trim().toLowerCase()
+  );
+}

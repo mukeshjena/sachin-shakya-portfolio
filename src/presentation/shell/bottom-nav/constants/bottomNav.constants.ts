@@ -5,6 +5,8 @@ import type { ComponentType } from "react";
 import {
   IoBriefcaseOutline,
   IoCompassOutline,
+  IoHardwareChipOutline,
+  IoLayersOutline,
   IoMailOutline,
   IoShieldCheckmarkOutline,
   IoStatsChartOutline,
@@ -25,16 +27,28 @@ export const MOBILE_BOTTOM_NAV_TABS: readonly MobileBottomNavTab[] = [
     icon: IoCompassOutline,
   },
   {
+    id: "impact",
+    label: "Impact",
+    href: "#impact",
+    icon: IoStatsChartOutline,
+  },
+  {
     id: "telemetry",
     label: "Telemetry",
     href: "#telemetry",
-    icon: IoStatsChartOutline,
+    icon: IoHardwareChipOutline,
   },
   {
     id: "experience",
     label: "Experience",
     href: "#experience",
     icon: IoBriefcaseOutline,
+  },
+  {
+    id: "capabilities",
+    label: "Capabilities",
+    href: "#capabilities",
+    icon: IoLayersOutline,
   },
   {
     id: "credentials",

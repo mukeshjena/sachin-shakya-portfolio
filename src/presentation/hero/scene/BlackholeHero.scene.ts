@@ -385,6 +385,15 @@ export class BlackholeSceneController {
       return;
     }
 
+    if (
+      typeof window !== "undefined" &&
+      this.container &&
+      window.scrollY > this.container.offsetHeight
+    ) {
+      this.lastTimestamp = 0;
+      return;
+    }
+
     if (this.lastTimestamp === 0) {
       this.lastTimestamp = timestamp;
     }
@@ -415,9 +424,12 @@ export class BlackholeSceneController {
             this.lastTimestamp = 0;
             cancelAnimationFrame(this.animFrameId);
             this.animFrameId = requestAnimationFrame(this.renderLoop);
+          } else if (!this.isIntersecting) {
+            cancelAnimationFrame(this.animFrameId);
+            this.lastTimestamp = 0;
           }
         },
-        { threshold: 0.05 }
+        { threshold: 0.02 }
       );
       this.intersectionObserver.observe(this.container);
     }

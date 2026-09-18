@@ -24,6 +24,7 @@ import { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
 import { GetPromoPopupUseCase } from "../../application/use-cases/promo/GetPromoPopupUseCase";
 import { SubmitPromoInquiryUseCase } from "../../application/use-cases/promo/SubmitPromoInquiryUseCase";
+import { UpdatePromoPopupUseCase } from "../../application/use-cases/promo/UpdatePromoPopupUseCase";
 import { SaveSectionUseCase } from "../../application/use-cases/sections/SaveSectionUseCase";
 import { GetSiteSettingsUseCase } from "../../application/use-cases/settings/GetSiteSettingsUseCase";
 import { SubscribeSiteSettingsUseCase } from "../../application/use-cases/settings/SubscribeSiteSettingsUseCase";
@@ -193,6 +194,15 @@ export function bootstrapContainer(): void {
     singleton(
       () =>
         new GetPromoPopupUseCase(
+          container.resolve<IPromoPopupRepository>(DI_TOKENS.PromoPopupRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.UpdatePromoPopup,
+    singleton(
+      () =>
+        new UpdatePromoPopupUseCase(
           container.resolve<IPromoPopupRepository>(DI_TOKENS.PromoPopupRepository)
         )
     )

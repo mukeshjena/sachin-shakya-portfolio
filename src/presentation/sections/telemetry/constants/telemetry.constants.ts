@@ -47,15 +47,15 @@ export interface TelemetryKpiCard {
 }
 
 export const TELEMETRY_COPY = {
-  eyebrow: "EXECUTIVE FINOPS & SRE TELEMETRY COMMAND CENTER",
-  headline: "Measurable Cloud Efficiency & Operational Precision",
+  eyebrow: "IMPACT // SIX MEASURED PRODUCTION OUTCOMES",
+  headline: "Numbers I Am Accountable For",
   subheadline:
-    "Grounded in verified multi-cloud production telemetry. Real-time cost governance, automated incident remediation, and IaC fleet management delivering high-impact business outcomes.",
+    "Cloud operations is judged on two things: what it costs and whether it stays up. Grounded in verified multi-cloud production telemetry and automated runbooks.",
   tabs: {
-    spend: "FinOps Cost Curve",
-    mttr: "Incident MTTR Benchmark",
-    automation: "DevOps Automation",
-    fleet: "Fleet Distribution",
+    spend: "Cost Curve",
+    mttr: "MTTR Benchmark",
+    automation: "Automation ROI",
+    fleet: "Fleet Topology",
   },
 } as const;
 

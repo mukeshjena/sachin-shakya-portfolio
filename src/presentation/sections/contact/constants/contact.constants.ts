@@ -3,46 +3,53 @@
 // Zero emojis, strictly Cupertino/outline style iconography metadata.
 
 export const CONTACT_COPY = {
-  eyebrow: "EXECUTIVE CONSULTATION // ARCHITECTURE ADVISORY",
-  headline: "Let's Talk About Your Cloud Architecture & Costs",
+  eyebrow: "CONTACT // UTC+5:30",
+  headline: "Let's Talk About Your Cloud Bill",
   subheadline:
-    "Direct engagement desk for FinOps cost reduction initiatives, multi-cloud Kubernetes platforms, and executive cloud engineering leadership roles.",
-  directChannelsHeader: "DIRECT EXECUTIVE DESK",
+    "Open to conversations about CloudOps leadership, cloud cost optimisation programmes, and SRE practice. Email reaches me fastest.",
+  directChannelsHeader: "DIRECT REACH",
   directChannelsSub:
     "Direct communication coordinates for enterprise stakeholders, founders, and hiring directors.",
   responseSla: "RESPONSE SLA: < 24 HOURS // DIRECT ARCHITECT REPLY",
   formTitle: "START AN ENGAGEMENT",
   formSubtitle:
-    "Fill out the mission parameters below. Submissions are saved to the cluster inbox and dispatched directly to Sachin's private mailbox.",
-  submitButtonText: "Dispatch Consultation Inquiry",
-  submittingText: "Encrypting & Dispatching Transmission...",
+    "Fill out the parameters below. Submissions are saved securely and dispatched directly to Sachin's private mailbox.",
+  submitButtonText: "Send Message",
+  submittingText: "Dispatching Transmission...",
   successTitle: "TRANSMISSION CONFIRMED // INQUIRY RECORDED",
   successMessage:
-    "Your consultation inquiry has been recorded in the cluster inbox and forwarded to Sachin Shakya. Expect a direct, technical response within 24 business hours.",
+    "Your consultation inquiry has been recorded and forwarded to Sachin Shakya. Expect a direct, technical response within 24 business hours.",
   sendAnotherButton: "Send Another Message",
 } as const;
 
 export const CONTACT_DIRECT_CHANNELS = [
   {
     id: "email",
-    label: "DIRECT EMAIL",
-    value: "sachin.shakya@live.com",
-    href: "mailto:sachin.shakya@live.com",
-    caption: "Primary channel for advisory RFPs and confidential discussions",
+    label: "EMAIL",
+    value: "sachinshakya69@gmail.com",
+    href: "mailto:sachinshakya69@gmail.com",
+    caption: "Primary channel for advisory RFPs and direct technical reach",
   },
   {
     id: "phone",
-    label: "DIRECT VOICE / WHATSAPP",
-    value: "+91 99112 00473",
-    href: "tel:+919911200473",
-    caption: "IST Business Hours (UTC+5:30) // Global scheduling by appointment",
+    label: "PHONE / WHATSAPP",
+    value: "+91 99530 60735",
+    href: "tel:+919953060735",
+    caption: "IST Business Hours (UTC+5:30) // Voice & WhatsApp direct",
+  },
+  {
+    id: "linkedin",
+    label: "LINKEDIN",
+    value: "in/sachin-shakya0782",
+    href: "https://linkedin.com/in/sachin-shakya0782",
+    caption: "Professional network, endorsements, and verified credentials",
   },
   {
     id: "location",
-    label: "HEADQUARTERS VECTOR",
-    value: "Faridabad, NCR, India",
-    href: "https://maps.google.com/?q=Faridabad,+Haryana,+India",
-    caption: "Available for global remote leadership & hybrid onsite delivery",
+    label: "BASED IN",
+    value: "Faridabad, Haryana 121005, India",
+    href: "https://maps.google.com/?q=Faridabad,+Haryana+121005,+India",
+    caption: "Available for global remote leadership & hybrid delivery",
   },
 ] as const;
 

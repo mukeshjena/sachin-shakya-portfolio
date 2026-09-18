@@ -1332,6 +1332,74 @@
   - Pre-commit automated quality gate (Biome, TypeScript, Vite build) with strictly prohibited `--no-verify`.
   - GitHub Actions CI/CD with pre-flight secret audits, Biome CI gate, bundle budgets, and atomic Cloudflare deploys.
 
+---
+
+## 2026-09-19 — Step 29: Comprehensive Executive Portfolio Overhaul (Completed ✅)
+
+**Branch:** `step/29-executive-portfolio-overhaul` → `release/v1.0.0` → `main` → `develop`
+**Objective:** Deliver authoritative, human-crafted instrument-panel portfolio addressing all 21 specific client enhancement demands.
+
+**Summary of Completion Across All 21 Requests:**
+1. **Promo Popup Modal & Admin Management (Items 1 & 20):**
+   - Left panel features Sachin Shakya's authentic executive portrait (`/assets/sachin-two.png`), right panel contains consultative inquiry form.
+   - Frequency logic implemented: "session" (once per session via `sessionStorage`) vs "always" (each time).
+   - Created `PromoPopupEditor` (`PromoPopupEditor.tsx`, `.hooks.ts`, `.types.ts`) inside Admin Dashboard Settings tab to manage `isEnabled`, frequency, heading, value proposition, and delay seconds with live Firestore persistence.
+   - Fixed button visibility and typography hierarchy with high-contrast amber styling.
+2. **Multi-Admin Authorization Whitelist (Item 2):**
+   - Added `muk3shjena@gmail.com` alongside `sachin.shakya@live.com` as permanent root administrators in `FirestoreAdminAccessRepository.ts`, `auth-emails.constants.ts`, and Firestore collection `adminEmails`.
+3. **Contact Section Redesign with Sachin's Photo (Items 3, 10, 11, 13):**
+   - Redesigned 2-column layout: left column showcases Sachin's photo (`/assets/sachin-three.png`), status beacon, authentic contact channels (`sachinshakya69@gmail.com`, `+91 99530 60735`, LinkedIn `in/sachin-shakya0782`, Faridabad, India), and CV download CTA.
+   - Guaranteed high-contrast amber submit button (`bg-[var(--amber)] text-[#06121a] font-bold`).
+   - Integrated Notyf success and error toast notifications.
+4. **Role Clarification & Overview Polish (Item 4):**
+   - Strictly eliminated "FINOPS" as a role title. Updated to **Technical Lead — CloudOps** / **CloudOps Lead**.
+   - Removed nested outer card padding from `ExecutiveOverview.tsx` so Sachin's portrait takes full space edge-to-edge.
+5. **Section Order Synchronization (Item 5):**
+   - Swapped section order in `src/App.tsx` so Impact (`#impact`) comes first after Hero, followed by Telemetry / Executive Overview (`#telemetry`), matching desktop header navigation.
+6. **Impact & Telemetry Visual Enhancements (Item 6):**
+   - Styled active telemetry tab with solid high-contrast amber (`bg-[var(--amber)] text-[#06121a] font-bold border border-[var(--amber)]`).
+   - Standardized typography and tab sizes to prevent unwanted text enlargement or wrapping.
+7. **Experience Section Alternating Redesign (Items 7 & 10):**
+   - Redesigned `ExperienceSection.tsx` into a bespoke alternating timeline modeled on DIIRA's `EnergyPillarsSection`: central vertical spine, numbered stage badges (`01`–`04`), alternating Left/Right cards on desktop, fluid spine on mobile.
+   - Created `TechIcon` component (`techIcon.types.ts`, `techIcon.utils.tsx`, `TechIcon.tsx` — exactly 3 files) rendering authentic vector outline icons for all technologies across all cards.
+   - Synchronized career milestones from `code.old/index.html` (Eptura, LTIMindtree, TCS Downer, TCS ABN AMRO).
+8. **Capabilities Section Upgrade (Item 8):**
+   - Added vector icons via `TechIcon` to technical skill pills across all categories.
+   - High-contrast active filter chip styling with compact font sizing (`text-[11px] font-mono`).
+9. **Credentials Section Alignment & Icons (Item 9 & 10):**
+   - Added vector outline icons to certifications, degrees, and honors.
+   - Synchronized authentic education (MCA 2020, B.Sc. Electronics 2017) and corporate awards (SpotON-HatsOff, Leadership-Gracias, TCS Kaizen).
+   - Leveled the bottom baselines of both columns via `items-stretch` and flex layout.
+10. **Authentic Coordinate & Data Verification (Item 10):**
+    - Synchronized all contact information, phone numbers, locations, metrics, and URLs strictly from `code.old/index.html`.
+11. **Vendor Prohibition (Item 12):**
+    - Purged all user-facing mentions of "Firebase", "Cloudflare", and "Cloudinary" across footers, media managers, and admin dashboard copy.
+12. **Toast Notifications with Notyf (Item 13):**
+    - Installed `notyf` package and created shadow-free, token-styled notification utility (`src/presentation/shared/notifications/`).
+    - Integrated toast notifications on contact and promo consultation form submissions.
+13. **Dynamic Custom Page Parser & Admin Rich Editor (Item 14):**
+    - Created `richContentRenderer.ts` parsing Markdown, HTML, and scoped `<style>` CSS blocks with XSS sanitization.
+    - Created `RichHtmlContent` component rendering rich custom section copy safely.
+    - Created `RichEditor` component (`RichEditor.tsx`, `.hooks.ts`, `.types.ts` — exactly 3 files) with Write / Preview / Split views and full formatting toolbar.
+    - Integrated `RichEditor` into `SectionEditorModal.tsx` for instant live preview and editing.
+14. **Technical SEO Parity (Item 15):**
+    - Verified and aligned Schema.org JSON-LD structured data (`Person`, `WebSite`, `BreadcrumbList`), canonical tags, OpenGraph social previews, dynamic sitemap, and robots.txt.
+15. **Mobile Hero Centering (Item 16):**
+    - Center-aligned typography and CTA buttons vertically and horizontally on mobile viewports.
+16. **Mobile Bottom Navigation Expansion (Item 17):**
+    - Expanded `MOBILE_BOTTOM_NAV_TABS` to include all 7 sections: Mission (`#top`), Impact (`#impact`), Telemetry (`#telemetry`), Experience (`#experience`), Capabilities (`#capabilities`), Credentials (`#credentials`), Contact (`#contact`).
+    - Engineered compact responsive touch targets (`w-9 h-9 sm:w-10 sm:h-10`) so all 7 icons fit without clipping or wrapping.
+17. **Global Bug Fixes & Code Standards (Item 18):**
+    - Resolved all linter, typecheck, and accessibility issues.
+18. **Scroll Lag Elimination (Item 19):**
+    - Removed high-frequency `CustomCursor` and window `mousemove` listener from `App.tsx`.
+    - Added `IntersectionObserver` viewport pause guard to `BlackholeHero.scene.ts` to suspend offscreen WebGL rendering.
+19. **Realtime Admin Dynamic Management (Item 20):**
+    - Ensured full live CRUD and visibility toggling for site settings, promo popup, content sections, telemetry metrics, and media assets.
+20. **Elimination of AI Tropes (Item 21):**
+    - Strictly purged all pulsating blinking dots (`animate-pulse`) across the entire repository.
+
+
 
 
 

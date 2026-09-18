@@ -1,0 +1,38 @@
+/* presentation/shared/notifications/notification.css */
+/* Bespoke Instrument Panel styling for Notyf toast telemetry. */
+/* Strictly shadow-free (Rule 2), 1px hairline border, theme tokens. */
+
+.notyf {
+  z-index: 99999;
+}
+
+body .notyf__toast {
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: var(--f-mono, monospace);
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  max-width: 380px;
+}
+
+body .notyf__toast.notyf-clean-toast {
+  background: var(--ink-850);
+  color: var(--paper);
+  border: 1px solid var(--line);
+}
+
+body .notyf__toast.notyf-clean-success {
+  border-color: rgba(63, 208, 138, 0.4);
+  border-left: 3px solid var(--live);
+}
+
+body .notyf__toast.notyf-clean-error {
+  border-color: rgba(239, 68, 68, 0.4);
+  border-left: 3px solid #ef4444;
+}
+
+body .notyf__toast.notyf-clean-info {
+  border-color: rgba(73, 199, 232, 0.4);
+  border-left: 3px solid var(--cyan);
+}

@@ -3,11 +3,11 @@
 
 export const FOOTER_COPY = {
   telemetryStamp:
-    "EDGE // CLOUDFLARE WORKERS &bull; FIRESTORE NATIVE PERSISTENT CACHE &bull; PURE SCI-FI TELEMETRY",
+    "EDGE // HIGH-PERFORMANCE RUNTIME &bull; DISTRIBUTED PERSISTENT CACHE &bull; PURE SCI-FI TELEMETRY",
   systemStatus: "ALL SUBSYSTEMS NOMINAL // 99.99% FLEET UPTIME",
-  summaryHeadline: "Enterprise Cloud Reliability & FinOps Governance",
+  summaryHeadline: "Enterprise Cloud Reliability & CloudOps Governance",
   summaryDescription:
-    "Architecting automated multi-cloud landing zones, Kubernetes clusters, and FinOps governance at Fortune 500 scale. Documented $170K/month cloud cost reduction and 40% MTTR improvement.",
+    "Architecting automated multi-cloud landing zones, Kubernetes clusters, and CloudOps cost governance at Fortune 500 scale. Documented $170K/month cloud cost reduction and 40% MTTR improvement.",
   navHeading: "NAVIGATION",
   telemetryHeading: "OPERATIONAL TELEMETRY",
   connectHeading: "COMMUNICATION CHANNELS",
@@ -24,7 +24,7 @@ export const FOOTER_DEFAULT_SECTION_LINKS = [
 ] as const;
 
 export const FOOTER_TELEMETRY_PILLS = [
-  { label: "FinOps Run-Rate", value: "$170K / month reduction" },
+  { label: "Cost Run-Rate", value: "$170K / month reduction" },
   { label: "Incident MTTR", value: "40% reduction across P1-P3" },
   { label: "Multi-Cloud Fleet", value: "2,000+ managed cloud resources" },
   { label: "Automation Ratio", value: "30-40% manual toil eliminated" },

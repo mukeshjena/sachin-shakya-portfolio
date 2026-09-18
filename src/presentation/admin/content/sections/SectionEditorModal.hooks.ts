@@ -34,13 +34,20 @@ export function useSectionEditorModal({
 
   useEffect(() => {
     if (sectionToEdit) {
-      const content = sectionToEdit.content || {};
+      const content = (sectionToEdit.content || {}) as Record<string, unknown>;
+      const existingText =
+        typeof content.description === "string"
+          ? content.description
+          : typeof content.body === "string"
+            ? content.body
+            : "";
+
       setFormData({
         title: sectionToEdit.title || "",
         type: sectionToEdit.type || "custom",
         isVisible: Boolean(sectionToEdit.isVisible),
         headline: typeof content.headline === "string" ? content.headline : "",
-        description: typeof content.description === "string" ? content.description : "",
+        description: existingText,
       });
     } else {
       setFormData(INITIAL_FORM);
@@ -89,6 +96,7 @@ export function useSectionEditorModal({
           content: {
             headline: formData.headline.trim(),
             description: formData.description.trim(),
+            body: formData.description.trim(),
           },
         });
 

@@ -76,7 +76,7 @@ export const MediaPicker: React.FC<MediaPickerProps> = (props) => {
                 Upload Media Asset
               </h2>
               <p className="text-xs text-[var(--mist-dim)] font-mono">
-                Cloudinary CDN integration via Cloudflare edge gateway
+                Edge CDN media integration via secure gateway
               </p>
             </div>
           </div>
@@ -166,7 +166,7 @@ export const MediaPicker: React.FC<MediaPickerProps> = (props) => {
               htmlFor="media-folder-select"
               className="block text-xs font-mono uppercase tracking-wider text-[var(--mist)] mb-1.5"
             >
-              Cloudinary Destination Folder
+              Media Storage Directory
             </label>
             <select
               id="media-folder-select"
@@ -215,7 +215,7 @@ export const MediaPicker: React.FC<MediaPickerProps> = (props) => {
               disabled={!selectedFile || isUploading}
               className="px-5 py-2 rounded-xl bg-[var(--amber)] text-[var(--ink-950)] text-xs font-semibold hover:bg-[var(--amber-deep)] transition-colors disabled:opacity-50 cursor-pointer"
             >
-              {isUploading ? "Uploading to Cloudinary..." : "Upload Asset"}
+              {isUploading ? "Uploading Asset..." : "Upload Asset"}
             </button>
           </div>
         </form>

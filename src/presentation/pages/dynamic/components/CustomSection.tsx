@@ -3,6 +3,7 @@
 // Adheres strictly to shadow-free surfaces, outline Cupertino icons, and zero emojis.
 
 import { IoArrowForwardOutline, IoHardwareChipOutline } from "react-icons/io5";
+import { RichHtmlContent } from "../../../shared/rich-content/RichHtmlContent";
 import type { CustomSectionProps } from "../DynamicPage.types";
 
 interface CustomSectionContent {
@@ -26,7 +27,11 @@ export function CustomSection({ section }: CustomSectionProps) {
   const eyebrow = content.eyebrow || section.title.toUpperCase();
   const headline = content.headline || section.title;
   const subheadline = content.subheadline;
-  const body = content.body;
+  const body =
+    content.body ||
+    (typeof (content as Record<string, unknown>).description === "string"
+      ? ((content as Record<string, unknown>).description as string)
+      : undefined);
   const items = Array.isArray(content.items) ? content.items : [];
 
   return (
@@ -39,10 +44,7 @@ export function CustomSection({ section }: CustomSectionProps) {
         {/* Section Header */}
         <div className="max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
-            <span
-              className="w-2 h-2 rounded-full bg-[var(--cyan)] animate-pulse"
-              aria-hidden="true"
-            />
+            <span className="w-2 h-2 rounded-full bg-[var(--cyan)]" aria-hidden="true" />
             <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--cyan)] font-semibold">
               {eyebrow}
             </span>
@@ -59,12 +61,10 @@ export function CustomSection({ section }: CustomSectionProps) {
           )}
         </div>
 
-        {/* Narrative Body Copy if Present */}
+        {/* Narrative Body Copy / Rich Content if Present */}
         {body && (
-          <div className="max-w-3xl p-6 rounded-2xl bg-[var(--ink-850)] border border-[var(--line)]">
-            <p className="text-sm sm:text-base text-[var(--mist)] leading-relaxed whitespace-pre-line">
-              {body}
-            </p>
+          <div className="max-w-4xl p-6 md:p-8 rounded-2xl bg-[var(--ink-850)] border border-[var(--line)]">
+            <RichHtmlContent content={body} />
           </div>
         )}
 

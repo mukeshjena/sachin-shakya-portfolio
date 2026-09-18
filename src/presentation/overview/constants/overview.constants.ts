@@ -2,10 +2,10 @@
 // Telemetry descriptors, copy fallbacks, and animation variants for the Executive Overview section.
 
 export const OVERVIEW_FALLBACK_CONTENT = {
-  eyebrow: "LEAD CLOUD ARCHITECT & FINOPS CONSULTANT",
+  eyebrow: "TECHNICAL LEAD — CLOUDOPS",
   headline: "Enterprise Cloud Reliability at Mission-Critical Scale",
   subheadline:
-    "Architecting high-availability multi-cloud landing zones across Azure & AWS, slashing monthly cloud expenditure by $170K, and cutting operational incident MTTR by 40%.",
+    "Operating high-availability multi-cloud platforms across Azure & AWS, eliminating $170K/month in cloud spend, and cutting operational incident MTTR by 40%.",
   ctaPrimary: "Explore Architecture",
   ctaSecondary: "Download Résumé",
   statusTag: "SYSTEM TELEMETRY // ALL NODES OPERATIONAL",
@@ -13,9 +13,9 @@ export const OVERVIEW_FALLBACK_CONTENT = {
 
 export const OVERVIEW_KEY_METRICS = [
   {
-    label: "FinOps Cost Savings",
+    label: "Cloud Cost Savings",
     value: "$170K/mo",
-    description: "Cloud spend reduction delivered",
+    description: "Monthly cloud spend eliminated",
     accent: "amber",
   },
   {
@@ -45,7 +45,7 @@ export const OVERVIEW_INFRA_BADGES: readonly InfraStackBadge[] = [
   { name: "Kubernetes (AKS/EKS)", iconKey: "k8s" },
   { name: "Terraform IaC", iconKey: "terraform" },
   { name: "Datadog Telemetry", iconKey: "datadog" },
-  { name: "FinOps Certified", iconKey: "finops" },
+  { name: "CloudOps Leadership", iconKey: "finops" },
 ] as const;
 
 export const OVERVIEW_ANIMATION_VARIANTS = {

@@ -9,7 +9,7 @@ import type { IRemoveAdminEmailUseCase } from "../../../application/use-cases/ad
 import { DI_TOKENS } from "../../../infrastructure/di/tokens";
 import { useContainer } from "../../shared/useContainer";
 import type { AuthorizedEmailsViewModel, FeedbackMessage } from "./AuthorizedEmailsManager.types";
-import { AUTH_EMAILS_COPY } from "./constants/auth-emails.constants";
+import { AUTH_EMAILS_COPY, isPermanentRootAdmin } from "./constants/auth-emails.constants";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -100,7 +100,7 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
   const handleRemoveEmail = useCallback(
     async (emailToRemove: string) => {
       const trimmed = emailToRemove.trim().toLowerCase();
-      if (trimmed === AUTH_EMAILS_COPY.ROOT_ADMIN_EMAIL) {
+      if (isPermanentRootAdmin(trimmed)) {
         setFeedbackMessage({
           type: "error",
           text: AUTH_EMAILS_COPY.ROOT_CANNOT_DELETE,

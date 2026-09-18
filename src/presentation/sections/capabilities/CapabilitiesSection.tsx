@@ -3,6 +3,7 @@
 // Strictly adheres to shadow-free surfaces, monospaced tabular figures, and zero emojis.
 
 import { motion } from "framer-motion";
+import { TechIcon } from "../../shared/tech-icons/TechIcon";
 import { useCapabilitiesSectionLogic } from "./CapabilitiesSection.hooks";
 import {
   CAPABILITIES_ANIMATION_VARIANTS,
@@ -29,10 +30,7 @@ export function CapabilitiesSection() {
         >
           <motion.div variants={CAPABILITIES_ANIMATION_VARIANTS.item}>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
-              <span
-                className="w-2 h-2 rounded-full bg-[var(--amber)] animate-pulse"
-                aria-hidden="true"
-              />
+              <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
               <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
                 {CAPABILITIES_COPY.eyebrow}
               </span>
@@ -61,10 +59,10 @@ export function CapabilitiesSection() {
                 key={cat.key}
                 type="button"
                 onClick={() => setSelectedCategory(cat.key)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-wider transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-[var(--amber)] text-black font-bold border border-[var(--amber)]"
-                    : "bg-[var(--ink-850)] text-[var(--mist)] border border-[var(--line)] hover:border-[var(--line-soft)] hover:text-[var(--paper)]"
+                    ? "bg-[var(--amber)] text-[#06121a] font-bold border border-[var(--amber)]"
+                    : "bg-[var(--ink-850)] text-[var(--mist)] border border-[var(--line)] hover:border-[var(--amber)]/40 hover:text-[var(--paper)]"
                 }`}
               >
                 {cat.label}
@@ -92,14 +90,15 @@ export function CapabilitiesSection() {
                 </p>
               </div>
 
-              {/* Technical Skills Pills */}
-              <div className="pt-2 flex flex-wrap gap-1.5 select-none border-t border-[var(--line-soft)]">
+              {/* Technical Skills Pills with Vector Icons */}
+              <div className="pt-2.5 flex flex-wrap gap-1.5 select-none border-t border-[var(--line-soft)]">
                 {card.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="px-2 py-0.5 rounded bg-[var(--ink-800)] border border-[var(--line-soft)] text-[11px] font-mono text-[var(--mist)]"
+                    className="px-2 py-0.5 rounded bg-[var(--ink-800)] border border-[var(--line-soft)] text-[11px] font-mono text-[var(--mist)] flex items-center gap-1.5 transition-colors hover:border-[var(--cyan)]/40 hover:text-[var(--paper)]"
                   >
-                    {skill}
+                    <TechIcon name={skill} className="w-3 h-3 text-[var(--cyan)]" />
+                    <span>{skill}</span>
                   </span>
                 ))}
               </div>

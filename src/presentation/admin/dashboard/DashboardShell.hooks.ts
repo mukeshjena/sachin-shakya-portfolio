@@ -34,7 +34,7 @@ const DEFAULT_SECTIONS: readonly Section[] = [
     id: "impact",
     pageId: "home",
     type: "impact",
-    title: "FinOps Telemetry & Enterprise Impact",
+    title: "CloudOps Telemetry & Enterprise Impact",
     content: {},
     order: 0,
     isVisible: true,

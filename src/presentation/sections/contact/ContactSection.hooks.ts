@@ -6,6 +6,7 @@ import type React from "react";
 import { useCallback, useState } from "react";
 import type { ISubmitContactFormUseCase } from "../../../application/use-cases/contact/SubmitContactFormUseCase";
 import { DI_TOKENS } from "../../../infrastructure/di/tokens";
+import { notificationService } from "../../shared/notifications/notification.service";
 import { useContainer } from "../../shared/useContainer";
 import type {
   ContactFormErrors,
@@ -102,6 +103,9 @@ export function useContactSectionLogic(): ContactSectionState {
           source: "contact-form",
         });
 
+        notificationService.success(
+          "Consultation inquiry dispatched successfully! Expect a direct technical reply within 24 hours."
+        );
         setIsSubmitted(true);
         setValues(INITIAL_VALUES);
         setErrors({});
@@ -111,6 +115,7 @@ export function useContactSectionLogic(): ContactSectionState {
             ? err.message
             : "Transmission failed. Please check your network or try direct email.";
         setGeneralError(msg);
+        notificationService.error(msg);
       } finally {
         setIsSubmitting(false);
       }

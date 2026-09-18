@@ -43,10 +43,7 @@ export function Footer() {
         {/* Top Operational Status Bar */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 border-b border-[var(--line-soft)]">
           <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)] border border-[var(--line)] text-xs font-mono text-[var(--live)] select-none">
-            <span
-              className="w-2 h-2 rounded-full bg-[var(--live)] animate-pulse"
-              aria-hidden="true"
-            />
+            <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
             <span className="font-semibold tracking-wider uppercase">
               {FOOTER_COPY.systemStatus}
             </span>
@@ -54,9 +51,9 @@ export function Footer() {
           <div className="text-[11px] font-mono text-[var(--mist-dim)] tracking-wider uppercase flex items-center gap-2 select-none">
             <span className="text-[var(--cyan)] font-semibold">EDGE</span>
             <span>&bull;</span>
-            <span>CLOUDFLARE WORKERS</span>
+            <span>HIGH-PERFORMANCE RUNTIME</span>
             <span>&bull;</span>
-            <span>FIRESTORE CACHE</span>
+            <span>DISTRIBUTED CACHE</span>
           </div>
         </div>
 
@@ -83,10 +80,7 @@ export function Footer() {
             </p>
 
             <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[var(--ink-850)] border border-[var(--line-soft)] text-[10px] font-mono text-[var(--live)] select-none">
-              <span
-                className="w-1.5 h-1.5 rounded-full bg-[var(--live)] animate-pulse"
-                aria-hidden="true"
-              />
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--live)]" aria-hidden="true" />
               <span>OPEN TO STRATEGIC ADVISORY</span>
             </div>
 

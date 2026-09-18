@@ -29,7 +29,7 @@ export function TelemetrySection() {
   return (
     <section
       id="impact"
-      aria-label="FinOps and Cloud Telemetry Command Center"
+      aria-label="CloudOps and Infrastructure Telemetry Command Center"
       className="relative w-full py-16 md:py-24 scroll-mt-20 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10 space-y-12">
@@ -43,10 +43,7 @@ export function TelemetrySection() {
         >
           <motion.div variants={TELEMETRY_ANIMATION_VARIANTS.item}>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
-              <span
-                className="w-2 h-2 rounded-full bg-[var(--amber)] animate-pulse"
-                aria-hidden="true"
-              />
+              <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
               <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
                 {TELEMETRY_COPY.eyebrow}
               </span>
@@ -117,7 +114,7 @@ export function TelemetrySection() {
         {/* Interactive Multi-Chart Suite Container */}
         <div className="space-y-6">
           {/* Tab Switcher */}
-          <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-xl bg-[var(--ink-850)] border border-[var(--line)] max-w-fit select-none">
+          <div className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-xl bg-[var(--ink-850)] border border-[var(--line)] max-w-fit select-none">
             {tabOptions.map((tab) => {
               const isActive = activeTab === tab.key;
               return (
@@ -125,10 +122,10 @@ export function TelemetrySection() {
                   key={tab.key}
                   type="button"
                   onClick={() => setActiveTab(tab.key)}
-                  className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-lg text-[11px] font-mono uppercase tracking-wider transition-all cursor-pointer ${
                     isActive
-                      ? "bg-[var(--amber)] text-black font-bold"
-                      : "text-[var(--mist)] hover:text-[var(--paper)] hover:bg-[var(--ink-800)]/70"
+                      ? "bg-[var(--amber)] text-[#06121a] font-bold border border-[var(--amber)]"
+                      : "text-[var(--mist)] hover:text-[var(--paper)] hover:bg-[var(--ink-800)]/70 border border-transparent"
                   }`}
                 >
                   {tab.label}

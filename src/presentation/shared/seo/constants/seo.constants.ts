@@ -16,7 +16,8 @@ export const SEO_CONSTANTS = {
     "Lead Cloud Architect",
     "DevOps Consultant",
     "Cloud Cost Optimization",
-    "FinOps",
+    "CloudOps Lead",
+    "Cloud Operations",
     "AWS",
     "Microsoft Azure",
     "Kubernetes",
@@ -28,7 +29,7 @@ export const SEO_CONSTANTS = {
     "Dynatrace",
   ],
   SOCIAL_LINKS: [
-    "https://www.linkedin.com/in/sachin-shakya",
+    "https://www.linkedin.com/in/sachin-shakya0782",
     "https://github.com/sachin-shakya",
   ] as const,
   JSON_LD_SCRIPT_ID: "schema-org-jsonld",

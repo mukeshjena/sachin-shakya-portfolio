@@ -6,12 +6,12 @@ import type { SiteSettings } from "../../../../domain/entities/admin/SiteSetting
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   id: "global",
   fullName: "Sachin Shakya",
-  headline: "Lead Cloud Architect & DevOps Consultant",
+  headline: "Technical Lead — CloudOps & DevOps Consultant",
   shortBio:
-    "Results-driven Cloud Architect with 8+ years architecting enterprise multi-cloud platforms, FinOps governance, and automated CI/CD pipelines. Documented $170K/month cloud cost reduction and 40% MTTR improvement across mission-critical systems.",
-  email: "sachin.shakya@live.com",
-  phone: "+91 99112 00473",
-  location: "Faridabad, Haryana, India",
+    "Results-driven CloudOps Lead with ~9 years architecting enterprise multi-cloud platforms, cloud cost governance, and automated CI/CD pipelines. Documented $170K/month cloud cost reduction and 40% MTTR improvement across mission-critical systems.",
+  email: "sachinshakya69@gmail.com",
+  phone: "+91 99530 60735",
+  location: "Faridabad, Haryana 121005, India",
   logoUrl: "/assets/sachin-logo.png",
   avatarUrl: "/assets/sachin-one.png",
   resumePdfUrl: "/Sachin_Shakya_Resume.pdf",
@@ -19,7 +19,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     {
       platform: "linkedin",
       label: "LinkedIn",
-      url: "https://www.linkedin.com/in/sachin-shakya/",
+      url: "https://www.linkedin.com/in/sachin-shakya0782",
       isVisible: true,
       order: 1,
     },

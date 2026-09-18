@@ -35,6 +35,7 @@ export const DI_TOKENS = {
   SubscribeSiteSettings: Symbol("SubscribeSiteSettings"),
   SubmitContactForm: Symbol("SubmitContactForm"),
   GetPromoPopup: Symbol("GetPromoPopup"),
+  UpdatePromoPopup: Symbol("UpdatePromoPopup"),
   SubmitPromoInquiry: Symbol("SubmitPromoInquiry"),
   RequestAccessCode: Symbol("RequestAccessCode"),
   VerifyAccessCode: Symbol("VerifyAccessCode"),

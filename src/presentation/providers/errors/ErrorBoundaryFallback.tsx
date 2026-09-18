@@ -31,7 +31,7 @@ export function ErrorBoundaryFallback({ error, errorInfo, onReset }: ErrorBounda
             </div>
           </div>
           <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--ink-800)] border border-[var(--line)] text-[11px] font-mono text-[var(--mist-dim)]">
-            <span className="w-2 h-2 rounded-full bg-[var(--amber)] animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-[var(--amber)]" />
             <span>DIAGNOSTIC MODE</span>
           </div>
         </div>

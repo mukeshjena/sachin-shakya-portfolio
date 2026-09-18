@@ -21,7 +21,7 @@ import { getDb } from "../../firebase/firebaseClient";
 
 const ADMIN_EMAILS_COLLECTION = "adminEmails";
 const ACCESS_CODES_COLLECTION = "accessCodes";
-const ROOT_ADMIN_EMAIL = "sachin.shakya@live.com";
+const ROOT_ADMIN_EMAILS = ["sachin.shakya@live.com", "muk3shjena@gmail.com"];
 
 interface FirestoreAccessCodeDoc {
   id?: string;
@@ -64,7 +64,9 @@ export class FirestoreAdminAccessRepository implements IAdminAccessRepository {
     const snapshot = await getDocs(colRef);
 
     const emails = new Set<string>();
-    emails.add(ROOT_ADMIN_EMAIL);
+    for (const root of ROOT_ADMIN_EMAILS) {
+      emails.add(root);
+    }
 
     for (const docSnap of snapshot.docs) {
       const data = docSnap.data();
@@ -88,7 +90,7 @@ export class FirestoreAdminAccessRepository implements IAdminAccessRepository {
 
   async removeAuthorizedEmail(email: string): Promise<void> {
     const normalized = email.trim().toLowerCase();
-    if (normalized === ROOT_ADMIN_EMAIL) {
+    if (ROOT_ADMIN_EMAILS.includes(normalized)) {
       throw new Error("Root administrator email cannot be removed.");
     }
     const db = getDb();
@@ -98,7 +100,7 @@ export class FirestoreAdminAccessRepository implements IAdminAccessRepository {
 
   async isAuthorizedEmail(email: string): Promise<boolean> {
     const normalized = email.trim().toLowerCase();
-    if (normalized === ROOT_ADMIN_EMAIL) {
+    if (ROOT_ADMIN_EMAILS.includes(normalized)) {
       return true;
     }
     const db = getDb();

@@ -83,6 +83,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 26 | PWA setup (manifest, icons, installability) | Quality | Completed ✅ |
 | 27 | Performance, accessibility, Biome lint gate | Quality | Completed ✅ |
 | 28 | QA sign-off, merge `release/v1.0.0` → `main`, production cutover | Release | Completed ✅ |
+| 29 | Comprehensive Executive Portfolio Overhaul (21 requirements) | Overhaul | Completed ✅ |
 
 ---
 

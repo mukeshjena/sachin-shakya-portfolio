@@ -2,11 +2,11 @@
 // Telemetry copy, shader configuration presets, and animation variants for 21st.dev Blackhole Hero.
 
 export const HERO_COPY = {
-  eyebrow: "LEAD CLOUD ARCHITECT // FINOPS & SRE EXECUTIVE",
+  eyebrow: "TECHNICAL LEAD — CLOUDOPS // CLOUD & DEVOPS ARCHITECT",
   titleLine1: "Architecting Autonomous",
   titleLine2: "Cloud Horizons",
   subheadline:
-    "Engineering resilient multi-cloud architectures, mission-critical Kubernetes clusters, and automated FinOps telemetry delivering $170K/month in verified cloud efficiency.",
+    "Engineering resilient multi-cloud architectures, mission-critical Kubernetes clusters, and automated CloudOps telemetry delivering $170K/month in verified cloud efficiency.",
   ctaPrimary: "Explore Telemetry",
   ctaSecondary: "Download CV",
   scrollPrompt: "DISCOVER TELEMETRY",

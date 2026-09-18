@@ -7,6 +7,7 @@ import type { PromoPopupDTO } from "../../application/dto/promo/PromoPopupDTO";
 import type { IGetPromoPopupUseCase } from "../../application/use-cases/promo/GetPromoPopupUseCase";
 import type { ISubmitPromoInquiryUseCase } from "../../application/use-cases/promo/SubmitPromoInquiryUseCase";
 import { DI_TOKENS } from "../../infrastructure/di/tokens";
+import { notificationService } from "../shared/notifications/notification.service";
 import { useContainer } from "../shared/useContainer";
 import {
   CONSULTATION_INTEREST_OPTIONS,
@@ -51,16 +52,6 @@ export function usePromoPopupModal(): PromoModalViewModel {
 
   // 1. Dwell time activation & Session Frequency Guard
   useEffect(() => {
-    try {
-      const isDismissed = sessionStorage.getItem(PROMO_STORAGE_KEYS.DISMISSED_SESSION);
-      const isSubmitted = sessionStorage.getItem(PROMO_STORAGE_KEYS.SUBMITTED_SESSION);
-      if (isDismissed || isSubmitted) {
-        return;
-      }
-    } catch {
-      // In private browsing or non-storage environments, proceed safely
-    }
-
     let isMounted = true;
 
     async function loadConfigAndSchedule() {
@@ -72,6 +63,20 @@ export function usePromoPopupModal(): PromoModalViewModel {
 
         setPromoConfig(config);
 
+        // If configured for 'session', check if already dismissed or submitted
+        const isSessionOnly = config.frequency !== "always";
+        if (isSessionOnly) {
+          try {
+            const isDismissed = sessionStorage.getItem(PROMO_STORAGE_KEYS.DISMISSED_SESSION);
+            const isSubmitted = sessionStorage.getItem(PROMO_STORAGE_KEYS.SUBMITTED_SESSION);
+            if (isDismissed || isSubmitted) {
+              return;
+            }
+          } catch {
+            // In private browsing, proceed safely
+          }
+        }
+
         const delaySeconds =
           typeof config.displayDelaySeconds === "number" && config.displayDelaySeconds >= 0
             ? config.displayDelaySeconds
@@ -79,13 +84,17 @@ export function usePromoPopupModal(): PromoModalViewModel {
 
         timerRef.current = setTimeout(() => {
           if (!isMounted) return;
-          try {
-            const dismissed = sessionStorage.getItem(PROMO_STORAGE_KEYS.DISMISSED_SESSION);
-            const submitted = sessionStorage.getItem(PROMO_STORAGE_KEYS.SUBMITTED_SESSION);
-            if (!dismissed && !submitted) {
+          if (isSessionOnly) {
+            try {
+              const dismissed = sessionStorage.getItem(PROMO_STORAGE_KEYS.DISMISSED_SESSION);
+              const submitted = sessionStorage.getItem(PROMO_STORAGE_KEYS.SUBMITTED_SESSION);
+              if (!dismissed && !submitted) {
+                setIsOpen(true);
+              }
+            } catch {
               setIsOpen(true);
             }
-          } catch {
+          } else {
             setIsOpen(true);
           }
         }, delaySeconds * 1000);
@@ -103,15 +112,17 @@ export function usePromoPopupModal(): PromoModalViewModel {
     };
   }, [getPromoPopup]);
 
-  // 2. Dismiss handler (persists session dismissal)
+  // 2. Dismiss handler (persists session dismissal if session mode)
   const handleClose = useCallback(() => {
     setIsOpen(false);
-    try {
-      sessionStorage.setItem(PROMO_STORAGE_KEYS.DISMISSED_SESSION, "true");
-    } catch {
-      // safe fallback
+    if (promoConfig?.frequency !== "always") {
+      try {
+        sessionStorage.setItem(PROMO_STORAGE_KEYS.DISMISSED_SESSION, "true");
+      } catch {
+        // safe fallback
+      }
     }
-  }, []);
+  }, [promoConfig?.frequency]);
 
   // 3. Escape key listener
   useEffect(() => {
@@ -184,6 +195,9 @@ export function usePromoPopupModal(): PromoModalViewModel {
           message: values.message,
         });
 
+        notificationService.success(
+          "Consultation inquiry received! Expect a direct response within 24 hours."
+        );
         setStatus("success");
         try {
           sessionStorage.setItem(PROMO_STORAGE_KEYS.SUBMITTED_SESSION, "true");
@@ -196,12 +210,13 @@ export function usePromoPopupModal(): PromoModalViewModel {
           setIsOpen(false);
         }, PROMO_DEFAULTS.AUTO_CLOSE_SUCCESS_MS);
       } catch (err) {
-        setStatus("error");
-        setErrorMessage(
+        const msg =
           err instanceof Error
             ? err.message
-            : "Unable to submit your inquiry at this moment. Please reach out via sachin.shakya@live.com."
-        );
+            : "Unable to submit your inquiry at this moment. Please reach out via sachinshakya69@gmail.com.";
+        setStatus("error");
+        setErrorMessage(msg);
+        notificationService.error(msg);
       }
     },
     [submitPromoInquiry, validateField, values]

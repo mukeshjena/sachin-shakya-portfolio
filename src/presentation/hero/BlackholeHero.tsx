@@ -23,7 +23,7 @@ export function BlackholeHero() {
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full pointer-events-none z-0" />
 
       {/* Hero Foreground Content */}
-      <div className="relative z-10 flex-1 flex items-start md:items-center px-6 pt-16 sm:pt-20 md:pt-0 lg:px-20 max-w-7xl mx-auto w-full">
+      <div className="relative z-10 flex-1 flex items-center px-6 py-12 md:py-0 lg:px-20 max-w-7xl mx-auto w-full justify-center md:justify-start">
         <motion.div
           variants={HERO_ANIMATION_VARIANTS.container}
           initial="hidden"
@@ -33,10 +33,7 @@ export function BlackholeHero() {
           {/* Eyebrow Telemetry Beacon */}
           <motion.div variants={HERO_ANIMATION_VARIANTS.item}>
             <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)]/90 backdrop-blur-md border border-[var(--line)] select-none">
-              <span
-                className="w-2 h-2 rounded-full bg-[var(--amber)] animate-pulse"
-                aria-hidden="true"
-              />
+              <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
               <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
                 {content.eyebrow}
               </span>

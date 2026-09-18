@@ -4,6 +4,7 @@
 // All logic and use-cases live in SectionEditorModal.hooks.ts (Rule 13).
 
 import { IoCloseOutline, IoLayersOutline, IoSaveOutline } from "react-icons/io5";
+import { RichEditor } from "../../shared/rich-editor/RichEditor";
 import { useSectionEditorModal } from "./SectionEditorModal.hooks";
 import type { SectionEditorModalProps } from "./SectionEditorModal.types";
 
@@ -20,7 +21,7 @@ export function SectionEditorModal(props: SectionEditorModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="section-modal-title"
-        className="w-full max-w-lg bg-[var(--ink-850)] border border-[var(--line)] rounded-2xl p-6 sm:p-8"
+        className="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[var(--ink-850)] border border-[var(--line)] rounded-2xl p-6 sm:p-8"
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-[var(--line)]">
@@ -102,19 +103,13 @@ export function SectionEditorModal(props: SectionEditorModalProps) {
           </div>
 
           <div>
-            <label
-              htmlFor="section-description"
-              className="block text-[11px] font-mono uppercase tracking-wider text-[var(--mist-dim)] mb-1"
-            >
-              Section Content Description
-            </label>
-            <textarea
-              id="section-description"
-              rows={3}
+            <RichEditor
+              label="Section Content & Narrative"
               value={formData.description}
-              onChange={(e) => handleChange("description", e.target.value)}
-              placeholder="Detailed descriptive copy for this section block"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--ink-800)] text-xs font-mono text-[var(--paper)] placeholder-[var(--mist-dim)]/50 border border-[var(--line)] outline-none focus:border-[var(--amber)] transition-colors resize-none"
+              onChange={(val) => handleChange("description", val)}
+              placeholder="Write Markdown, HTML, tables, lists, or scoped <style> CSS blocks..."
+              minHeight="200px"
+              helperText="Full Markdown, HTML markup, tables, and CSS style tags are rendered live with theme tokens."
             />
           </div>
 

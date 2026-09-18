@@ -5,7 +5,6 @@
 import { useAppState } from "./App.hooks";
 import { AdminLogin } from "./presentation/admin/login/AdminLogin";
 import { BlackholeHero } from "./presentation/hero/BlackholeHero";
-import { CustomCursor } from "./presentation/hero/cursor/CustomCursor";
 import { ExecutiveOverview } from "./presentation/overview/ExecutiveOverview";
 import { DynamicPage } from "./presentation/pages/dynamic/DynamicPage";
 import { PipelineTest } from "./presentation/pages/pipeline-test/PipelineTest";
@@ -25,7 +24,6 @@ function App() {
 
   return (
     <AppProviders>
-      <CustomCursor />
       <PromoPopupModal />
       <PwaInstallPrompt />
       <AppLayout>
@@ -48,8 +46,8 @@ function App() {
               ogImage="/og-image.png"
             />
             <BlackholeHero />
-            <ExecutiveOverview />
             <TelemetrySection />
+            <ExecutiveOverview />
             <ExperienceSection />
             <CapabilitiesSection />
             <CredentialsSection />

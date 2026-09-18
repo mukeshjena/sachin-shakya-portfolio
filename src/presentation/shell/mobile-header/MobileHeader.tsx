@@ -29,7 +29,7 @@ export function MobileHeader() {
               {fullName}
             </span>
             <span className="text-[9px] font-mono tracking-widest text-[var(--mist-dim)] uppercase">
-              ARCHITECT &bull; FINOPS
+              ARCHITECT &bull; CLOUDOPS
             </span>
           </div>
         </a>
@@ -38,10 +38,7 @@ export function MobileHeader() {
         <div className="flex items-center gap-2.5">
           {isAvailable && (
             <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--ink-800)] border border-[var(--line)]">
-              <span
-                className="w-1.5 h-1.5 rounded-full bg-[var(--live)] animate-pulse"
-                aria-hidden="true"
-              />
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--live)]" aria-hidden="true" />
               <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--live)] font-semibold">
                 ACTIVE
               </span>

@@ -47,7 +47,7 @@ export const DASHBOARD_NAV_TABS: readonly NavTabItem[] = [
   {
     id: "media",
     label: "Media",
-    description: "Cloudinary asset library & uploads",
+    description: "Media asset vault & edge uploads",
   },
   {
     id: "contacts",

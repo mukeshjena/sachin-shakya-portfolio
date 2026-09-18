@@ -3,11 +3,29 @@
 // Strictly adheres to shadow-free surfaces, monospaced tabular figures, and zero emojis.
 
 import { motion } from "framer-motion";
+import { FaAws } from "react-icons/fa6";
+import { IoSchoolOutline, IoShieldCheckmarkOutline, IoTrophyOutline } from "react-icons/io5";
+import { VscAzure } from "react-icons/vsc";
 import { useCredentialsSectionLogic } from "./CredentialsSection.hooks";
 import {
   CREDENTIALS_ANIMATION_VARIANTS,
   CREDENTIALS_COPY,
 } from "./constants/credentials.constants";
+
+function getCertIcon(code: string) {
+  if (code.startsWith("CLF")) {
+    return <FaAws className="w-4 h-4 text-[var(--amber)] shrink-0" aria-hidden="true" />;
+  }
+  if (code.startsWith("ITIL")) {
+    return (
+      <IoShieldCheckmarkOutline
+        className="w-4 h-4 text-[var(--live)] shrink-0"
+        aria-hidden="true"
+      />
+    );
+  }
+  return <VscAzure className="w-4 h-4 text-[#0078d4] shrink-0" aria-hidden="true" />;
+}
 
 export function CredentialsSection() {
   const { certifications, education, awards } = useCredentialsSectionLogic();
@@ -29,10 +47,7 @@ export function CredentialsSection() {
         >
           <motion.div variants={CREDENTIALS_ANIMATION_VARIANTS.item}>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
-              <span
-                className="w-2 h-2 rounded-full bg-[var(--amber)] animate-pulse"
-                aria-hidden="true"
-              />
+              <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
               <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
                 {CREDENTIALS_COPY.eyebrow}
               </span>
@@ -52,100 +67,135 @@ export function CredentialsSection() {
           </motion.div>
         </motion.div>
 
-        {/* 2-Column Responsive Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        {/* 2-Column Responsive Grid With Level Bottoms */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
           {/* Left Column (7 cols): Industry Certifications */}
-          <div className="lg:col-span-7 space-y-4">
-            <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold pb-1 border-b border-[var(--line-soft)] select-none">
-              {CREDENTIALS_COPY.certificationsHeading}
-            </h3>
+          <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
+            <div>
+              <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold pb-2 border-b border-[var(--line-soft)] select-none">
+                {CREDENTIALS_COPY.certificationsHeading}
+              </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {certifications.map((cert) => (
-                <div
-                  key={cert.code}
-                  className="p-4 rounded-xl bg-[var(--ink-850)]/90 border border-[var(--line)] hover:border-[var(--line-soft)] transition-colors space-y-2 select-none flex flex-col justify-between"
-                >
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="px-2.5 py-1 rounded-md font-mono text-xs font-bold border"
-                      style={{
-                        borderColor: cert.badgeColor,
-                        color: cert.badgeColor,
-                        backgroundColor: "var(--ink-800)",
-                      }}
-                    >
-                      {cert.code}
-                    </span>
-                    <span className="text-[11px] font-mono text-[var(--mist-dim)] tabular-nums">
-                      {cert.year}
-                    </span>
-                  </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-4">
+                {certifications.map((cert) => (
+                  <div
+                    key={cert.code}
+                    className="p-4 rounded-xl bg-[var(--ink-850)]/90 border border-[var(--line)] hover:border-[var(--line-soft)] transition-colors space-y-3 select-none flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        {getCertIcon(cert.code)}
+                        <span
+                          className="px-2 py-0.5 rounded-md font-mono text-xs font-bold border"
+                          style={{
+                            borderColor: cert.badgeColor,
+                            color: cert.badgeColor,
+                            backgroundColor: "var(--ink-800)",
+                          }}
+                        >
+                          {cert.code}
+                        </span>
+                      </div>
+                      <span className="text-[11px] font-mono text-[var(--mist-dim)] tabular-nums">
+                        {cert.year}
+                      </span>
+                    </div>
 
-                  <div>
-                    <h4 className="font-semibold text-sm text-[var(--paper)] leading-snug">
-                      {cert.title}
-                    </h4>
-                    <span className="text-[11px] font-mono text-[var(--mist-dim)] block pt-1">
-                      {cert.issuer}
-                    </span>
+                    <div>
+                      <h4 className="font-semibold text-sm text-[var(--paper)] leading-snug">
+                        {cert.title}
+                      </h4>
+                      <span className="text-[11px] font-mono text-[var(--mist-dim)] block pt-1">
+                        {cert.issuer}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            {/* Micro Verification Telemetry Footnote */}
+            <div className="p-3.5 rounded-xl bg-[var(--ink-850)]/50 border border-[var(--line-soft)] flex items-center justify-between text-[11px] font-mono text-[var(--mist-dim)] select-none">
+              <span>VERIFIED ENTERPRISE ARCHITECT</span>
+              <span className="text-[var(--live)]">6 OF 6 ACTIVE</span>
             </div>
           </div>
 
           {/* Right Column (5 cols): Education & Recognition */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
             {/* Academic Education */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold pb-1 border-b border-[var(--line-soft)] select-none">
+            <div className="space-y-3">
+              <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold pb-2 border-b border-[var(--line-soft)] select-none">
                 {CREDENTIALS_COPY.educationHeading}
               </h3>
 
-              {education.map((edu) => (
-                <div
-                  key={edu.degree}
-                  className="p-4 rounded-xl bg-[var(--ink-850)]/90 border border-[var(--line)] space-y-1.5 select-none"
-                >
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-[var(--paper)] text-sm">{edu.degree}</span>
-                    <span className="font-mono text-[var(--amber)] text-xs tabular-nums">
-                      {edu.period}
-                    </span>
+              <div className="space-y-2.5">
+                {education.map((edu) => (
+                  <div
+                    key={edu.degree}
+                    className="p-3.5 rounded-xl bg-[var(--ink-850)]/90 border border-[var(--line)] space-y-1 select-none flex items-start gap-3"
+                  >
+                    <div className="p-1.5 rounded-lg bg-[var(--ink-800)] border border-[var(--line)] mt-0.5">
+                      <IoSchoolOutline
+                        className="w-3.5 h-3.5 text-[var(--cyan)]"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-bold text-[var(--paper)] text-xs sm:text-sm truncate">
+                          {edu.degree}
+                        </span>
+                        <span className="font-mono text-[var(--amber)] text-xs tabular-nums shrink-0 ml-2">
+                          {edu.period}
+                        </span>
+                      </div>
+                      <div className="text-xs text-[var(--cyan)] font-medium pt-0.5">
+                        {edu.field}
+                      </div>
+                      <div className="text-[11px] font-mono text-[var(--mist-dim)] pt-0.5 truncate">
+                        {edu.institution}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-xs text-[var(--cyan)] font-medium">{edu.field}</div>
-                  <div className="text-xs font-mono text-[var(--mist-dim)] pt-0.5">
-                    {edu.institution}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             {/* Corporate Honors & Awards */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold pb-1 border-b border-[var(--line-soft)] select-none">
+            <div className="space-y-3">
+              <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold pb-2 border-b border-[var(--line-soft)] select-none">
                 {CREDENTIALS_COPY.awardsHeading}
               </h3>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {awards.map((award) => (
                   <div
                     key={award.title}
-                    className="p-4 rounded-xl bg-[var(--ink-850)]/90 border border-[var(--line)] space-y-1.5"
+                    className="p-3.5 rounded-xl bg-[var(--ink-850)]/90 border border-[var(--line)] space-y-1 select-none flex items-start gap-3"
                   >
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-bold text-sm text-[var(--paper)]">{award.title}</h4>
-                      <span className="font-mono text-xs text-[var(--amber)] font-bold tabular-nums">
-                        {award.year}
-                      </span>
+                    <div className="p-1.5 rounded-lg bg-[var(--ink-800)] border border-[var(--line)] mt-0.5">
+                      <IoTrophyOutline
+                        className="w-3.5 h-3.5 text-[var(--amber)]"
+                        aria-hidden="true"
+                      />
                     </div>
-                    <div className="text-xs font-mono text-[var(--mist-dim)]">
-                      {award.organization}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-bold text-xs sm:text-sm text-[var(--paper)] truncate">
+                          {award.title}
+                        </h4>
+                        <span className="font-mono text-xs text-[var(--amber)] font-bold tabular-nums shrink-0 ml-2">
+                          {award.year}
+                        </span>
+                      </div>
+                      <div className="text-[11px] font-mono text-[var(--mist-dim)]">
+                        {award.organization}
+                      </div>
+                      <p className="text-xs text-[var(--mist)] leading-relaxed pt-0.5 font-sans line-clamp-2">
+                        {award.description}
+                      </p>
                     </div>
-                    <p className="text-xs text-[var(--mist)] leading-relaxed pt-1 font-sans">
-                      {award.description}
-                    </p>
                   </div>
                 ))}
               </div>

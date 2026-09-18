@@ -66,10 +66,7 @@ export function ExecutiveOverview() {
             {/* Mission Eyebrow Telemetry Beacon */}
             <motion.div variants={OVERVIEW_ANIMATION_VARIANTS.item}>
               <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)]/90 border border-[var(--line)] select-none">
-                <span
-                  className="w-2 h-2 rounded-full bg-[var(--amber)] animate-pulse"
-                  aria-hidden="true"
-                />
+                <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
                 <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
                   {content.eyebrow}
                 </span>
@@ -147,69 +144,57 @@ export function ExecutiveOverview() {
             </motion.div>
           </div>
 
-          {/* Right Column (5 cols): Precision Telemetry Portrait Frame */}
+          {/* Right Column (5 cols): Edge-to-Edge Portrait Frame without nested card */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
             <motion.div
               variants={OVERVIEW_ANIMATION_VARIANTS.item}
-              className="relative w-full max-w-sm sm:max-w-md p-3.5 rounded-2xl bg-[var(--ink-850)]/80 backdrop-blur-xl border border-[var(--line)] space-y-3"
+              className="relative w-full max-w-sm sm:max-w-md aspect-square rounded-2xl overflow-hidden bg-[var(--ink-900)] border border-[var(--line)]"
             >
-              {/* Header Status Beacon */}
-              <div className="flex items-center justify-between px-1 border-b border-[var(--line-soft)] pb-2.5 text-[10px] font-mono text-[var(--mist-dim)]">
-                <div className="flex items-center gap-2">
-                  <IoShieldCheckmarkOutline
-                    className="w-4 h-4 text-[var(--live)]"
-                    aria-hidden="true"
-                  />
-                  <span className="text-[var(--paper)] font-semibold">VERIFIED IDENTITY</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <IoPulseOutline
-                    className="w-3.5 h-3.5 text-[var(--cyan)] animate-pulse"
-                    aria-hidden="true"
-                  />
-                  <span>ONLINE {"//"} CLOUD OPS</span>
-                </div>
-              </div>
+              <img
+                src={content.heroPhotoUrl}
+                alt="Sachin Shakya — Technical Lead CloudOps"
+                className="w-full h-full object-cover object-top"
+              />
 
-              {/* Portrait Image Container */}
-              <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[var(--ink-900)] border border-[var(--line)]">
-                <img
-                  src={content.heroPhotoUrl}
-                  alt="Sachin Shakya — Lead Cloud Architect"
-                  className="w-full h-full object-cover object-top"
-                />
+              {/* Subtle Radial Vignette */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_45%,rgba(6,18,26,0.6)_100%)] pointer-events-none"
+              />
 
-                {/* Subtle Radial Vignette */}
-                <div
+              {/* Top Verified Identity Badge Overlay */}
+              <div className="absolute top-3 left-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--ink-900)]/85 backdrop-blur-md border border-[var(--line)] text-[10px] font-mono text-[var(--paper)] select-none">
+                <IoShieldCheckmarkOutline
+                  className="w-3.5 h-3.5 text-[var(--live)]"
                   aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_45%,rgba(6,18,26,0.6)_100%)] pointer-events-none"
                 />
-
-                {/* Bottom Overlay Pill */}
-                <div className="absolute bottom-3 inset-x-3 p-2.5 rounded-xl bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)] flex items-center justify-between text-xs">
-                  <div>
-                    <span className="text-xs font-bold text-[var(--paper)] block uppercase tracking-tight">
-                      Sachin Shakya
-                    </span>
-                    <span className="text-[10px] font-mono text-[var(--cyan)] block uppercase">
-                      FinOps &bull; Multi-Cloud
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[10px] font-mono text-[var(--mist-dim)] block uppercase">
-                      EXPERIENCE
-                    </span>
-                    <span className="text-xs font-mono font-bold text-[var(--amber)] tabular-nums block">
-                      8+ YEARS
-                    </span>
-                  </div>
-                </div>
+                <span className="font-semibold uppercase tracking-wider">VERIFIED IDENTITY</span>
               </div>
 
-              {/* Bottom Telemetry Footer */}
-              <div className="px-1 pt-1 flex items-center justify-between text-[10px] font-mono text-[var(--mist-dim)] select-none">
-                <span>FARIDABAD {"//"} GLOBAL DELIVERY</span>
-                <span className="text-[var(--live)] font-semibold">ACTIVE STATUS</span>
+              {/* Top Right Status Overlay */}
+              <div className="absolute top-3 right-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[var(--ink-900)]/85 backdrop-blur-md border border-[var(--line)] text-[10px] font-mono text-[var(--cyan)] select-none">
+                <IoPulseOutline className="w-3.5 h-3.5 text-[var(--cyan)]" aria-hidden="true" />
+                <span className="uppercase tracking-wider">ONLINE</span>
+              </div>
+
+              {/* Bottom Overlay Pill */}
+              <div className="absolute bottom-3 inset-x-3 p-3 rounded-xl bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)] flex items-center justify-between text-xs select-none">
+                <div>
+                  <span className="text-xs font-bold text-[var(--paper)] block uppercase tracking-tight">
+                    Sachin Shakya
+                  </span>
+                  <span className="text-[10px] font-mono text-[var(--cyan)] block uppercase">
+                    Technical Lead &bull; CloudOps
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] font-mono text-[var(--mist-dim)] block uppercase">
+                    EXPERIENCE
+                  </span>
+                  <span className="text-xs font-mono font-bold text-[var(--amber)] tabular-nums block">
+                    ~9 YEARS
+                  </span>
+                </div>
               </div>
             </motion.div>
           </div>

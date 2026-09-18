@@ -7,7 +7,9 @@ import {
   IoAlertCircleOutline,
   IoCallOutline,
   IoCheckmarkCircleOutline,
+  IoDocumentTextOutline,
   IoLocationOutline,
+  IoLogoLinkedin,
   IoMailOutline,
   IoPaperPlaneOutline,
   IoShieldCheckmarkOutline,
@@ -49,10 +51,7 @@ export function ContactSection() {
         {/* Section Header */}
         <div className="max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
-            <span
-              className="w-2 h-2 rounded-full bg-[var(--live)] animate-pulse"
-              aria-hidden="true"
-            />
+            <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
             <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--live)] font-semibold">
               {CONTACT_COPY.eyebrow}
             </span>
@@ -69,68 +68,110 @@ export function ContactSection() {
 
         {/* 2-Column Command Desk Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Left Column (5 cols): Direct Executive Channels & SLA */}
+          {/* Left Column (5 cols): Executive Portrait & Direct Channels */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="p-6 rounded-2xl bg-[var(--ink-850)]/90 backdrop-blur-md border border-[var(--line)] space-y-6">
-              <div>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--mist-dim)] block">
-                  {CONTACT_COPY.directChannelsHeader}
-                </span>
-                <p className="text-xs text-[var(--mist)] mt-1">{CONTACT_COPY.directChannelsSub}</p>
-              </div>
-
-              {/* Direct Channels Cards */}
-              <div className="space-y-3">
-                {CONTACT_DIRECT_CHANNELS.map((channel) => (
-                  <a
-                    key={channel.id}
-                    href={channel.href}
-                    target={channel.href.startsWith("http") ? "_blank" : undefined}
-                    rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="p-4 rounded-xl bg-[var(--ink-800)]/80 border border-[var(--line)] hover:border-[var(--cyan)] hover:bg-[var(--ink-800)] transition-colors flex items-start gap-3.5 group cursor-pointer block"
-                  >
-                    <span className="w-9 h-9 rounded-lg bg-[var(--ink-700)] border border-[var(--line)] flex items-center justify-center text-[var(--cyan)] shrink-0 group-hover:border-[var(--cyan)] transition-colors">
-                      {channel.id === "email" && (
-                        <IoMailOutline className="w-4 h-4" aria-hidden="true" />
-                      )}
-                      {channel.id === "phone" && (
-                        <IoCallOutline className="w-4 h-4" aria-hidden="true" />
-                      )}
-                      {channel.id === "location" && (
-                        <IoLocationOutline className="w-4 h-4" aria-hidden="true" />
-                      )}
+            <div className="rounded-2xl overflow-hidden border border-[var(--line)] bg-[var(--ink-850)]/90 backdrop-blur-md">
+              {/* Sachin Shakya Portrait */}
+              <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-[var(--ink-900)]">
+                <img
+                  src="/assets/sachin-three.png"
+                  alt="Sachin Shakya — Technical Lead — CloudOps"
+                  className="w-full h-full object-cover object-top"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink-850)] via-transparent to-transparent" />
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)]">
+                    <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
+                    <span className="text-[10px] font-mono text-[var(--live)] font-semibold uppercase tracking-wider">
+                      AVAILABLE FOR ADVISORY
                     </span>
-                    <div className="space-y-0.5 min-w-0 flex-1">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--mist-dim)] block">
-                        {channel.label}
-                      </span>
-                      <span className="text-xs sm:text-sm font-semibold text-[var(--paper)] group-hover:text-[var(--cyan)] transition-colors block truncate">
-                        {channel.value}
-                      </span>
-                      <span className="text-[11px] text-[var(--mist-dim)] block leading-snug">
-                        {channel.caption}
-                      </span>
-                    </div>
-                  </a>
-                ))}
-              </div>
-
-              {/* SLA & Security Beacon */}
-              <div className="pt-2 border-t border-[var(--line)] space-y-2.5">
-                <div className="flex items-center gap-2 text-xs font-mono text-[var(--amber)]">
-                  <IoTimeOutline className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  <span className="text-[10px] tracking-wider uppercase font-semibold">
-                    {CONTACT_COPY.responseSla}
+                  </div>
+                  <span className="text-[10px] font-mono text-[var(--amber)] bg-[var(--ink-900)]/90 px-2 py-0.5 rounded border border-[var(--line)] font-bold">
+                    ~9 YRS EXP
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-mono text-[var(--mist-dim)]">
-                  <IoShieldCheckmarkOutline
-                    className="w-4 h-4 text-[var(--live)] shrink-0"
+              </div>
+
+              {/* Direct Details & Channels */}
+              <div className="p-6 space-y-5">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--mist-dim)] block">
+                    {CONTACT_COPY.directChannelsHeader}
+                  </span>
+                  <h3 className="text-lg font-bold text-[var(--paper)] mt-0.5">Sachin Shakya</h3>
+                  <p className="text-xs text-[var(--cyan)] font-mono">Technical Lead — CloudOps</p>
+                </div>
+
+                {/* Direct Channels Cards */}
+                <div className="space-y-2.5">
+                  {CONTACT_DIRECT_CHANNELS.map((channel) => (
+                    <a
+                      key={channel.id}
+                      href={channel.href}
+                      target={channel.href.startsWith("http") ? "_blank" : undefined}
+                      rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="p-3 rounded-xl bg-[var(--ink-800)]/80 border border-[var(--line)] hover:border-[var(--cyan)] hover:bg-[var(--ink-800)] transition-colors flex items-start gap-3 group cursor-pointer block"
+                    >
+                      <span className="w-8 h-8 rounded-lg bg-[var(--ink-700)] border border-[var(--line)] flex items-center justify-center text-[var(--cyan)] shrink-0 group-hover:border-[var(--cyan)] transition-colors">
+                        {channel.id === "email" && (
+                          <IoMailOutline className="w-4 h-4" aria-hidden="true" />
+                        )}
+                        {channel.id === "phone" && (
+                          <IoCallOutline className="w-4 h-4" aria-hidden="true" />
+                        )}
+                        {channel.id === "linkedin" && (
+                          <IoLogoLinkedin className="w-4 h-4" aria-hidden="true" />
+                        )}
+                        {channel.id === "location" && (
+                          <IoLocationOutline className="w-4 h-4" aria-hidden="true" />
+                        )}
+                      </span>
+                      <div className="space-y-0.5 min-w-0 flex-1">
+                        <span className="text-[9px] font-mono uppercase tracking-wider text-[var(--mist-dim)] block">
+                          {channel.label}
+                        </span>
+                        <span className="text-xs sm:text-sm font-semibold text-[var(--paper)] group-hover:text-[var(--cyan)] transition-colors block truncate">
+                          {channel.value}
+                        </span>
+                        <span className="text-[10px] text-[var(--mist-dim)] block leading-snug">
+                          {channel.caption}
+                        </span>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+
+                {/* Download Résumé Action */}
+                <a
+                  href="/Sachin_Shakya_Resume.pdf"
+                  download
+                  className="w-full py-2.5 px-4 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--paper)] hover:text-[var(--amber)] text-xs font-mono font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer select-none"
+                >
+                  <IoDocumentTextOutline
+                    className="w-4 h-4 text-[var(--amber)]"
                     aria-hidden="true"
                   />
-                  <span className="text-[10px] tracking-wider uppercase">
-                    CONFIDENTIAL {"//"} DIRECT ARCHITECT HANDSHAKE
-                  </span>
+                  <span>Download Verified Résumé (PDF)</span>
+                </a>
+
+                {/* SLA & Security Beacon */}
+                <div className="pt-2 border-t border-[var(--line-soft)] space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-mono text-[var(--amber)]">
+                    <IoTimeOutline className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                    <span className="text-[10px] tracking-wider uppercase font-semibold">
+                      {CONTACT_COPY.responseSla}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-mono text-[var(--mist-dim)]">
+                    <IoShieldCheckmarkOutline
+                      className="w-3.5 h-3.5 text-[var(--live)] shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span className="text-[10px] tracking-wider uppercase">
+                      CONFIDENTIAL {"//"} DIRECT ARCHITECT HANDSHAKE
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -287,15 +328,15 @@ export function ContactSection() {
                   </div>
 
                   {/* Submit Action */}
-                  <div className="pt-2">
+                  <div className="pt-4 border-t border-[var(--line-soft)] mt-4">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full sm:w-auto px-8 py-3 rounded-full bg-[var(--amber)] text-black font-semibold text-xs sm:text-sm uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 select-none"
+                      className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[var(--amber)] text-[#06121a] font-bold text-xs sm:text-sm font-mono uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 select-none border border-[var(--amber)]"
                     >
                       {isSubmitting ? (
                         <>
-                          <span className="w-3.5 h-3.5 rounded-full border-2 border-black/30 border-t-black animate-spin" />
+                          <span className="w-3.5 h-3.5 rounded-full border-2 border-[#06121a]/30 border-t-[#06121a] animate-spin" />
                           <span>{CONTACT_COPY.submittingText}</span>
                         </>
                       ) : (
