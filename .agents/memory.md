@@ -631,6 +631,56 @@
   - `npx tsc -b` → ✅ strict type check passed.
   - `npx vite build --logLevel silent` → ✅ build succeeded.
 
+---
+
+## 2026-09-18 — Step 14: App Shell: Header, iOS-Style Bottom Nav, Footer (Completed ✅)
+
+**Branch:** `step/14-app-shell`
+**Commit:** `feat(step-14): app shell (header, mobile-header, ios-style bottom nav dock, universal footer, layout)`
+
+**What was done:**
+- **Application Layer (`src/application/use-cases/pages/`):**
+  - Created `GetHeaderNavPagesUseCase.ts`: Fetches published pages flagged with `showInHeader: true` via `IPageRepository.getHeaderNavPages()`.
+  - Created `GetFooterNavPagesUseCase.ts`: Fetches published pages flagged with `showInFooter: true` via `IPageRepository.getFooterNavPages()`.
+  - Folder maintained at exactly 3 files.
+- **Infrastructure Layer (DI Registration):**
+  - Added tokens `GetHeaderNavPages` and `GetFooterNavPages` to `src/infrastructure/di/tokens.ts`.
+  - Registered use-cases as singletons in `src/infrastructure/di/bootstrap.ts`.
+- **Presentation Layer — Dual Chrome Shell Components:**
+  - **Desktop Header (`src/presentation/shell/header/`):**
+    - `Header.tsx`: Visible on `md:` and above. Frosted glass surface (`bg-[var(--ink-900)]/90 backdrop-blur-xl`), 1px hairline border (`border-b border-[var(--line)]`), dynamic logo and typography, dynamic navigation links from Firestore pages, live pulsing availability beacon (`var(--live)`), and `ThemeToggle`.
+    - `Header.hooks.ts` & `Header.types.ts` & `constants/header.constants.ts`.
+  - **Mobile Header Title Bar (`src/presentation/shell/mobile-header/`):**
+    - `MobileHeader.tsx`: Visible on `< md`. Compact top title bar with emblem, name, status badge, and `ThemeToggle`.
+    - `MobileHeader.hooks.ts` & `MobileHeader.types.ts`.
+  - **Mobile Floating Bottom Nav Dock (`src/presentation/shell/bottom-nav/`):**
+    - `MobileBottomNav.tsx`: iOS-style floating liquid-glass pill dock (`backdrop-blur-xl`, safe-area-aware padding `pb-[env(safe-area-inset-bottom)]`).
+    - Animated active tab pill indicator powered by Framer Motion `layoutId="activeMobileTabIndicator"`.
+    - Semantic `<div role="tablist">` with `<button role="tab">` elements for full accessibility.
+    - Cupertino outline icons (`react-icons/io5`), strictly zero emojis, strictly zero shadows.
+    - `MobileBottomNav.hooks.ts` & `MobileBottomNav.types.ts` & `constants/bottomNav.constants.ts`.
+  - **Universal Footer (`src/presentation/shell/footer/`):**
+    - `Footer.tsx`: 4-column executive layout with mission statement, navigation directory, operational telemetry pills ($170K/mo savings, 40% MTTR, 2,000+ resources), dynamic social links rendered as Cupertino outline icons (`IoLogoLinkedin`, `IoLogoGithub`, `IoMailOutline`), and executive copyright with monospaced tabular figures.
+    - Extra mobile bottom padding (`pb-28 md:pb-16`) ensuring zero occlusion by the floating bottom nav.
+    - `Footer.hooks.ts` & `Footer.types.ts` & `constants/footer.constants.ts`.
+  - **Master AppLayout Chrome (`src/presentation/shell/layout/`):**
+    - `AppLayout.tsx`: Top-level wrapper composing Desktop Header, Mobile Header, `<main id="top">`, Footer, and Mobile Bottom Nav.
+    - `AppLayout.hooks.ts` & `AppLayout.types.ts`.
+- **App Integration:**
+  - Wrapped page content in `<AppLayout>` inside `src/App.tsx`.
+- **Architectural & Aesthetic Invariants Met:**
+  - Max 3 files per folder strictly enforced across all 5 shell subfolders.
+  - Zero `box-shadow` or `shadow-*` used anywhere.
+  - Zero emojis anywhere (all icons outline Cupertino from `react-icons/io5`).
+  - Automated pre-commit hook passed without `--no-verify`.
+- **Verification:**
+  - `npx tsx scripts/test-shell-e2e.ts` → ✅ 100% passed (DI resolution, Firestore nav fetch, site settings, and link declarations).
+  - `npx tsx scripts/test-providers-e2e.ts` → ✅ 100% passed.
+  - `npx tsx scripts/test-pipeline-e2e.ts` → ✅ 100% passed.
+  - `npx biome check .` → ✅ 115 files, 0 errors.
+  - `npx tsc -b` → ✅ strict type check passed.
+  - `npx vite build --logLevel silent` → ✅ build succeeded.
+
 
 
 
