@@ -28,9 +28,19 @@ export function useHeaderLogic(): HeaderState {
       try {
         const pages = await getHeaderNavUseCase.execute();
         if (isMounted && pages.length > 0) {
-          // Map pages that are not 'home' to custom nav links
+          // Map pages that are not 'home' to custom nav links, strictly excluding FinOps & Architecture duplicates
           const pageLinks: NavLinkItem[] = pages
-            .filter((p) => p.slug.toString() !== "home")
+            .filter((p) => {
+              const slug = p.slug.toString().toLowerCase();
+              const title = p.title.toLowerCase();
+              return (
+                slug !== "home" &&
+                slug !== "cloud-architecture" &&
+                !title.includes("finops") &&
+                !title.includes("architecture & finops") &&
+                !title.includes("enterprise cloud architecture")
+              );
+            })
             .map((p) => ({
               id: p.id,
               label: p.title,

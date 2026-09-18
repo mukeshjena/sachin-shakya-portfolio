@@ -413,7 +413,30 @@ export default {
       );
 
     if (isStaticAsset) {
-      return await env.ASSETS.fetch(request);
+      const assetRes = await env.ASSETS.fetch(request);
+      if (!assetRes.ok) {
+        return assetRes;
+      }
+
+      const newHeaders = new Headers(assetRes.headers);
+      const sec = securityHeaders();
+      for (const [key, value] of Object.entries(sec)) {
+        newHeaders.set(key, value);
+      }
+
+      if (url.pathname.startsWith("/assets/")) {
+        // Hashed bundle chunks and static assets — immutable long-term edge cache
+        newHeaders.set("Cache-Control", "public, max-age=31536000, immutable");
+      } else if (/\.(ico|png|jpg|jpeg|svg|webp|woff2?|webmanifest|pdf)$/.test(url.pathname)) {
+        // Public brand icons, resume, and manifests — 1 day edge cache with stale-while-revalidate
+        newHeaders.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+      }
+
+      return new Response(assetRes.body, {
+        status: assetRes.status,
+        statusText: assetRes.statusText,
+        headers: newHeaders,
+      });
     }
 
     // For all SPA routes, fetch index.html from ASSETS directly (ZERO credentials injected into HTML)

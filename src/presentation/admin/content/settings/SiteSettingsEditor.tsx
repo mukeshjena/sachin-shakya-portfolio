@@ -130,6 +130,32 @@ export function SiteSettingsEditor() {
               className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--ink-800)] text-xs font-mono text-[var(--paper)] border border-[var(--line)] outline-none focus:border-[var(--amber)] transition-colors resize-none leading-relaxed"
             />
           </div>
+
+          <div>
+            <label
+              htmlFor="settings-logourl"
+              className="block text-[11px] font-mono uppercase tracking-wider text-[var(--mist-dim)] mb-1"
+            >
+              Brand Logo URL (Header & Footer)
+            </label>
+            <div className="flex items-center gap-3">
+              {formData.logoUrl && (
+                <img
+                  src={formData.logoUrl}
+                  alt="Logo preview"
+                  className="w-9 h-9 rounded-full object-cover border border-[var(--line)] bg-[var(--ink-800)] shrink-0"
+                />
+              )}
+              <input
+                id="settings-logourl"
+                type="text"
+                value={formData.logoUrl}
+                placeholder="/assets/sachin-logo.png or Cloudinary URL"
+                onChange={(e) => handleChange("logoUrl", e.target.value)}
+                className="flex-1 px-3.5 py-2.5 rounded-xl bg-[var(--ink-800)] text-xs font-mono text-[var(--paper)] border border-[var(--line)] outline-none focus:border-[var(--amber)] transition-colors"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Social Links CRUD */}

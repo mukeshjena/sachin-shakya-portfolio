@@ -32,7 +32,7 @@ export function BlackholeHero() {
         >
           {/* Eyebrow Telemetry Beacon */}
           <motion.div variants={HERO_ANIMATION_VARIANTS.item}>
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)]/90 backdrop-blur-md border border-[var(--line)] select-none">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.07] backdrop-blur-md border border-white/15 select-none">
               <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
               <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
                 {content.eyebrow}
@@ -42,7 +42,7 @@ export function BlackholeHero() {
 
           {/* Monumental Headline */}
           <motion.div variants={HERO_ANIMATION_VARIANTS.item}>
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-light tracking-tight text-[var(--paper)] leading-[1.06]">
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-light tracking-tight text-white leading-[1.06]">
               {content.titleLine1} <br />
               <span className="font-semibold text-white">{content.titleLine2}</span>
             </h1>
@@ -50,7 +50,7 @@ export function BlackholeHero() {
 
           {/* Cloud Architecture Subheadline */}
           <motion.div variants={HERO_ANIMATION_VARIANTS.item}>
-            <p className="text-xs sm:text-base text-[var(--paper)]/80 leading-relaxed max-w-lg font-sans">
+            <p className="text-xs sm:text-base text-white/85 leading-relaxed max-w-lg font-sans">
               {content.subheadline}
             </p>
           </motion.div>
@@ -61,7 +61,7 @@ export function BlackholeHero() {
             className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-1"
           >
             <a
-              href="#telemetry"
+              href="#impact"
               className="px-6 py-3 rounded-full bg-[var(--amber)] text-black font-semibold text-xs sm:text-sm uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all flex items-center justify-center gap-2 cursor-pointer select-none"
             >
               <span>{content.ctaPrimary}</span>
@@ -73,15 +73,15 @@ export function BlackholeHero() {
                 href={resumePdfUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 rounded-full bg-[var(--ink-800)]/90 backdrop-blur-md text-[var(--paper)] border border-[var(--line)] hover:border-[var(--cyan)] hover:text-[var(--cyan)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer select-none"
+                className="px-6 py-3 rounded-full bg-white/[0.08] backdrop-blur-md text-white border border-white/20 hover:border-[var(--cyan)] hover:text-[var(--cyan)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer select-none"
               >
                 <IoDocumentTextOutline className="w-4 h-4 text-[var(--cyan)]" aria-hidden="true" />
                 <span>Download CV</span>
               </a>
             ) : (
               <a
-                href="#telemetry"
-                className="px-6 py-3 rounded-full bg-[var(--ink-800)]/90 backdrop-blur-md text-[var(--paper)] border border-[var(--line)] hover:border-[var(--cyan)] hover:text-[var(--cyan)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer select-none"
+                href="#impact"
+                className="px-6 py-3 rounded-full bg-white/[0.08] backdrop-blur-md text-white border border-white/20 hover:border-[var(--cyan)] hover:text-[var(--cyan)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer select-none"
               >
                 <span>{content.ctaSecondary}</span>
               </a>
@@ -93,9 +93,9 @@ export function BlackholeHero() {
       {/* Bottom Scroll Indicator Cue */}
       <div className="relative z-10 pb-6 md:pb-8 flex justify-center pointer-events-none">
         <a
-          href="#telemetry"
-          aria-label="Scroll to telemetry"
-          className="pointer-events-auto flex flex-col items-center gap-1.5 text-[var(--mist-dim)] hover:text-[var(--paper)] transition-colors select-none"
+          href="#impact"
+          aria-label="Scroll to impact"
+          className="pointer-events-auto flex flex-col items-center gap-1.5 text-white/60 hover:text-white transition-colors select-none"
         >
           <span className="text-[10px] font-mono uppercase tracking-widest">
             {content.scrollPrompt}

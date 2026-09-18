@@ -11,13 +11,13 @@ import type { SiteSettingsEditorViewModel, SiteSettingsFormData } from "./SiteSe
 
 const INITIAL_FORM: SiteSettingsFormData = {
   fullName: "Sachin Shakya",
-  headline: "Lead Cloud Architect & DevOps Consultant",
+  headline: "Technical Lead — CloudOps // Cloud & DevOps Architect",
   shortBio:
-    "Engineering high-resilience, multi-cloud platforms across AWS, Azure, and Google Cloud with documented $170K/mo cost savings.",
+    "Lead Cloud Architect managing 2,000+ multi-cloud resources with $170K/month verified cost optimization and 40% MTTR reduction across AWS, Microsoft Azure, and Kubernetes.",
   email: "sachin.shakya@live.com",
-  phone: "+91 98765 43210",
-  location: "Bengaluru, India",
-  logoUrl: "/sachin-logo.png",
+  phone: "+91 99530 60735",
+  location: "Faridabad, Haryana 121005, India",
+  logoUrl: "/assets/sachin-logo.png",
   socialLinks: [
     {
       platform: "linkedin",

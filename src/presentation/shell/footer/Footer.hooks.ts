@@ -24,7 +24,17 @@ export function useFooterLogic(): FooterState {
         const pages = await getFooterNavUseCase.execute();
         if (isMounted && pages.length > 0) {
           const mapped: FooterNavItem[] = pages
-            .filter((p) => p.slug.toString() !== "home")
+            .filter((p) => {
+              const slug = p.slug.toString().toLowerCase();
+              const title = p.title.toLowerCase();
+              return (
+                slug !== "home" &&
+                slug !== "cloud-architecture" &&
+                !title.includes("finops") &&
+                !title.includes("architecture & finops") &&
+                !title.includes("enterprise cloud architecture")
+              );
+            })
             .map((p) => ({
               id: p.id,
               label: p.title,
@@ -54,6 +64,7 @@ export function useFooterLogic(): FooterState {
     headline: siteSettings.headline || "Lead Cloud Architect & DevOps Consultant",
     email: siteSettings.email || "sachin.shakya@live.com",
     location: siteSettings.location || "Faridabad, Haryana, India",
+    logoUrl: siteSettings.logoUrl || "/assets/sachin-logo.png",
     resumePdfUrl: siteSettings.resumePdfUrl,
     socialLinks: siteSettings.socialLinks ?? [],
     navItems,

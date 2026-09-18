@@ -20,8 +20,9 @@ export const DESKTOP_BLACKHOLE_SETTINGS = {
   elevation: -5.5,
   fov: 42,
   glow: 1.0,
-  steps: 300,
-  resolution: 0.72,
+  steps: 180,
+  resolution: 0.55,
+  maxDpr: 1.25,
 } as const;
 
 export const MOBILE_BLACKHOLE_SETTINGS = {
@@ -32,8 +33,9 @@ export const MOBILE_BLACKHOLE_SETTINGS = {
   elevation: -6.0,
   fov: 52,
   glow: 0.9,
-  steps: 220,
-  resolution: 0.65,
+  steps: 120,
+  resolution: 0.48,
+  maxDpr: 1.0,
 } as const;
 
 export const HERO_ANIMATION_VARIANTS = {

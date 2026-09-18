@@ -2,6 +2,7 @@
 // Compact iOS-style title bar for mobile viewports (< md).
 // Separated from desktop Header per Rule 8 (Dual Chrome Experience).
 
+import { IoPersonOutline } from "react-icons/io5";
 import { ThemeToggle } from "../../theme/toggle/ThemeToggle";
 import { useMobileHeaderLogic } from "./MobileHeader.hooks";
 
@@ -35,15 +36,25 @@ export function MobileHeader() {
         </a>
 
         {/* Status & Controls */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           {isAvailable && (
-            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--ink-800)] border border-[var(--line)]">
+            <div className="hidden xs:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--ink-800)] border border-[var(--line)]">
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--live)]" aria-hidden="true" />
               <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--live)] font-semibold">
                 ACTIVE
               </span>
             </div>
           )}
+
+          {/* Admin Portal Circle Icon (DIIRA Parity) */}
+          <a
+            href="/admin"
+            aria-label="Admin Portal"
+            title="Admin Portal"
+            className="flex w-8 h-8 rounded-lg border border-[var(--line)] bg-[var(--ink-800)] items-center justify-center text-[var(--mist)] hover:text-[var(--amber)] hover:border-[var(--amber)] transition-colors shrink-0 cursor-pointer select-none"
+          >
+            <IoPersonOutline className="w-3.5 h-3.5" aria-hidden="true" />
+          </a>
 
           <ThemeToggle />
         </div>

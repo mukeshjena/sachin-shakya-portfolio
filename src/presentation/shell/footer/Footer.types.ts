@@ -15,6 +15,7 @@ export interface FooterState {
   readonly headline: string;
   readonly email: string;
   readonly location: string;
+  readonly logoUrl?: string;
   readonly resumePdfUrl?: string;
   readonly socialLinks: readonly SocialLink[];
   readonly navItems: readonly FooterNavItem[];

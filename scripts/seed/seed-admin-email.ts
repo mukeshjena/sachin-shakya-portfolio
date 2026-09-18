@@ -13,6 +13,7 @@ async function main() {
     {
       email: "muk3shjena@gmail.com",
       role: "root",
+      isEnabled: true,
       addedAt: timestamp,
     },
     { merge: true }
@@ -23,6 +24,7 @@ async function main() {
     {
       email: "sachin.shakya@live.com",
       role: "root",
+      isEnabled: true,
       addedAt: timestamp,
     },
     { merge: true }

@@ -8,7 +8,7 @@ const THEME_STORAGE_KEY = "theme";
 
 function getInitialTheme(): Theme {
   if (typeof window === "undefined") {
-    return "dark";
+    return "light";
   }
 
   try {
@@ -20,7 +20,7 @@ function getInitialTheme(): Theme {
     // LocalStorage unavailable (e.g. strict security mode)
   }
 
-  return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  return "light";
 }
 
 export function useTheme(): ThemeContextValue {

@@ -325,7 +325,7 @@ export class BlackholeSceneController {
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.targetScene.tex);
-    gl.uniform1i(this.blendProg.u.uCurr, 0);
+    gl.uniform1i(this.blendProg.u.uCur, 0);
 
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(
@@ -340,7 +340,7 @@ export class BlackholeSceneController {
     this.targetPrev = this.targetBlend;
     this.targetBlend = tmp;
 
-    // 3. Bloom passes (extract + blur)
+    // 3. Bloom passes (extract + 4-pass blur)
     executeBloomPass(
       gl,
       this.extractProg,
@@ -348,10 +348,11 @@ export class BlackholeSceneController {
       this.targetPrev,
       this.targetBlurA,
       this.targetBlurB,
-      this.packFactor
+      this.packFactor,
+      this.hasHalfFloat
     );
 
-    // 4. Composite pass
+    // 4. Composite pass to canvas
     this.applyProgram(this.compositeProg.program);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, this.viewWidth, this.viewHeight);
@@ -365,15 +366,17 @@ export class BlackholeSceneController {
     gl.bindTexture(gl.TEXTURE_2D, this.targetBlurA.tex);
     gl.uniform1i(cu.uBloom, 1);
 
-    gl.uniform1f(cu.uGlow, cfg.glow);
-    gl.uniform1f(cu.uExposure, cfg.exposure);
-    gl.uniform1f(cu.uVignette, cfg.vignette);
-    gl.uniform1f(cu.uPackFactor, this.packFactor);
     gl.uniform2f(cu.uRes, this.viewWidth, this.viewHeight);
+    gl.uniform1f(cu.uDecode, this.hasHalfFloat ? 0 : 1);
+    gl.uniform1f(cu.uPack, this.packFactor);
+    gl.uniform1f(cu.uGlow, Math.max(0, cfg.glow) * 0.26);
+    gl.uniform1f(cu.uExposure, Math.max(0.05, cfg.exposure));
+    gl.uniform1f(cu.uVignette, Math.max(0, Math.min(1, cfg.vignette)));
 
     const scrimDir = getScrimDirectionCode(cfg.scrim);
-    gl.uniform1i(cu.uScrimDir, scrimDir);
-    gl.uniform1f(cu.uScrimStr, Math.max(0, Math.min(1, cfg.scrimStrength)));
+    gl.uniform1f(cu.uScrimDir, scrimDir);
+    gl.uniform1f(cu.uScrimAmt, Math.max(0, Math.min(1, cfg.scrimStrength)));
+    gl.uniform1f(cu.uSeed, (timeSec * 60) % 1000);
 
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     this.frameIndex++;
@@ -385,20 +388,11 @@ export class BlackholeSceneController {
       return;
     }
 
-    if (
-      typeof window !== "undefined" &&
-      this.container &&
-      window.scrollY > this.container.offsetHeight
-    ) {
-      this.lastTimestamp = 0;
-      return;
-    }
-
     if (this.lastTimestamp === 0) {
       this.lastTimestamp = timestamp;
     }
 
-    const dt = Math.min(0.066, (timestamp - this.lastTimestamp) * 0.001);
+    const dt = Math.min(0.05, (timestamp - this.lastTimestamp) * 0.001);
     this.lastTimestamp = timestamp;
     this.simTime += dt;
 

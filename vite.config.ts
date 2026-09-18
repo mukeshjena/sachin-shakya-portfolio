@@ -71,8 +71,26 @@ export default defineConfig({
         ],
       },
       workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        navigateFallback: "/index.html",
+        navigateFallbackDenylist: [
+          /^\/api\//i,
+          /\.(?:js|css|png|jpg|jpeg|svg|ico|woff2?|ttf|eot|webp|json|xml|txt|map)$/i,
+        ],
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,json,woff,woff2}"],
+        globIgnores: ["**/*.map"],
         runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "html-cache",
+              networkTimeoutSeconds: 3,
+            },
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: "CacheFirst",
@@ -103,11 +121,11 @@ export default defineConfig({
           },
           {
             urlPattern: /^https:\/\/res\.cloudinary\.com\/.*/i,
-            handler: "StaleWhileRevalidate",
+            handler: "CacheFirst",
             options: {
               cacheName: "cloudinary-media-cache",
               expiration: {
-                maxEntries: 50,
+                maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24 * 30,
               },
               cacheableResponse: {

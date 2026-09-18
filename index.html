@@ -49,16 +49,9 @@
     />
     <script>
       (() => {
-        let stored;
-        let theme;
         try {
-          stored = localStorage.getItem("theme");
-          theme =
-            stored === "light" || stored === "dark"
-              ? stored
-              : window.matchMedia("(prefers-color-scheme: light)").matches
-                ? "light"
-                : "dark";
+          const stored = localStorage.getItem("theme");
+          const theme = stored === "dark" || stored === "light" ? stored : "light";
           document.documentElement.setAttribute("data-theme", theme);
         } catch {}
       })();

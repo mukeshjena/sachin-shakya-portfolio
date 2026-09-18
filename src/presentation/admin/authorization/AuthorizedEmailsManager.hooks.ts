@@ -3,35 +3,32 @@
 // Zero debounced inputs (Rule 4 / Rule 12): validate on blur and submit only.
 
 import { useCallback, useEffect, useState } from "react";
-import type { IAddAdminEmailUseCase } from "../../../application/use-cases/admin-users/AddAdminEmailUseCase";
-import type { IGetAuthorizedEmailsUseCase } from "../../../application/use-cases/admin-users/GetAuthorizedEmailsUseCase";
-import type { IRemoveAdminEmailUseCase } from "../../../application/use-cases/admin-users/RemoveAdminEmailUseCase";
+import type {
+  AuthorizedAdminRecord,
+  IAdminAccessRepository,
+} from "../../../domain/repositories/admin/IAdminAccessRepository";
 import { DI_TOKENS } from "../../../infrastructure/di/tokens";
 import { useContainer } from "../../shared/useContainer";
 import type { AuthorizedEmailsViewModel, FeedbackMessage } from "./AuthorizedEmailsManager.types";
-import { AUTH_EMAILS_COPY, isPermanentRootAdmin } from "./constants/auth-emails.constants";
+import { AUTH_EMAILS_COPY } from "./constants/auth-emails.constants";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
-  const getAuthorizedEmails = useContainer<IGetAuthorizedEmailsUseCase>(
-    DI_TOKENS.GetAuthorizedEmails
-  );
-  const addAdminEmail = useContainer<IAddAdminEmailUseCase>(DI_TOKENS.AddAdminEmail);
-  const removeAdminEmail = useContainer<IRemoveAdminEmailUseCase>(DI_TOKENS.RemoveAdminEmail);
+  const adminAccessRepo = useContainer<IAdminAccessRepository>(DI_TOKENS.AdminAccessRepository);
 
-  const [emails, setEmails] = useState<string[]>([]);
+  const [admins, setAdmins] = useState<AuthorizedAdminRecord[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [newEmail, setNewEmail] = useState<string>("");
   const [inputError, setInputError] = useState<string | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<FeedbackMessage | null>(null);
 
-  const fetchEmails = useCallback(async () => {
+  const fetchAdmins = useCallback(async () => {
     setIsLoading(true);
     try {
-      const list = await getAuthorizedEmails.execute();
-      setEmails(list);
+      const records = await adminAccessRepo.getAuthorizedAdminRecords();
+      setAdmins(records);
     } catch (err) {
       setFeedbackMessage({
         type: "error",
@@ -40,11 +37,11 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
     } finally {
       setIsLoading(false);
     }
-  }, [getAuthorizedEmails]);
+  }, [adminAccessRepo]);
 
   useEffect(() => {
-    fetchEmails();
-  }, [fetchEmails]);
+    fetchAdmins();
+  }, [fetchAdmins]);
 
   const handleNewEmailChange = useCallback((value: string) => {
     setNewEmail(value);
@@ -68,7 +65,7 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
         return;
       }
 
-      if (emails.includes(trimmed)) {
+      if (admins.some((a) => a.email === trimmed)) {
         setInputError("This email is already an authorized administrator.");
         return;
       }
@@ -78,13 +75,13 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
       setInputError(null);
 
       try {
-        await addAdminEmail.execute({ email: trimmed });
+        await adminAccessRepo.addAuthorizedEmail(trimmed);
         setNewEmail("");
         setFeedbackMessage({
           type: "success",
           text: AUTH_EMAILS_COPY.SUCCESS_ADDED,
         });
-        await fetchEmails();
+        await fetchAdmins();
       } catch (err) {
         setFeedbackMessage({
           type: "error",
@@ -94,22 +91,39 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
         setIsAdding(false);
       }
     },
-    [addAdminEmail, emails, fetchEmails, newEmail]
+    [adminAccessRepo, admins, fetchAdmins, newEmail]
+  );
+
+  const handleToggleStatus = useCallback(
+    async (emailToToggle: string, currentEnabled: boolean) => {
+      const nextEnabled = !currentEnabled;
+      setIsLoading(true);
+      setFeedbackMessage(null);
+
+      try {
+        await adminAccessRepo.setAdminEnabled(emailToToggle, nextEnabled);
+        setFeedbackMessage({
+          type: "success",
+          text: `Administrator '${emailToToggle}' is now ${nextEnabled ? "ACTIVE" : "DISABLED"}.`,
+        });
+        await fetchAdmins();
+      } catch (err) {
+        setFeedbackMessage({
+          type: "error",
+          text: err instanceof Error ? err.message : "Failed to update administrator status.",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [adminAccessRepo, fetchAdmins]
   );
 
   const handleRemoveEmail = useCallback(
     async (emailToRemove: string) => {
       const trimmed = emailToRemove.trim().toLowerCase();
-      if (isPermanentRootAdmin(trimmed)) {
-        setFeedbackMessage({
-          type: "error",
-          text: AUTH_EMAILS_COPY.ROOT_CANNOT_DELETE,
-        });
-        return;
-      }
-
       const confirmed = window.confirm(
-        `Are you sure you want to revoke administrative access for '${trimmed}'?`
+        `Are you sure you want to revoke and delete administrative privileges for '${trimmed}'?`
       );
       if (!confirmed) return;
 
@@ -117,12 +131,12 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
       setFeedbackMessage(null);
 
       try {
-        await removeAdminEmail.execute({ email: trimmed });
+        await adminAccessRepo.removeAuthorizedEmail(trimmed);
         setFeedbackMessage({
           type: "success",
           text: AUTH_EMAILS_COPY.SUCCESS_REMOVED,
         });
-        await fetchEmails();
+        await fetchAdmins();
       } catch (err) {
         setFeedbackMessage({
           type: "error",
@@ -132,11 +146,11 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
         setIsLoading(false);
       }
     },
-    [fetchEmails, removeAdminEmail]
+    [adminAccessRepo, fetchAdmins]
   );
 
   return {
-    emails,
+    admins,
     isLoading,
     isAdding,
     newEmail,
@@ -145,6 +159,7 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
     handleNewEmailChange,
     handleNewEmailBlur,
     handleAddEmail,
+    handleToggleStatus,
     handleRemoveEmail,
   };
 }

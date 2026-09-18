@@ -1399,6 +1399,58 @@
 20. **Elimination of AI Tropes (Item 21):**
     - Strictly purged all pulsating blinking dots (`animate-pulse`) across the entire repository.
 
+---
+
+## 2026-09-19 — Step 30: Blackhole Hero Fix, Default Light Mode, Admin Authorization & Caching Parity (Completed ✅)
+
+**Branch:** `step/30-blackhole-lightmode-admin-polish` → merged into `release/v1.0.0`, `main`, and `develop`
+**Status:** Completed ✅
+
+**What was done:**
+1. **Blackhole Hero Engine Fix & Performance Optimization:**
+   - Diagnosed root cause of black/invisible canvas after Step 28: shader uniforms (`uCur`, `uPack`, `uDecode`, `uScrimDir`, `uScrimAmt`, `uSeed`) were mismatched between `BlackholeHero.scene.ts` and `BlackholeHero.shaders.ts`, causing WebGL to abort passes.
+   - Restored 4-pass Gaussian bloom in `BlackholeHero.utils.ts` and fixed `scrollY > offsetHeight` scroll freeze that stopped `requestAnimationFrame` when returning to top.
+   - Tuned raymarch settings: desktop `steps: 180`, `resolution: 0.55`, `maxDpr: 1.25`; mobile `steps: 120`, `resolution: 0.48`, `maxDpr: 1.0`. Eliminated pointer movement lag and GPU thread choking.
+   - Upgraded hero typography to luminous deep-space contrast (`text-white`, `text-white/85`) with frosted glass CTAs, ensuring striking visual brilliance in both light and dark themes.
+
+2. **Default Light Mode with Strict Persistence:**
+   - Configured `index.html` inline script and `src/presentation/theme/useTheme.ts` to default to `"light"` for first-time visitors.
+   - Preserves user preference in `localStorage['theme']` immediately upon toggle.
+   - Configured `:root, [data-theme="light"]` as the default palette and `[data-theme="dark"]` for space mode in `src/index.css`.
+
+3. **Header Cleanup & DIIRA-Style Admin Icon:**
+   - Filtered out `cloud-architecture`, `finops`, and `enterprise cloud architecture` from navigation in `Header.hooks.ts`.
+   - Added DIIRA-style Cupertino outline person icon (`IoPersonOutline`) in desktop and mobile headers linking to `/admin`.
+   - Updated `Footer.tsx` to render the authentic brand logo image instead of the `"SS"` placeholder.
+   - Added logo URL configuration with live preview in `SiteSettingsEditor.tsx`.
+
+4. **Admin Authorization Control & Reusable 3-Dot Actions Menu:**
+   - Created reusable Cupertino 3-dot dropdown menu component in `src/presentation/admin/shared/actions-menu/` (`ActionsMenu.types.ts`, `ActionsMenu.hooks.ts`, `ActionsMenu.tsx` — exactly 3 files, shadow-free, zero emojis).
+   - Extended `IAdminAccessRepository` and `FirestoreAdminAccessRepository` with `AuthorizedAdminRecord`, `getAuthorizedAdminRecords()`, and `setAdminEnabled(email, isEnabled)`.
+   - Upgraded `AuthorizedEmailsManager.tsx` with Active / Disabled status chips, 3-dot actions menu for enabling/disabling access and removing administrators. Enforces that `sachin.shakya@live.com` cannot be removed or disabled.
+
+5. **SEO Assets & Bespoke Executive OpenGraph Image Generation (Sharp Script):**
+   - Created `scripts/generate-seo-assets.ts` with `sharp` (matching ODINA/DIIRA parity).
+   - Generated multi-resolution `favicon.ico` (16, 32, 48px), PNG favicons (16x16, 32x32, 48x48, 96x96, 144x144, 192x192), `apple-touch-icon.png`, PWA icons (192, 512, maskable), and bespoke 1200x630 executive telemetry cards (`og-image.png`, `og-image.jpg`, `twitter-image.jpg`).
+   - Added `"generate:seo"` script to `package.json`.
+
+6. **Edge & Client Caching Parity with DIIRA:**
+   - Cloudflare Worker (`worker/index.ts`): Added `Cache-Control: public, max-age=31536000, immutable` for `/assets/*` and 1-day stale-while-revalidate for brand icons.
+   - Vite PWA Workbox (`vite.config.ts`): Added `NetworkFirst` runtime caching for navigation requests, `CacheFirst` for Cloudinary media, `clientsClaim`, `skipWaiting`, and `navigateFallbackDenylist`.
+
+7. **Seed Content Alignment:**
+   - Updated `scripts/seed/seed-content.ts` with authentic CloudOps role copy and set `showInHeader: false` on dynamic pages.
+   - Re-ran idempotent seeding: all collections synchronized with zero duplicates.
+
+**Verification & Quality Gates:**
+- `npx biome check .` → ✅ 287 files passed, 0 errors
+- `npx tsc -b` → ✅ strict typecheck passed with 0 errors
+- `npx tsx scripts/test-audit-gates.ts` → ✅ 0 box-shadow, 0 emojis, max 3 files/folder, max 500 LOC
+- `npx tsx scripts/test-hero-e2e.ts` → ✅ 100% passed
+- `npx tsx scripts/test-seo-e2e.ts` → ✅ 100% passed
+- `npm run build` → ✅ production build passed cleanly
+
+
 
 
 

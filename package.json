@@ -17,6 +17,7 @@
     "test:cloudinary": "tsx scripts/test-cloudinary.ts",
     "seed": "tsx scripts/seed/seed.ts",
     "cleanup": "tsx scripts/cleanup/cleanup.ts",
+    "generate:seo": "tsx scripts/generate-seo-assets.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
@@ -35,9 +36,11 @@
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
+    "@types/sharp": "^0.31.1",
     "@vitejs/plugin-react": "^6.1.1",
     "autoprefixer": "^10.6.1",
     "postcss": "^8.5.28",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.13",
     "typescript": "~6.0.2",

@@ -2,6 +2,7 @@
 // Declarative desktop navigation header (>= md breakpoint).
 // Adheres strictly to sci-fi instrument panel aesthetics, shadow-free surfaces, and zero emojis.
 
+import { IoPersonOutline } from "react-icons/io5";
 import { ThemeToggle } from "../../theme/toggle/ThemeToggle";
 import { HEADER_COPY } from "./constants/header.constants";
 import { useHeaderLogic } from "./Header.hooks";
@@ -58,7 +59,17 @@ export function Header() {
         </nav>
 
         {/* Right Telemetry Controls */}
-        <div className="flex items-center gap-3.5">
+        <div className="flex items-center gap-3">
+          {/* Admin Portal Circle Icon (DIIRA Parity) */}
+          <a
+            href="/admin"
+            aria-label="Admin Portal"
+            title="Admin Portal"
+            className="flex w-9 h-9 rounded-xl border border-[var(--line)] bg-[var(--ink-800)] items-center justify-center text-[var(--mist)] hover:text-[var(--amber)] hover:border-[var(--amber)] hover:bg-[var(--ink-700)] transition-colors shrink-0 cursor-pointer select-none"
+          >
+            <IoPersonOutline className="w-4 h-4" aria-hidden="true" />
+          </a>
+
           {/* Cupertino Theme Toggle */}
           <ThemeToggle />
 

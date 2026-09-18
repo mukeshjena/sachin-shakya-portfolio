@@ -14,6 +14,7 @@ import {
   where,
 } from "firebase/firestore";
 import type {
+  AuthorizedAdminRecord,
   IAdminAccessRepository,
   StoredAccessCode,
 } from "../../../domain/repositories/admin/IAdminAccessRepository";
@@ -58,41 +59,76 @@ function mapDocToAccessCode(id: string, data: FirestoreAccessCodeDoc): StoredAcc
 export class FirestoreAdminAccessRepository implements IAdminAccessRepository {
   // ── Authorized email management ─────────────────────────────────────────────
 
-  async getAuthorizedEmails(): Promise<string[]> {
+  async getAuthorizedAdminRecords(): Promise<AuthorizedAdminRecord[]> {
     const db = getDb();
     const colRef = collection(db, ADMIN_EMAILS_COLLECTION);
     const snapshot = await getDocs(colRef);
 
-    const emails = new Set<string>();
+    const recordMap = new Map<string, AuthorizedAdminRecord>();
+
     for (const root of ROOT_ADMIN_EMAILS) {
-      emails.add(root);
+      recordMap.set(root, {
+        email: root,
+        isEnabled: true,
+        addedAt: new Date(2026, 0, 1),
+        role: "Primary Administrator",
+      });
     }
 
     for (const docSnap of snapshot.docs) {
       const data = docSnap.data();
-      if (data.email && typeof data.email === "string") {
-        emails.add(data.email.trim().toLowerCase());
-      }
+      const email = (data.email || docSnap.id).trim().toLowerCase();
+      recordMap.set(email, {
+        email,
+        isEnabled: data.isEnabled !== false,
+        addedAt: parseDate(data.addedAt),
+        role:
+          data.role ||
+          (ROOT_ADMIN_EMAILS.includes(email) ? "Primary Administrator" : "Administrator"),
+      });
     }
 
-    return Array.from(emails);
+    return Array.from(recordMap.values()).sort((a, b) => a.email.localeCompare(b.email));
+  }
+
+  async getAuthorizedEmails(): Promise<string[]> {
+    const records = await this.getAuthorizedAdminRecords();
+    return records.filter((r) => r.isEnabled).map((r) => r.email);
   }
 
   async addAuthorizedEmail(email: string): Promise<void> {
     const normalized = email.trim().toLowerCase();
     const db = getDb();
     const docRef = doc(db, ADMIN_EMAILS_COLLECTION, normalized);
-    await setDoc(docRef, {
-      email: normalized,
-      addedAt: new Date().toISOString(),
-    });
+    await setDoc(
+      docRef,
+      {
+        email: normalized,
+        isEnabled: true,
+        addedAt: new Date().toISOString(),
+        role: "Administrator",
+      },
+      { merge: true }
+    );
+  }
+
+  async setAdminEnabled(email: string, isEnabled: boolean): Promise<void> {
+    const normalized = email.trim().toLowerCase();
+    const db = getDb();
+    const docRef = doc(db, ADMIN_EMAILS_COLLECTION, normalized);
+    await setDoc(
+      docRef,
+      {
+        email: normalized,
+        isEnabled,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
   }
 
   async removeAuthorizedEmail(email: string): Promise<void> {
     const normalized = email.trim().toLowerCase();
-    if (ROOT_ADMIN_EMAILS.includes(normalized)) {
-      throw new Error("Root administrator email cannot be removed.");
-    }
     const db = getDb();
     const docRef = doc(db, ADMIN_EMAILS_COLLECTION, normalized);
     await deleteDoc(docRef);
@@ -100,13 +136,26 @@ export class FirestoreAdminAccessRepository implements IAdminAccessRepository {
 
   async isAuthorizedEmail(email: string): Promise<boolean> {
     const normalized = email.trim().toLowerCase();
-    if (ROOT_ADMIN_EMAILS.includes(normalized)) {
-      return true;
-    }
     const db = getDb();
     const docRef = doc(db, ADMIN_EMAILS_COLLECTION, normalized);
     const docSnap = await getDoc(docRef);
-    return docSnap.exists();
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return data.isEnabled !== false;
+    }
+
+    if (ROOT_ADMIN_EMAILS.includes(normalized)) {
+      await setDoc(docRef, {
+        email: normalized,
+        isEnabled: true,
+        addedAt: new Date().toISOString(),
+        role: "Primary Administrator",
+      });
+      return true;
+    }
+
+    return false;
   }
 
   // ── OTP code lifecycle ───────────────────────────────────────────────────────

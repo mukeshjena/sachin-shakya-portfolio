@@ -7,16 +7,16 @@ import { bootstrapContainer } from "../src/infrastructure/di/bootstrap";
 import { container } from "../src/infrastructure/di/container";
 import { DI_TOKENS } from "../src/infrastructure/di/tokens";
 import {
-  HERO_FALLBACK_CONTENT,
-  HERO_INFRA_BADGES,
-  HERO_KEY_METRICS,
+  DESKTOP_BLACKHOLE_SETTINGS,
+  HERO_COPY,
+  MOBILE_BLACKHOLE_SETTINGS,
 } from "../src/presentation/hero/constants/hero.constants";
 import { BlackholeSceneController } from "../src/presentation/hero/scene/BlackholeHero.scene";
 import {
-  ACCRETION_DISK_FRAGMENT_SHADER,
-  ACCRETION_DISK_VERTEX_SHADER,
-  EVENT_HORIZON_CORONA_FRAGMENT_SHADER,
-  EVENT_HORIZON_CORONA_VERTEX_SHADER,
+  BLACKHOLE_FRAGMENT_SHADER,
+  BLOOM_BLUR_SHADER,
+  COMPOSITE_SHADER,
+  VERTEX_SHADER,
 } from "../src/presentation/hero/scene/BlackholeHero.shaders";
 
 async function main() {
@@ -33,30 +33,25 @@ async function main() {
   if (!controller) throw new Error("Failed to instantiate BlackholeSceneController");
   console.log("   BlackholeSceneController instantiated cleanly.");
 
-  if (!ACCRETION_DISK_VERTEX_SHADER.includes("gl_PointSize")) {
-    throw new Error("Accretion disk vertex shader missing point size logic");
+  if (!VERTEX_SHADER.includes("gl_Position")) {
+    throw new Error("Vertex shader missing gl_Position");
   }
-  if (!ACCRETION_DISK_FRAGMENT_SHADER.includes("gl_PointCoord")) {
-    throw new Error("Accretion disk fragment shader missing circular point discard");
+  if (!BLACKHOLE_FRAGMENT_SHADER.includes("uCamPos")) {
+    throw new Error("Accretion disk fragment shader missing uCamPos");
   }
-  if (!EVENT_HORIZON_CORONA_VERTEX_SHADER.includes("gl_Position")) {
-    throw new Error("Corona vertex shader missing gl_Position");
+  if (!BLOOM_BLUR_SHADER.includes("uStep")) {
+    throw new Error("Bloom blur fragment shader missing uStep uniform");
   }
-  if (!EVENT_HORIZON_CORONA_FRAGMENT_SHADER.includes("fresnel")) {
-    throw new Error("Corona fragment shader missing Fresnel glow calculation");
+  if (!COMPOSITE_SHADER.includes("uBloom")) {
+    throw new Error("Composite fragment shader missing uBloom composite");
   }
-  console.log("   Custom GLSL shaders validated (accretion & relativistic corona).");
+  console.log("   Custom GLSL shaders validated (relativistic Kerr raymarch & bloom pipeline).");
 
   console.log("\n3. Verifying Hero Telemetry Constants...");
-  console.log(`   Eyebrow: ${HERO_FALLBACK_CONTENT.eyebrow}`);
-  console.log(`   Headline: ${HERO_FALLBACK_CONTENT.headline}`);
-  console.log(`   Key Metrics: ${HERO_KEY_METRICS.length} items:`);
-  for (const m of HERO_KEY_METRICS) {
-    console.log(`   - ${m.label}: ${m.value} (${m.description})`);
-  }
-  console.log(
-    `   Stack Badges: ${HERO_INFRA_BADGES.length} items (${HERO_INFRA_BADGES.join(", ")})`
-  );
+  console.log(`   Eyebrow: ${HERO_COPY.eyebrow}`);
+  console.log(`   Title: ${HERO_COPY.titleLine1} ${HERO_COPY.titleLine2}`);
+  console.log(`   Desktop Raymarch Steps: ${DESKTOP_BLACKHOLE_SETTINGS.steps}`);
+  console.log(`   Mobile Raymarch Steps: ${MOBILE_BLACKHOLE_SETTINGS.steps}`);
 
   console.log("\n4. Verifying Firestore Home Page Data...");
   const getPageUseCase = container.resolve<GetPublishedPageBySlugUseCase>(

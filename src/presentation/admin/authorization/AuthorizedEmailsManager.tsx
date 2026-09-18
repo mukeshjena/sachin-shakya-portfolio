@@ -5,17 +5,20 @@
 
 import {
   IoCheckmarkCircleOutline,
+  IoLockClosedOutline,
+  IoLockOpenOutline,
   IoPersonAddOutline,
   IoPersonOutline,
   IoShieldCheckmarkOutline,
   IoTrashOutline,
 } from "react-icons/io5";
+import { ActionsMenu } from "../shared/actions-menu/ActionsMenu";
 import { useAuthorizedEmailsManager } from "./AuthorizedEmailsManager.hooks";
-import { AUTH_EMAILS_COPY, isPermanentRootAdmin } from "./constants/auth-emails.constants";
+import { AUTH_EMAILS_COPY } from "./constants/auth-emails.constants";
 
 export function AuthorizedEmailsManager() {
   const {
-    emails,
+    admins,
     isLoading,
     isAdding,
     newEmail,
@@ -24,6 +27,7 @@ export function AuthorizedEmailsManager() {
     handleNewEmailChange,
     handleNewEmailBlur,
     handleAddEmail,
+    handleToggleStatus,
     handleRemoveEmail,
   } = useAuthorizedEmailsManager();
 
@@ -53,7 +57,7 @@ export function AuthorizedEmailsManager() {
             {AUTH_EMAILS_COPY.WHITELIST_COUNT_LABEL}
           </span>
           <span className="text-lg font-mono font-bold tabular-nums text-[var(--cyan)]">
-            {emails.length}
+            {admins.length}
           </span>
         </div>
       </div>
@@ -113,28 +117,28 @@ export function AuthorizedEmailsManager() {
 
       {/* Authorized Emails List */}
       <div className="mt-6 space-y-2.5">
-        {isLoading && emails.length === 0 ? (
+        {isLoading && admins.length === 0 ? (
           <div className="py-8 text-center text-xs font-mono text-[var(--mist-dim)]">
             Loading whitelist telemetry...
           </div>
         ) : (
-          emails.map((email) => {
-            const isRoot = isPermanentRootAdmin(email);
+          admins.map((admin) => {
+            const isEnabled = admin.isEnabled;
 
             return (
               <div
-                key={email}
-                className="flex items-center justify-between p-3.5 bg-[var(--ink-800)] border border-[var(--line)] rounded-xl hover:border-[var(--line-soft)] transition-colors"
+                key={admin.email}
+                className="flex items-center justify-between p-3.5 bg-[var(--ink-800)] border border-[var(--line)] rounded-xl hover:border-[var(--line-soft)] transition-colors gap-3"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div
                     className={`p-2 rounded-lg border ${
-                      isRoot
+                      isEnabled
                         ? "bg-[var(--amber)]/10 border-[var(--amber)]/30 text-[var(--amber)]"
-                        : "bg-[var(--ink-700)] border-[var(--line)] text-[var(--cyan)]"
+                        : "bg-[var(--ink-700)] border-[var(--line)] text-[var(--mist-dim)]"
                     }`}
                   >
-                    {isRoot ? (
+                    {isEnabled ? (
                       <IoShieldCheckmarkOutline className="w-4 h-4" aria-hidden="true" />
                     ) : (
                       <IoPersonOutline className="w-4 h-4" aria-hidden="true" />
@@ -142,35 +146,52 @@ export function AuthorizedEmailsManager() {
                   </div>
 
                   <div className="min-w-0">
-                    <div className="text-xs font-mono font-semibold text-[var(--paper)] truncate">
-                      {email}
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-semibold text-[var(--paper)] truncate">
+                        {admin.email}
+                      </span>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[9px] font-mono uppercase tracking-wider font-semibold border ${
+                          isEnabled
+                            ? "bg-[var(--live)]/10 text-[var(--live)] border-[var(--live)]/30"
+                            : "bg-red-500/10 text-red-400 border-red-500/30"
+                        }`}
+                      >
+                        {isEnabled ? "ACTIVE" : "DISABLED"}
+                      </span>
                     </div>
                     <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--mist-dim)] mt-0.5">
-                      {isRoot ? AUTH_EMAILS_COPY.ROOT_BADGE : AUTH_EMAILS_COPY.TEAM_BADGE}
+                      {admin.role || "Administrator"}
                     </div>
                   </div>
                 </div>
 
-                {/* Revoke Action */}
-                <div>
-                  {isRoot ? (
-                    <span
-                      title={AUTH_EMAILS_COPY.ROOT_CANNOT_DELETE}
-                      className="px-2.5 py-1 rounded-md bg-[var(--ink-900)] border border-[var(--line)] text-[10px] font-mono text-[var(--mist-dim)] cursor-not-allowed"
-                    >
-                      IMMUTABLE
-                    </span>
-                  ) : (
-                    <button
-                      type="button"
-                      aria-label={`${AUTH_EMAILS_COPY.DELETE_BUTTON_ARIA} ${email}`}
-                      onClick={() => handleRemoveEmail(email)}
-                      className="p-2 rounded-lg text-[var(--mist-dim)] hover:text-red-400 bg-[var(--ink-900)] hover:bg-red-950/20 border border-[var(--line)] hover:border-red-500/30 transition-colors cursor-pointer"
-                    >
-                      <IoTrashOutline className="w-4 h-4" aria-hidden="true" />
-                    </button>
-                  )}
-                </div>
+                {/* 3-Dot Actions Menu */}
+                <ActionsMenu
+                  ariaLabel={`Actions for ${admin.email}`}
+                  items={[
+                    isEnabled
+                      ? {
+                          id: "disable",
+                          label: "Disable Access",
+                          icon: IoLockClosedOutline,
+                          onClick: () => handleToggleStatus(admin.email, isEnabled),
+                        }
+                      : {
+                          id: "enable",
+                          label: "Enable Access",
+                          icon: IoLockOpenOutline,
+                          onClick: () => handleToggleStatus(admin.email, isEnabled),
+                        },
+                    {
+                      id: "delete",
+                      label: "Remove Admin",
+                      icon: IoTrashOutline,
+                      isDestructive: true,
+                      onClick: () => handleRemoveEmail(admin.email),
+                    },
+                  ]}
+                />
               </div>
             );
           })

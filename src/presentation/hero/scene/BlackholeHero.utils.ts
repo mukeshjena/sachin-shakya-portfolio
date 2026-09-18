@@ -342,8 +342,10 @@ export function executeBloomPass(
   targetPrev: RenderTarget,
   targetBlurA: RenderTarget,
   targetBlurB: RenderTarget,
-  packFactor: number
+  packFactor: number,
+  hasHalfFloat: boolean
 ): void {
+  // 1. Extract pass
   // biome-ignore lint/correctness/useHookAtTopLevel: WebGL method
   gl.useProgram(extractProg.program);
   gl.bindFramebuffer(gl.FRAMEBUFFER, targetBlurA.fb);
@@ -352,22 +354,33 @@ export function executeBloomPass(
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, targetPrev.tex);
   gl.uniform1i(extractProg.u.uTex, 0);
+  gl.uniform2f(extractProg.u.uTexel, 1 / targetPrev.w, 1 / targetPrev.h);
+  gl.uniform1f(extractProg.u.uDecode, hasHalfFloat ? 0 : 1);
+  gl.uniform1f(extractProg.u.uPack, packFactor);
   gl.uniform1f(extractProg.u.uThreshold, 0.85);
-  gl.uniform1f(extractProg.u.uPackFactor, packFactor);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 
-  // biome-ignore lint/correctness/useHookAtTopLevel: WebGL method
-  gl.useProgram(blurProg.program);
-  gl.bindFramebuffer(gl.FRAMEBUFFER, targetBlurB.fb);
-  gl.activeTexture(gl.TEXTURE0);
-  gl.bindTexture(gl.TEXTURE_2D, targetBlurA.tex);
-  gl.uniform1i(blurProg.u.uTex, 0);
-  gl.uniform2f(blurProg.u.uDir, 1.25 / targetBlurA.w, 0);
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  // 2. Multi-pass Gaussian blur helper
+  const runBlurStep = (
+    src: RenderTarget,
+    dst: RenderTarget,
+    stepX: number,
+    stepY: number
+  ): void => {
+    gl.useProgram(blurProg.program);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, dst.fb);
+    gl.viewport(0, 0, dst.w, dst.h);
 
-  gl.bindFramebuffer(gl.FRAMEBUFFER, targetBlurA.fb);
-  gl.bindTexture(gl.TEXTURE_2D, targetBlurB.tex);
-  gl.uniform1i(blurProg.u.uTex, 0);
-  gl.uniform2f(blurProg.u.uDir, 0, 1.25 / targetBlurB.h);
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, src.tex);
+    gl.uniform1i(blurProg.u.uTex, 0);
+    gl.uniform2f(blurProg.u.uStep, stepX / dst.w, stepY / dst.h);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+
+  // 4 alternating separable blur passes (horizontal, vertical, wide horizontal, wide vertical)
+  runBlurStep(targetBlurA, targetBlurB, 1.0, 0.0);
+  runBlurStep(targetBlurB, targetBlurA, 0.0, 1.0);
+  runBlurStep(targetBlurA, targetBlurB, 2.6, 0.0);
+  runBlurStep(targetBlurB, targetBlurA, 0.0, 2.6);
 }

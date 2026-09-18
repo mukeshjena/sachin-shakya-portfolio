@@ -16,6 +16,13 @@ export interface StoredAccessCode {
   createdAt: Date;
 }
 
+export interface AuthorizedAdminRecord {
+  readonly email: string;
+  readonly isEnabled: boolean;
+  readonly addedAt: Date;
+  readonly role?: string;
+}
+
 /**
  * Contract for admin access control persistence.
  * Covers both the authorized-emails list and the OTP code lifecycle.
@@ -26,13 +33,19 @@ export interface IAdminAccessRepository {
   /** Returns all authorized admin email addresses */
   getAuthorizedEmails(): Promise<string[]>;
 
+  /** Returns full administrator records including active/disabled status */
+  getAuthorizedAdminRecords(): Promise<AuthorizedAdminRecord[]>;
+
   /** Adds an email to the authorized list */
   addAuthorizedEmail(email: string): Promise<void>;
+
+  /** Toggles an administrator's access status between enabled and disabled */
+  setAdminEnabled(email: string, isEnabled: boolean): Promise<void>;
 
   /** Removes an email from the authorized list */
   removeAuthorizedEmail(email: string): Promise<void>;
 
-  /** Returns true if the email is on the authorized list */
+  /** Returns true if the email is on the authorized list and is actively enabled */
   isAuthorizedEmail(email: string): Promise<boolean>;
 
   // ── OTP code lifecycle ───────────────────────────────────────────────────────

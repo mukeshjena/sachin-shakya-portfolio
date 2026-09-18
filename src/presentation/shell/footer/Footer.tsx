@@ -34,8 +34,17 @@ function getSocialIcon(
 }
 
 export function Footer() {
-  const { currentYear, fullName, headline, email, location, resumePdfUrl, socialLinks, navItems } =
-    useFooterLogic();
+  const {
+    currentYear,
+    fullName,
+    headline,
+    email,
+    location,
+    logoUrl,
+    resumePdfUrl,
+    socialLinks,
+    navItems,
+  } = useFooterLogic();
 
   return (
     <footer className="w-full bg-[var(--ink-900)] border-t border-[var(--line)] text-[var(--paper)]">
@@ -62,9 +71,17 @@ export function Footer() {
           {/* Column 1: Identity & Executive Mission */}
           <div className="space-y-4">
             <div className="flex items-center gap-3 select-none">
-              <div className="w-10 h-10 rounded-full bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-sm">
-                SS
-              </div>
+              {logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt={`${fullName} emblem`}
+                  className="w-10 h-10 rounded-full object-cover border border-[var(--line)] bg-[var(--ink-800)]"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-sm">
+                  SS
+                </div>
+              )}
               <div>
                 <h3 className="text-base font-bold tracking-tight text-[var(--paper)] uppercase">
                   {fullName}
