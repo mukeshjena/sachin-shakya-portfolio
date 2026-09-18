@@ -3,6 +3,8 @@
 // This is the ONLY file that imports both infrastructure classes and DI tokens together.
 // Import this once at app startup (main.tsx), before any component renders.
 
+import { GetFooterNavPagesUseCase } from "../../application/use-cases/pages/GetFooterNavPagesUseCase";
+import { GetHeaderNavPagesUseCase } from "../../application/use-cases/pages/GetHeaderNavPagesUseCase";
 import { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages/GetPublishedPageBySlugUseCase";
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
 import { GetSiteSettingsUseCase } from "../../application/use-cases/settings/GetSiteSettingsUseCase";
@@ -47,7 +49,7 @@ export function bootstrapContainer(): void {
     singleton(() => new FirestoreSiteSettingsRepository())
   );
 
-  // ── Use-cases (Step 11 & 13) ────────────────────────────────────────────────
+  // ── Use-cases (Step 11, 13 & 14) ───────────────────────────────────────────
   container.register(
     DI_TOKENS.GetPublishedPageBySlug,
     singleton(
@@ -55,6 +57,20 @@ export function bootstrapContainer(): void {
         new GetPublishedPageBySlugUseCase(
           container.resolve<IPageRepository>(DI_TOKENS.PageRepository)
         )
+    )
+  );
+  container.register(
+    DI_TOKENS.GetHeaderNavPages,
+    singleton(
+      () =>
+        new GetHeaderNavPagesUseCase(container.resolve<IPageRepository>(DI_TOKENS.PageRepository))
+    )
+  );
+  container.register(
+    DI_TOKENS.GetFooterNavPages,
+    singleton(
+      () =>
+        new GetFooterNavPagesUseCase(container.resolve<IPageRepository>(DI_TOKENS.PageRepository))
     )
   );
   container.register(

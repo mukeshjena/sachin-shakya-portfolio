@@ -25,6 +25,8 @@ export const DI_TOKENS = {
   // (populated as use-cases are implemented in Steps 11+)
   GetPublishedPages: Symbol("GetPublishedPages"),
   GetPublishedPageBySlug: Symbol("GetPublishedPageBySlug"),
+  GetHeaderNavPages: Symbol("GetHeaderNavPages"),
+  GetFooterNavPages: Symbol("GetFooterNavPages"),
   GetSiteSettings: Symbol("GetSiteSettings"),
   SubscribeSiteSettings: Symbol("SubscribeSiteSettings"),
   SubmitContactForm: Symbol("SubmitContactForm"),
