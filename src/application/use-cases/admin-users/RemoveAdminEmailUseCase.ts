@@ -17,8 +17,6 @@ export interface IRemoveAdminEmailUseCase {
   execute(input: RemoveAdminEmailInput): Promise<RemoveAdminEmailResult>;
 }
 
-const ROOT_ADMIN_EMAIL = "sachin.shakya@live.com";
-
 export class RemoveAdminEmailUseCase implements IRemoveAdminEmailUseCase {
   private readonly adminAccessRepo: IAdminAccessRepository;
 
@@ -29,10 +27,8 @@ export class RemoveAdminEmailUseCase implements IRemoveAdminEmailUseCase {
   async execute(input: RemoveAdminEmailInput): Promise<RemoveAdminEmailResult> {
     const trimmed = input.email ? input.email.trim().toLowerCase() : "";
 
-    if (trimmed === ROOT_ADMIN_EMAIL) {
-      throw new Error(
-        "Security Violation: The primary root administrator (sachin.shakya@live.com) cannot be revoked."
-      );
+    if (!trimmed) {
+      throw new Error("Invalid email address provided for revocation.");
     }
 
     const isAuthorized = await this.adminAccessRepo.isAuthorizedEmail(trimmed);

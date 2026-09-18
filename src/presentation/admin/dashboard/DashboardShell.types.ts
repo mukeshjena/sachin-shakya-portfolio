@@ -19,6 +19,10 @@ export interface DashboardPageItem {
   readonly id: string;
   readonly slug: string;
   readonly title: string;
+  readonly subtitle?: string;
+  readonly richContent?: string;
+  readonly category?: string;
+  readonly order?: number;
   readonly isPublished: boolean;
   readonly showInHeader: boolean;
   readonly showInFooter: boolean;
@@ -33,6 +37,17 @@ export interface DashboardContactItem {
   readonly source?: string;
   readonly isRead?: boolean;
   readonly createdAt?: string;
+}
+
+export interface DashboardConfirmState {
+  readonly isOpen: boolean;
+  readonly title: string;
+  readonly message: string;
+  readonly confirmLabel?: string;
+  readonly cancelLabel?: string;
+  readonly isDestructive?: boolean;
+  readonly isLoading?: boolean;
+  readonly onConfirm: () => Promise<void> | void;
 }
 
 export interface DashboardShellViewModel {
@@ -50,6 +65,10 @@ export interface DashboardShellViewModel {
   readonly isCollapsed: boolean;
   readonly toggleSidebarCollapsed: () => void;
   readonly handleLogout: () => void;
+
+  // Confirmation Dialog State
+  readonly confirmState: DashboardConfirmState | null;
+  readonly closeConfirm: () => void;
 
   // Page Editor State
   readonly isPageModalOpen: boolean;
@@ -80,7 +99,7 @@ export interface DashboardShellViewModel {
 
   // Contacts Actions
   readonly handleToggleContactRead: (id: string, currentStatus: boolean) => Promise<void>;
-  readonly handleDeleteContact: (id: string) => Promise<void>;
+  readonly handleDeleteContact: (id: string) => void;
   readonly getContactRowActions: (
     contactId: string,
     email?: string,

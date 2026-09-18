@@ -12,6 +12,7 @@ import {
   IoShieldCheckmarkOutline,
   IoTrashOutline,
 } from "react-icons/io5";
+import { ConfirmDialog } from "../../shared/confirm-dialog/ConfirmDialog";
 import { ActionsMenu } from "../shared/actions-menu/ActionsMenu";
 import { useAuthorizedEmailsManager } from "./AuthorizedEmailsManager.hooks";
 import { AUTH_EMAILS_COPY } from "./constants/auth-emails.constants";
@@ -24,11 +25,14 @@ export function AuthorizedEmailsManager() {
     newEmail,
     inputError,
     feedbackMessage,
+    emailToDelete,
     handleNewEmailChange,
     handleNewEmailBlur,
     handleAddEmail,
     handleToggleStatus,
-    handleRemoveEmail,
+    promptRemoveEmail,
+    cancelRemoveEmail,
+    confirmRemoveEmail,
   } = useAuthorizedEmailsManager();
 
   return (
@@ -188,7 +192,7 @@ export function AuthorizedEmailsManager() {
                       label: "Remove Admin",
                       icon: IoTrashOutline,
                       isDestructive: true,
-                      onClick: () => handleRemoveEmail(admin.email),
+                      onClick: () => promptRemoveEmail(admin.email),
                     },
                   ]}
                 />
@@ -197,6 +201,19 @@ export function AuthorizedEmailsManager() {
           })
         )}
       </div>
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmDialog
+        isOpen={Boolean(emailToDelete)}
+        title="Revoke Administrator Access"
+        message={`Are you sure you want to revoke and delete administrative privileges for '${emailToDelete}'?\n\nThis will permanently remove the operator from the authorized whitelist.`}
+        confirmLabel="Revoke Access"
+        cancelLabel="Keep Access"
+        isDestructive={true}
+        isLoading={isLoading}
+        onConfirm={confirmRemoveEmail}
+        onCancel={cancelRemoveEmail}
+      />
     </div>
   );
 }

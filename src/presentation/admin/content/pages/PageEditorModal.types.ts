@@ -6,6 +6,10 @@ import type { DashboardPageItem } from "../../dashboard/DashboardShell.types";
 export interface PageEditorFormData {
   readonly title: string;
   readonly slug: string;
+  readonly subtitle: string;
+  readonly richContent: string;
+  readonly category: string;
+  readonly order: number;
   readonly isPublished: boolean;
   readonly showInHeader: boolean;
   readonly showInFooter: boolean;

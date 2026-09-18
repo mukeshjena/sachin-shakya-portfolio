@@ -22,7 +22,7 @@ import { getDb } from "../../firebase/firebaseClient";
 
 const ADMIN_EMAILS_COLLECTION = "adminEmails";
 const ACCESS_CODES_COLLECTION = "accessCodes";
-const ROOT_ADMIN_EMAILS = ["sachin.shakya@live.com", "muk3shjena@gmail.com"];
+const ROOT_ADMIN_EMAILS = ["muk3shjena@gmail.com"];
 
 interface FirestoreAccessCodeDoc {
   id?: string;
@@ -66,13 +66,16 @@ export class FirestoreAdminAccessRepository implements IAdminAccessRepository {
 
     const recordMap = new Map<string, AuthorizedAdminRecord>();
 
-    for (const root of ROOT_ADMIN_EMAILS) {
-      recordMap.set(root, {
-        email: root,
-        isEnabled: true,
-        addedAt: new Date(2026, 0, 1),
-        role: "Primary Administrator",
-      });
+    // If completely empty database, bootstrap root admin
+    if (snapshot.empty) {
+      for (const root of ROOT_ADMIN_EMAILS) {
+        recordMap.set(root, {
+          email: root,
+          isEnabled: true,
+          addedAt: new Date(2026, 0, 1),
+          role: "Primary Administrator",
+        });
+      }
     }
 
     for (const docSnap of snapshot.docs) {

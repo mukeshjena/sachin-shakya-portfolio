@@ -52,7 +52,7 @@ export function ContactSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
           {/* Left Column (5 cols): Full-Bleed Portrait Card with Bottom Vintage Overlay */}
           <div className="lg:col-span-5 flex flex-col h-full">
-            <div className="relative flex-1 min-h-[480px] lg:min-h-[560px] w-full overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--ink-850)] flex flex-col justify-end">
+            <div className="relative flex-1 min-h-[480px] lg:min-h-[560px] w-full overflow-hidden rounded-2xl border border-[var(--line)] bg-[#050508] flex flex-col justify-end">
               {/* Full-Bleed Portrait Image */}
               <img
                 src={contactInfo.photoUrl}
@@ -63,13 +63,13 @@ export function ContactSection() {
 
               {/* Experience Badge */}
               <div className="absolute top-4 right-4 z-10">
-                <span className="text-[10px] font-mono text-[var(--amber)] bg-[var(--ink-900)]/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-[var(--line)] font-bold select-none">
+                <span className="text-[10px] font-mono text-[var(--amber)] bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10 font-bold select-none">
                   ~9 YRS EXP
                 </span>
               </div>
 
-              {/* Bottom Vintage Gradient Overlay with Identity and Icons */}
-              <div className="relative z-10 w-full bg-gradient-to-t from-[var(--ink-900)] via-[var(--ink-900)]/85 to-transparent pt-24 pb-6 px-6 space-y-4">
+              {/* Bottom Gradient Overlay with Identity and Icons */}
+              <div className="relative z-10 w-full bg-gradient-to-t from-black via-black/85 to-transparent pt-24 pb-6 px-6 space-y-4">
                 {/* Direct Identity */}
                 <div>
                   <h3 className="text-xl font-bold tracking-tight text-[var(--paper)]">

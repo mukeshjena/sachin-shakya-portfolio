@@ -10,6 +10,10 @@ export interface SavePageInput {
   readonly id?: string;
   readonly slug: string;
   readonly title: string;
+  readonly subtitle?: string;
+  readonly richContent?: string;
+  readonly category?: string;
+  readonly order?: number;
   readonly isPublished: boolean;
   readonly showInHeader: boolean;
   readonly showInFooter: boolean;
@@ -54,6 +58,10 @@ export class SavePageUseCase implements ISavePageUseCase {
 
       return this.pageRepository.update(input.id, {
         title: trimmedTitle,
+        subtitle: input.subtitle?.trim() || undefined,
+        richContent: input.richContent,
+        category: input.category?.trim() || undefined,
+        order: input.order,
         isPublished: input.isPublished,
         showInHeader: input.showInHeader,
         showInFooter: input.showInFooter,
@@ -72,6 +80,10 @@ export class SavePageUseCase implements ISavePageUseCase {
     return this.pageRepository.create({
       slug: slugStr,
       title: trimmedTitle,
+      subtitle: input.subtitle?.trim() || undefined,
+      richContent: input.richContent,
+      category: input.category?.trim() || undefined,
+      order: input.order,
       sectionOrder: [],
       isPublished: input.isPublished,
       showInHeader: input.showInHeader,

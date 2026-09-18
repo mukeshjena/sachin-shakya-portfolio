@@ -4,11 +4,13 @@
 
 import { motion } from "framer-motion";
 import { TechIcon } from "../../shared/tech-icons/TechIcon";
-import { EXPERIENCE_ANIMATION_VARIANTS, EXPERIENCE_COPY } from "./constants/experience.constants";
+import { EXPERIENCE_ANIMATION_VARIANTS } from "./constants/experience.constants";
 import { useExperienceSectionLogic } from "./ExperienceSection.hooks";
+import type { ExperienceSectionProps } from "./ExperienceSection.types";
 
-export function ExperienceSection() {
-  const { roles, activeRoleId, setActiveRoleId } = useExperienceSectionLogic();
+export function ExperienceSection({ content }: ExperienceSectionProps) {
+  const { roles, activeRoleId, setActiveRoleId, headline, subheadline } =
+    useExperienceSectionLogic(content);
 
   return (
     <section
@@ -27,13 +29,13 @@ export function ExperienceSection() {
         >
           <motion.div variants={EXPERIENCE_ANIMATION_VARIANTS.item}>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--paper)] leading-tight">
-              {EXPERIENCE_COPY.headline}
+              {headline}
             </h2>
           </motion.div>
 
           <motion.div variants={EXPERIENCE_ANIMATION_VARIANTS.item}>
             <p className="text-sm sm:text-base text-[var(--mist)] leading-relaxed font-sans">
-              {EXPERIENCE_COPY.subheadline}
+              {subheadline}
             </p>
           </motion.div>
         </motion.div>

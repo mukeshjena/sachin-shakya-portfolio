@@ -6,6 +6,13 @@ import type { ISaveSectionUseCase } from "../../../../application/use-cases/sect
 import type { IUpdateSiteSettingsUseCase } from "../../../../application/use-cases/settings/UpdateSiteSettingsUseCase";
 import type { SectionType } from "../../../../domain/entities/content/Section";
 import { DI_TOKENS } from "../../../../infrastructure/di/tokens";
+import { CAPABILITY_CARDS } from "../../../sections/capabilities/constants/capabilities.constants";
+import {
+  CERTIFICATIONS,
+  EDUCATION_RECORDS,
+  HONORS_AWARDS,
+} from "../../../sections/credentials/constants/credentials.constants";
+import { EXPERIENCE_ROLES } from "../../../sections/experience/constants/experience.constants";
 import { useContainer } from "../../../shared/useContainer";
 import type {
   SectionEditorFormData,
@@ -45,6 +52,11 @@ const INITIAL_FORM: SectionEditorFormData = {
   targetSavings: "$170K/mo",
   mttrImprovement: "40%",
   fleetManaged: "2,000+",
+  roles: EXPERIENCE_ROLES,
+  cards: CAPABILITY_CARDS,
+  certifications: CERTIFICATIONS,
+  education: EDUCATION_RECORDS,
+  awards: HONORS_AWARDS,
 };
 
 export function useSectionEditorModal({
@@ -135,6 +147,17 @@ export function useSectionEditorModal({
           typeof c.mttrImprovement === "string" ? c.mttrImprovement : INITIAL_FORM.mttrImprovement,
         fleetManaged:
           typeof c.fleetManaged === "string" ? c.fleetManaged : INITIAL_FORM.fleetManaged,
+        roles: Array.isArray(c.roles) && c.roles.length > 0 ? c.roles : INITIAL_FORM.roles,
+        cards: Array.isArray(c.cards) && c.cards.length > 0 ? c.cards : INITIAL_FORM.cards,
+        certifications:
+          Array.isArray(c.certifications) && c.certifications.length > 0
+            ? c.certifications
+            : INITIAL_FORM.certifications,
+        education:
+          Array.isArray(c.education) && c.education.length > 0
+            ? c.education
+            : INITIAL_FORM.education,
+        awards: Array.isArray(c.awards) && c.awards.length > 0 ? c.awards : INITIAL_FORM.awards,
       });
     } else {
       setFormData(INITIAL_FORM);
@@ -183,7 +206,15 @@ export function useSectionEditorModal({
           body: formData.description.trim(),
         };
 
-        if (formData.type === "contact") {
+        if (formData.type === "experience") {
+          updatedContent.roles = formData.roles || EXPERIENCE_ROLES;
+        } else if (formData.type === "capabilities") {
+          updatedContent.cards = formData.cards || CAPABILITY_CARDS;
+        } else if (formData.type === "credentials") {
+          updatedContent.certifications = formData.certifications || CERTIFICATIONS;
+          updatedContent.education = formData.education || EDUCATION_RECORDS;
+          updatedContent.awards = formData.awards || HONORS_AWARDS;
+        } else if (formData.type === "contact") {
           updatedContent.fullName = formData.fullName?.trim() || "";
           updatedContent.headline = formData.role?.trim() || "";
           updatedContent.email = formData.email?.trim() || "";

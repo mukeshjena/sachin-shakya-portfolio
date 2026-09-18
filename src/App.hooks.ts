@@ -19,15 +19,23 @@ function parseCurrentRoute(): { isDynamic: boolean; slug: string } {
     return { isDynamic: false, slug: "home" };
   }
 
-  // 1. Check query parameter ?page=slug
+  // 0. Check admin query/hash
+  const hash = window.location.hash;
+  if (hash === "#admin" || hash.startsWith("#/admin") || hash === "#login") {
+    return { isDynamic: false, slug: "admin" };
+  }
+
+  // 1. Check query parameter ?page=slug or ?tab=admin
   const params = new URLSearchParams(window.location.search);
   const querySlug = params.get("page");
+  if (querySlug === "admin" || params.get("tab") === "admin" || params.get("admin") === "true") {
+    return { isDynamic: false, slug: "admin" };
+  }
   if (querySlug && querySlug !== "home") {
     return { isDynamic: true, slug: querySlug.replace(/^\/+|\/+$/g, "") };
   }
 
   // 2. Check hash route #/slug or #/pages/slug
-  const hash = window.location.hash;
   if (hash.startsWith("#/pages/")) {
     const slug = hash.slice(8).replace(/^\/+|\/+$/g, "");
     if (slug && slug !== "home") {
@@ -156,6 +164,15 @@ export function useAppState(): AppState {
     pingMessage,
     isDynamicRoute: routeInfo.isDynamic,
     activeSlug: routeInfo.slug,
-    isAdminRoute: routeInfo.slug === "admin" || routeInfo.slug === "login",
+    isAdminRoute:
+      routeInfo.slug === "admin" ||
+      routeInfo.slug === "login" ||
+      (typeof window !== "undefined" &&
+        (window.location.pathname.startsWith("/admin") ||
+          window.location.pathname.startsWith("/login") ||
+          window.location.search.includes("page=admin") ||
+          window.location.search.includes("tab=admin") ||
+          window.location.hash.startsWith("#/admin") ||
+          window.location.hash === "#admin")),
   };
 }

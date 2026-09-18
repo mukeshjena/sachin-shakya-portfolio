@@ -41,7 +41,7 @@ export function BlackholeHero() {
 
           {/* Monumental Headline */}
           <motion.div variants={HERO_ANIMATION_VARIANTS.item}>
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-light tracking-tight text-white leading-[1.06]">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-light tracking-tight text-white leading-[1.12]">
               {content.titleLine1} <br />
               <span className="font-semibold text-white">{content.titleLine2}</span>
             </h1>
@@ -49,7 +49,7 @@ export function BlackholeHero() {
 
           {/* Cloud Architecture Subheadline */}
           <motion.div variants={HERO_ANIMATION_VARIANTS.item}>
-            <p className="text-xs sm:text-base text-white/85 leading-relaxed max-w-lg font-sans">
+            <p className="text-xs sm:text-sm md:text-base text-white/80 leading-relaxed max-w-lg font-sans">
               {content.subheadline}
             </p>
           </motion.div>

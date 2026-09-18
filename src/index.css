@@ -82,26 +82,26 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  /* Canvas layers — deep rich petrol canvas matching instrument panel aesthetics */
-  --ink-900: #06121a;
-  --ink-850: #08171f;
-  --ink-800: #0b1d27;
-  --ink-700: #102a36;
-  --ink-600: #17394a;
+  /* Canvas layers — deep obsidian space canvas matching blackhole hero */
+  --ink-900: #000000;
+  --ink-850: #08080a;
+  --ink-800: #0f0f13;
+  --ink-700: #18181f;
+  --ink-600: #24242e;
 
   /* Lines & structural boundaries (shadow-free depth) */
-  --line: rgba(130, 180, 200, 0.16);
-  --line-soft: rgba(130, 180, 200, 0.09);
+  --line: rgba(255, 255, 255, 0.09);
+  --line-soft: rgba(255, 255, 255, 0.04);
 
   /* Typography tones */
-  --mist: #93aeba;
-  --mist-dim: #6b8896;
-  --paper: #e8f1f4;
+  --mist: #a1a1aa;
+  --mist-dim: #71717a;
+  --paper: #fafafa;
 
   /* Signal accents */
   --amber: #ffb020;
   --amber-deep: #e08c00;
-  --cyan: #38bdf8;
+  --cyan: #49c7e8;
   --live: #3fd08a;
 
   /* Radii scale */
@@ -234,10 +234,10 @@ select:focus {
 
 .vintage-animated-gradient {
   background:
-    radial-gradient(ellipse 85% 55% at 50% -15%, rgba(20, 55, 80, 0.4), transparent 70%),
-    radial-gradient(circle 850px at 100% 35%, rgba(14, 42, 60, 0.3), transparent 60%),
-    radial-gradient(circle 750px at 0% 85%, rgba(18, 48, 70, 0.25), transparent 60%),
-    linear-gradient(180deg, #050d14 0%, #071520 45%, #050f17 80%, #04090e 100%);
+    radial-gradient(ellipse 85% 55% at 50% -15%, rgba(40, 45, 60, 0.25), transparent 70%),
+    radial-gradient(circle 850px at 100% 35%, rgba(20, 25, 40, 0.18), transparent 60%),
+    radial-gradient(circle 750px at 0% 85%, rgba(25, 30, 45, 0.15), transparent 60%),
+    linear-gradient(180deg, #000000 0%, #060609 45%, #08080d 80%, #000000 100%);
   background-size: 140% 140%;
   animation: vintageGradientShift 22s ease-in-out infinite alternate;
 }
@@ -252,8 +252,8 @@ select:focus {
 
 .vintage-grid-canvas {
   background-image:
-    linear-gradient(to right, rgba(130, 180, 200, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(130, 180, 200, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -265,7 +265,7 @@ select:focus {
 }
 
 .vintage-vignette {
-  background: radial-gradient(circle at 50% 50%, transparent 45%, rgba(4, 10, 15, 0.55) 100%);
+  background: radial-gradient(circle at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.6) 100%);
 }
 
 [data-theme="light"] .vintage-vignette {

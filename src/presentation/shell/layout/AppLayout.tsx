@@ -9,7 +9,7 @@ import { MobileHeader } from "../mobile-header/MobileHeader";
 import { useAppLayoutLogic } from "./AppLayout.hooks";
 import type { AppLayoutProps } from "./AppLayout.types";
 
-export function AppLayout({ children }: AppLayoutProps) {
+export function AppLayout({ children, hidePublicChrome = false }: AppLayoutProps) {
   const { handleNavigate } = useAppLayoutLogic();
 
   return (
@@ -22,10 +22,10 @@ export function AppLayout({ children }: AppLayoutProps) {
       </div>
 
       {/* Desktop Header (>= md) */}
-      <Header />
+      {!hidePublicChrome && <Header />}
 
       {/* Mobile Title Bar (< md) */}
-      <MobileHeader />
+      {!hidePublicChrome && <MobileHeader />}
 
       {/* Page View Canvas */}
       <main id="top" className="relative z-10 flex-1 w-full">
@@ -33,12 +33,14 @@ export function AppLayout({ children }: AppLayoutProps) {
       </main>
 
       {/* Universal Executive Footer */}
-      <div className="relative z-10">
-        <Footer />
-      </div>
+      {!hidePublicChrome && (
+        <div className="relative z-10">
+          <Footer />
+        </div>
+      )}
 
       {/* Mobile Liquid-Glass Bottom Nav (< md) */}
-      <MobileBottomNav onTabSelect={handleNavigate} />
+      {!hidePublicChrome && <MobileBottomNav onTabSelect={handleNavigate} />}
     </div>
   );
 }

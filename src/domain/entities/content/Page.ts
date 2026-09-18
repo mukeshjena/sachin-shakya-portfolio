@@ -23,6 +23,15 @@ export interface Page {
   showInHeader: boolean;
   /** Whether to show a nav link in the footer */
   showInFooter: boolean;
+  /** Subtitle or executive summary */
+  subtitle?: string;
+  /** Direct rich content (Markdown / HTML / CSS) */
+  richContent?: string;
+  content?: string;
+  /** Categorization tag (e.g. cloud, architecture, legal) */
+  category?: string;
+  /** Navigation display order */
+  order?: number;
   /** SEO overrides — falls back to siteSettings if absent */
   seoTitle?: string;
   seoDescription?: string;

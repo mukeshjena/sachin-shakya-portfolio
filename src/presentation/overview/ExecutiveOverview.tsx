@@ -5,7 +5,7 @@
 
 import { motion } from "framer-motion";
 import { FaAws } from "react-icons/fa6";
-import { IoPulseOutline, IoShieldCheckmarkOutline } from "react-icons/io5";
+import { IoShieldCheckmarkOutline } from "react-icons/io5";
 import { SiDatadog, SiKubernetes, SiTerraform } from "react-icons/si";
 import { VscAzure } from "react-icons/vsc";
 import {
@@ -123,11 +123,11 @@ export function ExecutiveOverview() {
             </motion.div>
           </div>
 
-          {/* Right Column (5 cols): Edge-to-Edge Portrait Frame without nested card */}
+          {/* Right Column (5 cols): Edge-to-Edge Portrait Frame */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
             <motion.div
               variants={OVERVIEW_ANIMATION_VARIANTS.item}
-              className="relative w-full max-w-sm sm:max-w-md aspect-square rounded-2xl overflow-hidden bg-[var(--ink-900)] border border-[var(--line)]"
+              className="relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-2xl overflow-hidden bg-[#050508] border border-[var(--line)]"
             >
               <img
                 src={content.heroPhotoUrl}
@@ -138,36 +138,21 @@ export function ExecutiveOverview() {
               {/* Subtle Radial Vignette */}
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_45%,rgba(6,18,26,0.6)_100%)] pointer-events-none"
+                className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.65)_100%)] pointer-events-none"
               />
 
-              {/* Top Verified Identity Badge Overlay */}
-              <div className="absolute top-3 left-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--ink-900)]/85 backdrop-blur-md border border-[var(--line)] text-[10px] font-mono text-[var(--paper)] select-none">
-                <IoShieldCheckmarkOutline
-                  className="w-3.5 h-3.5 text-[var(--live)]"
-                  aria-hidden="true"
-                />
-                <span className="font-semibold uppercase tracking-wider">VERIFIED IDENTITY</span>
-              </div>
-
-              {/* Top Right Status Overlay */}
-              <div className="absolute top-3 right-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[var(--ink-900)]/85 backdrop-blur-md border border-[var(--line)] text-[10px] font-mono text-[var(--cyan)] select-none">
-                <IoPulseOutline className="w-3.5 h-3.5 text-[var(--cyan)]" aria-hidden="true" />
-                <span className="uppercase tracking-wider">ONLINE</span>
-              </div>
-
-              {/* Bottom Overlay Pill */}
-              <div className="absolute bottom-3 inset-x-3 p-3 rounded-xl bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)] flex items-center justify-between text-xs select-none">
+              {/* Bottom Overlay Pill (No Dot, Clean Identity) */}
+              <div className="absolute bottom-3 inset-x-3 p-3 rounded-xl bg-black/85 backdrop-blur-md border border-white/10 flex items-center justify-between text-xs select-none">
                 <div>
-                  <span className="text-xs font-bold text-[var(--paper)] block uppercase tracking-tight">
+                  <span className="text-xs font-bold text-white block uppercase tracking-tight">
                     Sachin Shakya
                   </span>
                   <span className="text-[10px] font-mono text-[var(--cyan)] block uppercase">
-                    Technical Lead &bull; CloudOps
+                    Technical Lead CloudOps
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] font-mono text-[var(--mist-dim)] block uppercase">
+                  <span className="text-[10px] font-mono text-white/60 block uppercase">
                     EXPERIENCE
                   </span>
                   <span className="text-xs font-mono font-bold text-[var(--amber)] tabular-nums block">

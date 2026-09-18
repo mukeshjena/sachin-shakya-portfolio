@@ -24,6 +24,11 @@ interface FirestorePageDoc {
   id?: string;
   slug: string;
   title: string;
+  subtitle?: string;
+  richContent?: string;
+  content?: string;
+  category?: string;
+  order?: number;
   sectionOrder?: string[];
   isPublished: boolean;
   showInHeader: boolean;
@@ -52,6 +57,11 @@ function mapDocToPage(id: string, data: FirestorePageDoc): Page {
     id,
     slug: new Slug(data.slug || id),
     title: data.title ?? "Untitled Page",
+    subtitle: data.subtitle,
+    richContent: data.richContent ?? data.content,
+    content: data.content ?? data.richContent,
+    category: data.category,
+    order: data.order,
     sectionOrder: Array.isArray(data.sectionOrder) ? data.sectionOrder : [],
     isPublished: Boolean(data.isPublished),
     showInHeader: Boolean(data.showInHeader),
@@ -138,6 +148,16 @@ export class FirestorePageRepository implements IPageRepository {
       updatedAt: isoString,
     };
 
+    if (input.subtitle !== undefined) rawPayload.subtitle = input.subtitle;
+    if (input.richContent !== undefined) {
+      rawPayload.richContent = input.richContent;
+      rawPayload.content = input.richContent;
+    } else if (input.content !== undefined) {
+      rawPayload.richContent = input.content;
+      rawPayload.content = input.content;
+    }
+    if (input.category !== undefined) rawPayload.category = input.category;
+    if (input.order !== undefined) rawPayload.order = input.order;
     if (input.seoTitle !== undefined) rawPayload.seoTitle = input.seoTitle;
     if (input.seoDescription !== undefined) rawPayload.seoDescription = input.seoDescription;
     if (input.seoImage !== undefined) rawPayload.seoImage = input.seoImage;
@@ -149,6 +169,11 @@ export class FirestorePageRepository implements IPageRepository {
       id: docId,
       slug: slugObj,
       title: input.title,
+      subtitle: input.subtitle,
+      richContent: input.richContent ?? input.content,
+      content: input.content ?? input.richContent,
+      category: input.category,
+      order: input.order,
       sectionOrder: input.sectionOrder ?? [],
       isPublished: input.isPublished,
       showInHeader: input.showInHeader,
@@ -176,6 +201,16 @@ export class FirestorePageRepository implements IPageRepository {
     };
 
     if (updates.title !== undefined) updatePayload.title = updates.title;
+    if (updates.subtitle !== undefined) updatePayload.subtitle = updates.subtitle;
+    if (updates.richContent !== undefined) {
+      updatePayload.richContent = updates.richContent;
+      updatePayload.content = updates.richContent;
+    } else if (updates.content !== undefined) {
+      updatePayload.richContent = updates.content;
+      updatePayload.content = updates.content;
+    }
+    if (updates.category !== undefined) updatePayload.category = updates.category;
+    if (updates.order !== undefined) updatePayload.order = updates.order;
     if (updates.sectionOrder !== undefined) updatePayload.sectionOrder = updates.sectionOrder;
     if (updates.isPublished !== undefined) updatePayload.isPublished = updates.isPublished;
     if (updates.showInHeader !== undefined) updatePayload.showInHeader = updates.showInHeader;

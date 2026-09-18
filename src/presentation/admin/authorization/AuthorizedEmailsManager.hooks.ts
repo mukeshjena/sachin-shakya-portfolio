@@ -119,35 +119,39 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
     [adminAccessRepo, fetchAdmins]
   );
 
-  const handleRemoveEmail = useCallback(
-    async (emailToRemove: string) => {
-      const trimmed = emailToRemove.trim().toLowerCase();
-      const confirmed = window.confirm(
-        `Are you sure you want to revoke and delete administrative privileges for '${trimmed}'?`
-      );
-      if (!confirmed) return;
+  const [emailToDelete, setEmailToDelete] = useState<string | null>(null);
 
-      setIsLoading(true);
-      setFeedbackMessage(null);
+  const promptRemoveEmail = useCallback((email: string) => {
+    setEmailToDelete(email.trim().toLowerCase());
+  }, []);
 
-      try {
-        await adminAccessRepo.removeAuthorizedEmail(trimmed);
-        setFeedbackMessage({
-          type: "success",
-          text: AUTH_EMAILS_COPY.SUCCESS_REMOVED,
-        });
-        await fetchAdmins();
-      } catch (err) {
-        setFeedbackMessage({
-          type: "error",
-          text: err instanceof Error ? err.message : "Failed to revoke administrator access.",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [adminAccessRepo, fetchAdmins]
-  );
+  const cancelRemoveEmail = useCallback(() => {
+    setEmailToDelete(null);
+  }, []);
+
+  const confirmRemoveEmail = useCallback(async () => {
+    if (!emailToDelete) return;
+    const trimmed = emailToDelete;
+    setEmailToDelete(null);
+    setIsLoading(true);
+    setFeedbackMessage(null);
+
+    try {
+      await adminAccessRepo.removeAuthorizedEmail(trimmed);
+      setFeedbackMessage({
+        type: "success",
+        text: AUTH_EMAILS_COPY.SUCCESS_REMOVED,
+      });
+      await fetchAdmins();
+    } catch (err) {
+      setFeedbackMessage({
+        type: "error",
+        text: err instanceof Error ? err.message : "Failed to revoke administrator access.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [adminAccessRepo, emailToDelete, fetchAdmins]);
 
   return {
     admins,
@@ -156,10 +160,14 @@ export function useAuthorizedEmailsManager(): AuthorizedEmailsViewModel {
     newEmail,
     inputError,
     feedbackMessage,
+    emailToDelete,
     handleNewEmailChange,
     handleNewEmailBlur,
     handleAddEmail,
     handleToggleStatus,
-    handleRemoveEmail,
+    handleRemoveEmail: promptRemoveEmail,
+    promptRemoveEmail,
+    cancelRemoveEmail,
+    confirmRemoveEmail,
   };
 }

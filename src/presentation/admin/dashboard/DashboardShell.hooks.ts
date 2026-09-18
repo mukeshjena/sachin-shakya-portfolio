@@ -15,9 +15,11 @@ import { DI_TOKENS } from "../../../infrastructure/di/tokens";
 import { useAuth } from "../../providers/auth/useAuth";
 import { useRealtimeSync } from "../../shared/hooks/useRealtimeSync";
 import type { MenuItemAction } from "../../shared/menu/ThreeDotMenu.types";
+import { notificationService } from "../../shared/notifications/notification.service";
 import { useContainer } from "../../shared/useContainer";
 import type { DashboardTabId } from "./constants/dashboard.constants";
 import type {
+  DashboardConfirmState,
   DashboardContactItem,
   DashboardMetrics,
   DashboardPageItem,
@@ -245,22 +247,48 @@ export function useDashboardShell(): DashboardShellViewModel {
     setPageToEdit(null);
   }, []);
 
+  const [confirmState, setConfirmState] = useState<DashboardConfirmState | null>(null);
+
+  const closeConfirm = useCallback(() => {
+    setConfirmState(null);
+  }, []);
+
   const handleDeletePage = useCallback(
-    async (pageId: string, slug: string) => {
+    (pageId: string, slug: string) => {
       if (slug === "home" || pageId === "home") {
-        alert("The primary root 'home' page is immutable and cannot be deleted.");
+        setConfirmState({
+          isOpen: true,
+          title: "Action Not Allowed",
+          message: "The primary root 'home' page is immutable and cannot be deleted.",
+          confirmLabel: "Understood",
+          isDestructive: false,
+          onConfirm: () => setConfirmState(null),
+        });
         return;
       }
-      const confirmed = window.confirm(
-        `Are you sure you want to permanently delete page '/${slug}'?`
-      );
-      if (!confirmed) return;
 
-      try {
-        await deletePageUseCase.execute({ id: pageId, slug });
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "Failed to delete page.");
-      }
+      setConfirmState({
+        isOpen: true,
+        title: "Delete Dynamic Page",
+        message: `Are you sure you want to permanently delete page '/${slug}'?\n\nThis will remove the route and unpublish all content.`,
+        confirmLabel: "Delete Page",
+        isDestructive: true,
+        onConfirm: async () => {
+          try {
+            await deletePageUseCase.execute({ id: pageId, slug });
+            setConfirmState(null);
+          } catch (err) {
+            setConfirmState({
+              isOpen: true,
+              title: "Error Deleting Page",
+              message: err instanceof Error ? err.message : "Failed to delete page.",
+              confirmLabel: "Close",
+              isDestructive: false,
+              onConfirm: () => setConfirmState(null),
+            });
+          }
+        },
+      });
     },
     [deletePageUseCase]
   );
@@ -383,8 +411,11 @@ export function useDashboardShell(): DashboardShellViewModel {
     async (id: string, publicId: string) => {
       try {
         await deleteMediaUseCase.execute({ id, publicId });
+        notificationService.success(`Media asset ${publicId} deleted successfully.`);
       } catch (err) {
-        alert(err instanceof Error ? err.message : "Failed to delete media asset.");
+        notificationService.error(
+          err instanceof Error ? err.message : "Failed to delete media asset."
+        );
       }
     },
     [deleteMediaUseCase]
@@ -396,24 +427,38 @@ export function useDashboardShell(): DashboardShellViewModel {
       try {
         await updateContactStatusUseCase.execute({ id, isRead: !currentStatus });
       } catch (err) {
-        alert(err instanceof Error ? err.message : "Failed to update inquiry status.");
+        notificationService.error(
+          err instanceof Error ? err.message : "Failed to update inquiry status."
+        );
       }
     },
     [updateContactStatusUseCase]
   );
 
   const handleDeleteContact = useCallback(
-    async (id: string) => {
-      const confirmed = window.confirm(
-        "Are you sure you want to permanently delete this inquiry submission?"
-      );
-      if (!confirmed) return;
-
-      try {
-        await deleteContactSubmissionUseCase.execute({ id });
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "Failed to delete inquiry.");
-      }
+    (id: string) => {
+      setConfirmState({
+        isOpen: true,
+        title: "Delete Contact Submission",
+        message: "Are you sure you want to permanently delete this inquiry submission?",
+        confirmLabel: "Delete Inquiry",
+        isDestructive: true,
+        onConfirm: async () => {
+          try {
+            await deleteContactSubmissionUseCase.execute({ id });
+            setConfirmState(null);
+          } catch (err) {
+            setConfirmState({
+              isOpen: true,
+              title: "Error Deleting Inquiry",
+              message: err instanceof Error ? err.message : "Failed to delete inquiry.",
+              confirmLabel: "Close",
+              isDestructive: false,
+              onConfirm: () => setConfirmState(null),
+            });
+          }
+        },
+      });
     },
     [deleteContactSubmissionUseCase]
   );
@@ -465,6 +510,10 @@ export function useDashboardShell(): DashboardShellViewModel {
     isCollapsed,
     toggleSidebarCollapsed,
     handleLogout: logout,
+
+    // Confirmation
+    confirmState,
+    closeConfirm,
 
     // Modals
     isPageModalOpen,

@@ -27,7 +27,7 @@ export interface ContactsTabProps {
     isRead?: boolean
   ) => MenuItemAction[];
   readonly onToggleRead: (contactId: string, currentStatus: boolean) => Promise<void>;
-  readonly onDeleteContact: (contactId: string) => Promise<void>;
+  readonly onDeleteContact: (contactId: string) => void | Promise<void>;
 }
 
 type FilterStatus = "all" | "unread";

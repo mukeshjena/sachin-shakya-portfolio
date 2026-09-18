@@ -17,9 +17,13 @@ export interface AuthorizedEmailsViewModel {
   readonly newEmail: string;
   readonly inputError: string | null;
   readonly feedbackMessage: FeedbackMessage | null;
+  readonly emailToDelete: string | null;
   readonly handleNewEmailChange: (value: string) => void;
   readonly handleNewEmailBlur: () => void;
   readonly handleAddEmail: (e: React.FormEvent) => Promise<void>;
   readonly handleToggleStatus: (email: string, currentEnabled: boolean) => Promise<void>;
-  readonly handleRemoveEmail: (email: string) => Promise<void>;
+  readonly handleRemoveEmail: (email: string) => void | Promise<void>;
+  readonly promptRemoveEmail: (email: string) => void;
+  readonly cancelRemoveEmail: () => void;
+  readonly confirmRemoveEmail: () => Promise<void>;
 }

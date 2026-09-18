@@ -1,6 +1,14 @@
 // presentation/admin/content/sections/SectionEditorModal.types.ts
 // Type contracts for the section configuration modal supporting full type-aware editing.
 
+import type { CapabilityCardItem } from "../../../sections/capabilities/constants/capabilities.constants";
+import type {
+  AwardItem,
+  CertificationItem,
+  EducationItem,
+} from "../../../sections/credentials/constants/credentials.constants";
+import type { ExperienceRole } from "../../../sections/experience/constants/experience.constants";
+
 export interface SectionEditorFormData {
   readonly title: string;
   readonly type: string;
@@ -36,6 +44,12 @@ export interface SectionEditorFormData {
   readonly targetSavings?: string;
   readonly mttrImprovement?: string;
   readonly fleetManaged?: string;
+  // Deep Content Editors (Experience, Capabilities, Credentials)
+  readonly roles?: readonly ExperienceRole[];
+  readonly cards?: readonly CapabilityCardItem[];
+  readonly certifications?: readonly CertificationItem[];
+  readonly education?: readonly EducationItem[];
+  readonly awards?: readonly AwardItem[];
 }
 
 export interface SectionEditTarget {

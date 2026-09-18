@@ -58,21 +58,20 @@ export function PromoPopupModal() {
         </button>
 
         {/* Left Column: Sachin's Portrait & Verification Telemetry (Desktop Only) */}
-        <div className="hidden md:flex flex-col justify-between w-5/12 relative overflow-hidden bg-[var(--ink-900)] border-r border-[var(--line)] rounded-l-2xl min-h-[480px]">
+        <div className="hidden md:flex flex-col justify-end w-5/12 relative overflow-hidden bg-[#06121a] border-r border-[var(--line)] rounded-l-2xl min-h-[480px]">
           {/* Background Portrait */}
           <img
             src="/assets/sachin-two.png"
             alt="Sachin Shakya — Technical Lead — CloudOps"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink-900)] via-[var(--ink-900)]/40 to-[var(--ink-900)]/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06121a] via-[#06121a]/30 to-transparent pointer-events-none" />
 
-          {/* Bottom Telemetry Card Overlay */}
-          <div className="relative z-10 p-6">
-            <div className="p-3.5 rounded-xl bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)] space-y-1">
+          {/* Pinned Bottom Telemetry Card Overlay */}
+          <div className="relative z-10 p-6 mt-auto">
+            <div className="p-3.5 rounded-xl bg-[#06121a]/85 backdrop-blur-md border border-white/10 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-[var(--paper)]">Sachin Shakya</span>
-                <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
+                <span className="text-sm font-bold text-white">Sachin Shakya</span>
               </div>
               <div className="text-[11px] font-mono text-[var(--cyan)]">
                 Technical Lead — CloudOps

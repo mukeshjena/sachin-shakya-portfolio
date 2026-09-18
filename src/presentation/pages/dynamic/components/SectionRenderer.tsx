@@ -24,13 +24,13 @@ export function SectionRenderer({ section }: SectionRendererProps) {
       return <TelemetrySection />;
 
     case "experience":
-      return <ExperienceSection />;
+      return <ExperienceSection content={section.content} />;
 
     case "capabilities":
-      return <CapabilitiesSection />;
+      return <CapabilitiesSection content={section.content} />;
 
     case "credentials":
-      return <CredentialsSection />;
+      return <CredentialsSection content={section.content} />;
 
     case "contact":
       return <ContactSection />;

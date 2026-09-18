@@ -5,4 +5,5 @@ import type { ReactNode } from "react";
 
 export interface AppLayoutProps {
   readonly children: ReactNode;
+  readonly hidePublicChrome?: boolean;
 }

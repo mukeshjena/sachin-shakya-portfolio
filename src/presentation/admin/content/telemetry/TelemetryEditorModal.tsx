@@ -38,9 +38,9 @@ export const TelemetryEditorModal: React.FC<TelemetryEditorModalProps> = (props)
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-[var(--ink-850)] border border-[var(--line)] rounded-2xl overflow-hidden z-10">
+      <div className="relative w-full max-w-2xl h-[85vh] max-h-[85vh] flex flex-col bg-[var(--ink-850)] border border-[var(--line)] rounded-2xl overflow-hidden z-10">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--line-soft)] bg-[var(--ink-900)]/80">
+        <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-[var(--line-soft)] bg-[var(--ink-900)]/80">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)]">
               <IoTrendingUpOutline className="w-4 h-4" />
@@ -68,7 +68,11 @@ export const TelemetryEditorModal: React.FC<TelemetryEditorModalProps> = (props)
         </div>
 
         {/* Scrollable Form Body */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
+        <form
+          id="telemetry-form"
+          onSubmit={handleSubmit}
+          className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6"
+        >
           {errorMessage && (
             <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono">
               {errorMessage}
@@ -163,7 +167,13 @@ export const TelemetryEditorModal: React.FC<TelemetryEditorModalProps> = (props)
               <span className="text-[11px] font-mono text-[var(--mist-dim)]">12 data points</span>
             </div>
 
-            <div className="space-y-2 border border-[var(--line-soft)] rounded-xl p-3 bg-[var(--ink-900)]/40 max-h-60 overflow-y-auto">
+            <div className="space-y-2 border border-[var(--line-soft)] rounded-xl p-3 bg-[var(--ink-900)]/40">
+              <div className="grid grid-cols-12 gap-2 items-center text-[10px] uppercase font-mono tracking-wider text-[var(--mist-dim)] pb-1 border-b border-[var(--line-soft)] px-1.5">
+                <div className="col-span-2">Month</div>
+                <div className="col-span-3">Baseline ($K)</div>
+                <div className="col-span-3">Optimized ($K)</div>
+                <div className="col-span-4">Milestone</div>
+              </div>
               {formData.points.map((pt, idx) => (
                 <div
                   key={pt.month}
@@ -206,25 +216,26 @@ export const TelemetryEditorModal: React.FC<TelemetryEditorModalProps> = (props)
               ))}
             </div>
           </div>
-
-          {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--line-soft)]">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-transparent border border-[var(--line)] text-xs font-medium text-[var(--mist)] hover:text-[var(--paper)] hover:border-[var(--line)] transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="px-5 py-2 rounded-xl bg-[var(--amber)] text-[var(--ink-950)] text-xs font-semibold hover:bg-[var(--amber-deep)] transition-colors disabled:opacity-50"
-            >
-              {isSaving ? "Saving Metrics..." : "Save Telemetry Data"}
-            </button>
-          </div>
         </form>
+
+        {/* Pinned Footer Actions */}
+        <div className="shrink-0 flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--line-soft)] bg-[var(--ink-900)]/90">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl bg-transparent border border-[var(--line)] text-xs font-medium text-[var(--mist)] hover:text-[var(--paper)] hover:border-[var(--line)] transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            form="telemetry-form"
+            disabled={isSaving}
+            className="px-5 py-2 rounded-xl bg-[var(--amber)] text-[var(--ink-950)] text-xs font-semibold hover:bg-[var(--amber-deep)] transition-colors disabled:opacity-50 cursor-pointer"
+          >
+            {isSaving ? "Saving Metrics..." : "Save Telemetry Data"}
+          </button>
+        </div>
       </div>
     </div>
   );

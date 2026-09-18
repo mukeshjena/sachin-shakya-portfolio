@@ -7,6 +7,7 @@ import { FaAws } from "react-icons/fa6";
 import { IoSchoolOutline, IoShieldCheckmarkOutline, IoTrophyOutline } from "react-icons/io5";
 import { VscAzure } from "react-icons/vsc";
 import { useCredentialsSectionLogic } from "./CredentialsSection.hooks";
+import type { CredentialsSectionProps } from "./CredentialsSection.types";
 import {
   CREDENTIALS_ANIMATION_VARIANTS,
   CREDENTIALS_COPY,
@@ -27,8 +28,9 @@ function getCertIcon(code: string) {
   return <VscAzure className="w-4 h-4 text-[#0078d4] shrink-0" aria-hidden="true" />;
 }
 
-export function CredentialsSection() {
-  const { certifications, education, awards } = useCredentialsSectionLogic();
+export function CredentialsSection({ content }: CredentialsSectionProps) {
+  const { certifications, education, awards, headline, subheadline } =
+    useCredentialsSectionLogic(content);
 
   return (
     <section
@@ -47,13 +49,13 @@ export function CredentialsSection() {
         >
           <motion.div variants={CREDENTIALS_ANIMATION_VARIANTS.item}>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--paper)] leading-tight">
-              {CREDENTIALS_COPY.headline}
+              {headline}
             </h2>
           </motion.div>
 
           <motion.div variants={CREDENTIALS_ANIMATION_VARIANTS.item}>
             <p className="text-sm sm:text-base text-[var(--mist)] leading-relaxed font-sans">
-              {CREDENTIALS_COPY.subheadline}
+              {subheadline}
             </p>
           </motion.div>
         </motion.div>

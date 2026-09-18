@@ -20,7 +20,7 @@ function App() {
     <AppProviders>
       <PromoPopupModal />
       <PwaInstallPrompt />
-      <AppLayout>
+      <AppLayout hidePublicChrome={isAdminRoute}>
         {showPipelineTest ? (
           <div className="p-6 md:p-12 flex items-center justify-center">
             <div className="w-full max-w-2xl">

@@ -135,7 +135,7 @@ export function useContactSectionLogic(): ContactSectionState {
     linkedinUrl,
     locationUrl: "https://maps.google.com/?q=Faridabad,+Haryana+121005,+India",
     resumePdfUrl: siteSettings?.resumePdfUrl || "/Sachin_Shakya_Resume.pdf",
-    photoUrl: siteSettings?.avatarUrl || "/assets/sachin-three.png",
+    photoUrl: "/assets/sachin-three.png",
     fullName: siteSettings?.fullName || "Sachin Shakya",
     headline: siteSettings?.headline || "Technical Lead — CloudOps",
   };

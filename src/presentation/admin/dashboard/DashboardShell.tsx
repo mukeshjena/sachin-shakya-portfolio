@@ -17,6 +17,7 @@ import {
   IoOpenOutline,
   IoSettingsOutline,
 } from "react-icons/io5";
+import { ConfirmDialog } from "../../shared/confirm-dialog/ConfirmDialog";
 import { ThemeToggle } from "../../theme/toggle/ThemeToggle";
 import { PageEditorModal } from "../content/pages/PageEditorModal";
 import { SectionEditorModal } from "../content/sections/SectionEditorModal";
@@ -51,6 +52,10 @@ export function DashboardShell() {
     isCollapsed,
     toggleSidebarCollapsed,
     handleLogout,
+
+    // Confirmation
+    confirmState,
+    closeConfirm,
 
     // Modals & Row Actions
     isPageModalOpen,
@@ -393,6 +398,21 @@ export function DashboardShell() {
       <TelemetryEditorModal isOpen={isTelemetryModalOpen} onClose={closeTelemetryModal} />
 
       <MediaPicker isOpen={isMediaPickerOpen} onClose={closeMediaPicker} />
+
+      {/* Confirmation Modal */}
+      {confirmState && (
+        <ConfirmDialog
+          isOpen={confirmState.isOpen}
+          title={confirmState.title}
+          message={confirmState.message}
+          confirmLabel={confirmState.confirmLabel}
+          cancelLabel={confirmState.cancelLabel}
+          isDestructive={confirmState.isDestructive}
+          isLoading={confirmState.isLoading}
+          onConfirm={confirmState.onConfirm}
+          onCancel={closeConfirm}
+        />
+      )}
     </div>
   );
 }

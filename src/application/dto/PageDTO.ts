@@ -15,6 +15,11 @@ export interface PageDTO {
   isPublished: boolean;
   showInHeader: boolean;
   showInFooter: boolean;
+  subtitle?: string;
+  richContent?: string;
+  content?: string;
+  category?: string;
+  order?: number;
   seoTitle: string;
   seoDescription: string;
   seoImage: string;
@@ -32,6 +37,11 @@ export function toPageDTO(page: Page): PageDTO {
     isPublished: page.isPublished,
     showInHeader: page.showInHeader,
     showInFooter: page.showInFooter,
+    subtitle: page.subtitle ?? "",
+    richContent: page.richContent ?? page.content ?? "",
+    content: page.content ?? page.richContent ?? "",
+    category: page.category ?? "",
+    order: page.order ?? 0,
     seoTitle: page.seoTitle ?? page.title,
     seoDescription: page.seoDescription ?? "",
     seoImage: page.seoImage ?? "",

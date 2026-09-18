@@ -7,8 +7,14 @@ import type {
   EducationItem,
 } from "./constants/credentials.constants";
 
+export interface CredentialsSectionProps {
+  readonly content?: Record<string, unknown>;
+}
+
 export interface CredentialsSectionState {
   readonly certifications: readonly CertificationItem[];
   readonly education: readonly EducationItem[];
   readonly awards: readonly AwardItem[];
+  readonly headline?: string;
+  readonly subheadline?: string;
 }

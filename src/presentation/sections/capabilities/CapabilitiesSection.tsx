@@ -5,13 +5,15 @@
 import { motion } from "framer-motion";
 import { TechIcon } from "../../shared/tech-icons/TechIcon";
 import { useCapabilitiesSectionLogic } from "./CapabilitiesSection.hooks";
+import type { CapabilitiesSectionProps } from "./CapabilitiesSection.types";
 import {
   CAPABILITIES_ANIMATION_VARIANTS,
   CAPABILITIES_COPY,
 } from "./constants/capabilities.constants";
 
-export function CapabilitiesSection() {
-  const { selectedCategory, setSelectedCategory, filteredCards } = useCapabilitiesSectionLogic();
+export function CapabilitiesSection({ content }: CapabilitiesSectionProps) {
+  const { selectedCategory, setSelectedCategory, filteredCards, headline, subheadline } =
+    useCapabilitiesSectionLogic(content);
 
   return (
     <section
@@ -30,13 +32,13 @@ export function CapabilitiesSection() {
         >
           <motion.div variants={CAPABILITIES_ANIMATION_VARIANTS.item}>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--paper)] leading-tight">
-              {CAPABILITIES_COPY.headline}
+              {headline}
             </h2>
           </motion.div>
 
           <motion.div variants={CAPABILITIES_ANIMATION_VARIANTS.item}>
             <p className="text-sm sm:text-base text-[var(--mist)] leading-relaxed font-sans">
-              {CAPABILITIES_COPY.subheadline}
+              {subheadline}
             </p>
           </motion.div>
         </motion.div>
