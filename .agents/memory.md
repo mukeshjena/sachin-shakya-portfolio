@@ -749,13 +749,34 @@
   - `npx tsx scripts/test-hero-e2e.ts` → ✅ 100% passed.
   - `npx tsx scripts/test-shell-e2e.ts` → ✅ 100% passed.
 
+---
 
+## 2026-09-18 — Step 15b: 21st.dev Relativistic Blackhole Hero, Executive Overview & Shell Refinements (Completed ✅)
 
+**Branch:** `step/15b-blackhole-hero-and-shell-refinements` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `b4fe920 feat(step-15b): 21st.dev relativistic blackhole hero, executive overview, iOS 27 dock, and footer refinements`
 
+**What was done:**
+1. **21st.dev Relativistic Blackhole Hero Section (`src/presentation/hero/`):**
+   - Implemented pure WebGL shader-based raymarched blackhole accretion disk directly recreating the 21st.dev (Yura Oak) architecture.
+   - Fully calculated Kerr/Schwarzschild geodesic light bending (`acc = -1.5 * h2 * pos / (r2 * r2 * r)`), Keplerian accretion disk shear, Shakura-Sunyaev thermal gradient, dual-clock turbulence crossfade (preventing moiré), relativistic Doppler beaming, and gravitational Einstein ring arcs over & under the event horizon.
+   - Multi-pass postprocessing pipeline: Temporal blend (EMA antialiasing), luminance bloom extraction & downsampling, separable Gaussian blur passes, ACES tone-mapping, and directional scrims (`left` for desktop, `top` for mobile).
+   - Full viewport `min-h-[100dvh] h-[100dvh]` coverage across both mobile and desktop.
+   - Responsive camera parameters: `desktop: focus: [0.72, 0.46]` with left scrim; `mobile: focus: [0.5, 0.76]` with top scrim so the black hole is prominently visible in the lower half and copy sits cleanly at the top.
+2. **Preserved Executive Overview Section (`src/presentation/overview/`):**
+   - Repurposed the previous telemetry hero section into a dedicated section directly below the blackhole hero.
+   - Preserved Sachin Shakya's verified identity portrait card, $170K/mo FinOps savings, 40% MTTR reduction, 2,000+ managed cloud resources, multi-cloud tech stack badges, and résumé PDF download button.
+3. **iOS 27 Inspired Mobile Bottom Nav (`src/presentation/shell/bottom-nav/`):**
+   - Stripped text names/labels from mobile tabs (icon only).
+   - Upgraded to a floating liquid-glass pill dock (`rounded-full bg-[var(--ink-900)]/85 backdrop-blur-2xl border border-[var(--line)] px-3 py-2`).
+   - Circular tab buttons (`w-11 h-11 rounded-full flex items-center justify-center`) with Framer Motion spring active bubble indicator (`layoutId="activeMobileTabIndicator"`).
+4. **Footer Social Icons Polish (`src/presentation/shell/footer/`):**
+   - Removed text labels from social link buttons (icon only).
+   - Styled as modern circular rounded-full buttons (`w-10 h-10 rounded-full bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--cyan)] flex items-center justify-center`) with accessible `aria-label` and `title`.
 
-
-
-
-
-
-
+**Verification:**
+- `npx biome check .` → ✅ 129 files passed, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ 0 type errors (strict mode).
+- `npx vite build --logLevel silent` → ✅ Production build succeeded in 840ms.
+- Pre-commit automated quality gate passed cleanly on git commit.
+- Sequential branch promotion completed: `step/15b...` → `release/v1.0.0` → `main` → `develop`.
