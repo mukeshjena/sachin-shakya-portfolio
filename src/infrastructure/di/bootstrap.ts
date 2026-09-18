@@ -10,17 +10,21 @@ import { GetHeaderNavPagesUseCase } from "../../application/use-cases/pages/nav/
 import { GetPageSectionsUseCase } from "../../application/use-cases/pages/query/GetPageSectionsUseCase";
 import { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages/query/GetPublishedPageBySlugUseCase";
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
+import { GetPromoPopupUseCase } from "../../application/use-cases/promo/GetPromoPopupUseCase";
+import { SubmitPromoInquiryUseCase } from "../../application/use-cases/promo/SubmitPromoInquiryUseCase";
 import { GetSiteSettingsUseCase } from "../../application/use-cases/settings/GetSiteSettingsUseCase";
 import { SubscribeSiteSettingsUseCase } from "../../application/use-cases/settings/SubscribeSiteSettingsUseCase";
 import type { IContactRepository } from "../../domain/repositories/admin/IContactRepository";
 import type { IEmailSender } from "../../domain/repositories/admin/IEmailSender";
 import type { IPageRepository } from "../../domain/repositories/content/IPageRepository";
 import type { ISectionRepository } from "../../domain/repositories/content/ISectionRepository";
+import type { IPromoPopupRepository } from "../../domain/repositories/promo/IPromoPopupRepository";
 import type { ISiteSettingsRepository } from "../../domain/repositories/settings/ISiteSettingsRepository";
 import { CloudinaryMediaUploader } from "../cloudinary/CloudinaryMediaUploader";
 import { EmailApiSender } from "../email/EmailApiSender";
 import { getDb } from "../firebase/firebaseClient";
 import { FirestoreContactRepository } from "../repositories/admin/FirestoreContactRepository";
+import { FirestorePromoPopupRepository } from "../repositories/admin/FirestorePromoPopupRepository";
 import { FirestorePageRepository } from "../repositories/content/FirestorePageRepository";
 import { FirestoreSectionRepository } from "../repositories/content/FirestoreSectionRepository";
 import { FirestoreSiteSettingsRepository } from "../repositories/settings/FirestoreSiteSettingsRepository";
@@ -68,6 +72,10 @@ export function bootstrapContainer(): void {
   container.register(
     DI_TOKENS.SiteSettingsRepository,
     singleton(() => new FirestoreSiteSettingsRepository())
+  );
+  container.register(
+    DI_TOKENS.PromoPopupRepository,
+    singleton(() => new FirestorePromoPopupRepository())
   );
 
   // ── Use-cases (Step 11, 13, 14 & 17) ───────────────────────────────────────
@@ -136,6 +144,25 @@ export function bootstrapContainer(): void {
     singleton(
       () =>
         new SubmitContactFormUseCase(
+          container.resolve<IContactRepository>(DI_TOKENS.ContactRepository),
+          container.resolve<IEmailSender>(DI_TOKENS.EmailSender)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.GetPromoPopup,
+    singleton(
+      () =>
+        new GetPromoPopupUseCase(
+          container.resolve<IPromoPopupRepository>(DI_TOKENS.PromoPopupRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.SubmitPromoInquiry,
+    singleton(
+      () =>
+        new SubmitPromoInquiryUseCase(
           container.resolve<IContactRepository>(DI_TOKENS.ContactRepository),
           container.resolve<IEmailSender>(DI_TOKENS.EmailSender)
         )

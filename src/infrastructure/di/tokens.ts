@@ -19,6 +19,7 @@ export const DI_TOKENS = {
   ContactRepository: Symbol("IContactRepository"),
   EmailSender: Symbol("IEmailSender"),
   MediaUploader: Symbol("IMediaUploader"),
+  PromoPopupRepository: Symbol("IPromoPopupRepository"),
   SiteSettingsRepository: Symbol("ISiteSettingsRepository"),
 
   // ── Application-layer use-cases ───────────────────────────────────────────
@@ -32,6 +33,7 @@ export const DI_TOKENS = {
   GetSiteSettings: Symbol("GetSiteSettings"),
   SubscribeSiteSettings: Symbol("SubscribeSiteSettings"),
   SubmitContactForm: Symbol("SubmitContactForm"),
+  GetPromoPopup: Symbol("GetPromoPopup"),
   SubmitPromoInquiry: Symbol("SubmitPromoInquiry"),
   RequestAccessCode: Symbol("RequestAccessCode"),
   VerifyAccessCode: Symbol("VerifyAccessCode"),

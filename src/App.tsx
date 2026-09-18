@@ -8,6 +8,7 @@ import { CustomCursor } from "./presentation/hero/cursor/CustomCursor";
 import { ExecutiveOverview } from "./presentation/overview/ExecutiveOverview";
 import { DynamicPage } from "./presentation/pages/dynamic/DynamicPage";
 import { PipelineTest } from "./presentation/pages/pipeline-test/PipelineTest";
+import { PromoPopupModal } from "./presentation/promo/PromoPopupModal";
 import { AppProviders } from "./presentation/providers/AppProviders";
 import { CapabilitiesSection } from "./presentation/sections/capabilities/CapabilitiesSection";
 import { ContactSection } from "./presentation/sections/contact/ContactSection";
@@ -22,6 +23,7 @@ function App() {
   return (
     <AppProviders>
       <CustomCursor />
+      <PromoPopupModal />
       <AppLayout>
         {showPipelineTest ? (
           <div className="p-6 md:p-12 flex items-center justify-center">
