@@ -35,6 +35,7 @@ import { FirestorePromoPopupRepository } from "../repositories/admin/FirestorePr
 import { FirestorePageRepository } from "../repositories/content/FirestorePageRepository";
 import { FirestoreSectionRepository } from "../repositories/content/FirestoreSectionRepository";
 import { FirestoreSiteSettingsRepository } from "../repositories/settings/FirestoreSiteSettingsRepository";
+import { FirestoreRealtimeSyncService } from "../services/realtime/FirestoreRealtimeSyncService";
 import { getEnv } from "../system/env";
 import { container, singleton } from "./container";
 import { DI_TOKENS } from "./tokens";
@@ -48,6 +49,10 @@ export function bootstrapContainer(): void {
   // ── System / Infrastructure ────────────────────────────────────────────────
   container.register(DI_TOKENS.FirestoreDb, () => getDb());
   container.register(DI_TOKENS.EnvConfig, () => getEnv());
+  container.register(
+    DI_TOKENS.RealtimeSyncService,
+    singleton(() => new FirestoreRealtimeSyncService())
+  );
   container.register(
     DI_TOKENS.MediaUploader,
     singleton(() => new CloudinaryMediaUploader())

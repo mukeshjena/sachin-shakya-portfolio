@@ -7,12 +7,11 @@ import {
   IoArrowBackOutline,
   IoArrowForwardOutline,
   IoKeyOutline,
-  IoLogOutOutline,
   IoMailOutline,
   IoRefreshOutline,
   IoShieldCheckmarkOutline,
 } from "react-icons/io5";
-import { AuthorizedEmailsManager } from "../authorization/AuthorizedEmailsManager";
+import { DashboardShell } from "../dashboard/DashboardShell";
 import { useAdminLogin } from "./AdminLogin.hooks";
 import { OtpInput } from "./components/OtpInput";
 import { OTP_COPY } from "./constants/otp.constants";
@@ -25,7 +24,6 @@ export function AdminLogin() {
     cooldown,
     isLoading,
     errorMessage,
-    currentUserEmail,
     handleEmailChange,
     handleEmailSubmit,
     handleOtpChange,
@@ -33,44 +31,10 @@ export function AdminLogin() {
     handleOtpSubmit,
     handleResendCode,
     handleChangeEmail,
-    handleLogout,
   } = useAdminLogin();
 
   if (step === "authenticated") {
-    return (
-      <div className="min-h-[85vh] py-10 px-4 sm:px-6">
-        <div className="w-full max-w-3xl mx-auto space-y-6 animate-fade-in">
-          {/* Top Session Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-[var(--ink-850)] border border-[var(--line)] rounded-xl">
-            <div className="flex items-center gap-2.5 text-xs font-mono text-[var(--live)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--live)] animate-pulse" />
-              <span className="uppercase tracking-wider">
-                AUTHENTICATED &bull; {currentUserEmail || "ADMIN"}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <a
-                href="/#top"
-                className="text-xs font-mono text-[var(--mist-dim)] hover:text-[var(--paper)] transition-colors"
-              >
-                Return to Site
-              </a>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--ink-800)] hover:bg-[var(--ink-700)] text-xs font-mono text-[var(--mist)] hover:text-red-400 border border-[var(--line)] transition-colors cursor-pointer"
-              >
-                <IoLogOutOutline className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Logout</span>
-              </button>
-            </div>
-          </div>
-
-          <AuthorizedEmailsManager />
-        </div>
-      </div>
-    );
+    return <DashboardShell />;
   }
 
   return (

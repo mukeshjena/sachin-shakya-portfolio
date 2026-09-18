@@ -42,6 +42,7 @@ export const DI_TOKENS = {
   RemoveAdminEmail: Symbol("RemoveAdminEmail"),
 
   // ── System / Infrastructure ──────────────────────────────────────────────
+  RealtimeSyncService: Symbol("IRealtimeSyncService"),
   FirestoreDb: Symbol("FirestoreDb"),
   EnvConfig: Symbol("EnvConfig"),
 
