@@ -9,6 +9,8 @@
 # Fix all issues before committing.
 # ─────────────────────────────────────────────────────────────────────────────
 
+export NODE_OPTIONS="--max-old-space-size=4096"
+
 BOLD='\033[1m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'

@@ -1563,6 +1563,54 @@
 - `npm run build` → ✅ production build passed cleanly in 614ms
 - Branch promotion: `step/32-admin-cms-parity-polish` → `release/v1.0.0` → `main` → `develop`
 
+---
+
+## 2026-09-18 — Step 33: Animated Dark Gradient Vintage Grid, Transparent Light-Mode Hero Header, Contact Portrait Overhaul & Professional Identity (Completed ✅)
+
+**Branch:** `step/33-vintage-bg-professional-identity` → merged sequentially into `release/v1.0.0` → `main` → `develop`
+**Commit:** `68507a3 feat(step-33): animated dark gradient vintage grid, transparent header hero, contact portrait overhaul, and professional identity`
+
+**What was done:**
+1. **Animated Dark Gradient & Vintage Grid Background:**
+   - In `src/index.css`, replaced flat pitch-black background with dynamic animated gradient `@keyframes vintageGradientShift` moving between rich petrol-navy tones (`#06121a`, `#08171f`, `#0b1d27`, `#07151e`).
+   - Layered a fine vintage hairline drafting grid (`.vintage-grid-canvas`) with subtle ambient opacity and radial vignette mask (`.vintage-vignette`).
+   - Integrated into `AppLayout.tsx` as a fixed backdrop beneath the primary content layers.
+   - Cleared opaque backgrounds on content sections (`ExecutiveOverview`, `TelemetrySection`, `ExperienceSection`, `CapabilitiesSection`, `CredentialsSection`, `DynamicPage`) to allow the animated vintage grid to seamlessly flow through the application.
+
+2. **Light Mode Header Hero Transparency:**
+   - In `Header.tsx`, dynamically set `bg-transparent border-transparent backdrop-blur-none` with high-contrast text (`text-white`, `text-zinc-300`, `border-white/20`) when at the top of the page (`!isScrolled`), blending directly into the dark WebGL blackhole hero canvas in both light and dark themes.
+   - Smoothly transitions to frosted glass (`border-[var(--line)] bg-[var(--ink-900)]/90 backdrop-blur-xl`) with theme-adaptive styling upon scrolling down (`isScrolled`).
+   - Added scroll position awareness to `MobileHeader.hooks.ts` and `MobileHeader.tsx`, applying transparent background over hero and frosted glass when scrolled.
+
+3. **Contact Section Portrait Redesign:**
+   - In `ContactSection.tsx`, removed the outer wrapper card completely.
+   - Restructured the portrait into a single full-bleed `rounded-2xl` card with an integrated vintage bottom gradient overlay housing Sachin's name, role, and Cupertino outline action buttons (Email, Phone, LinkedIn, Location, CV download).
+   - Configured `min-h-[480px] lg:min-h-[560px]` and `flex-1 flex flex-col justify-end` to equalize the height seamlessly with the right-hand contact form card.
+
+4. **Professional Terminology & Sci-Fi Words Elimination:**
+   - **Public Pages & Copy:**
+     - Replaced "Mission Control" with "Professional Portfolio" / "Admin Console".
+     - Replaced "Telemetry" with "Architecture & Metrics" (or "Metrics" on mobile tabs).
+     - Replaced "Impact" with "Overview" / "Executive Overview".
+     - Replaced "Vector", "Transmission", "Transmitting...", "Signal" with "Explore Architecture", "Sending Message...", "Message Received".
+     - Replaced mobile "Mission" tab with "Home".
+     - Replaced "404 ACCRETION HORIZON / EVENT HORIZON REACHED" in `NotFoundTelemetry.tsx` with "PAGE NOT FOUND // CODE 404".
+   - **Contact Form Sender:**
+     - In `worker/index.ts`, updated `fromName` from `"Sachin Shakya — Mission Control"` to `"Sachin Shakya — Consultation Desk"`.
+   - **SEO & Schema.org JSON-LD:**
+     - In `src/infrastructure/seo/JsonLdGenerator.ts`, replaced sci-fi descriptions with "Cloud Architecture & DevOps Professional Portfolio", "Observability & Monitoring", and enterprise executive descriptors.
+   - **Seed Content:**
+     - In `scripts/seed/seed-content.ts`, scrubbed all sci-fi descriptors ("Mission Control Hero", "Command Center Telemetry", "Return to Mission Control").
+   - **Admin CMS Dashboard & Navigation:**
+     - In `DashboardShell.hooks.ts`, `ContentTab.tsx`, and `dashboard.constants.ts`, renamed sections to "Hero & Introduction", "Architecture & Performance Metrics", "Executive Overview & Achievements", "Work Experience & History", and "Technical Capabilities & Skills".
+     - Preserved Firestore collection IDs (`telemetry`, `impact`, `experience`, etc.) for complete backward compatibility.
+
+**Verification:**
+- `npx biome check .` → ✅ 292 files checked, 0 errors
+- `npx tsc -b` → ✅ strict typecheck passed with 0 errors
+- `npm run build` → ✅ production build passed cleanly in 594ms
+- Branch promotion: `step/33-vintage-bg-professional-identity` → `release/v1.0.0` → `main` → `develop`
+
 
 
 
