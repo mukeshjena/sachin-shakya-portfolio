@@ -14,7 +14,7 @@ const EMPTY_DIGITS = Array.from({ length: OTP_CONFIG.CODE_LENGTH }, () => "");
 
 export function useAdminLogin(): AdminLoginViewModel {
   const requestAccessCode = useContainer<IRequestAccessCodeUseCase>(DI_TOKENS.RequestAccessCode);
-  const { login, isAuthenticated } = useAuth();
+  const { login, logout, user, isAuthenticated } = useAuth();
 
   const [step, setStep] = useState<AdminLoginStep>(() =>
     isAuthenticated ? "authenticated" : "email"
@@ -170,6 +170,7 @@ export function useAdminLogin(): AdminLoginViewModel {
     cooldown,
     isLoading,
     errorMessage,
+    currentUserEmail: user?.email || null,
     handleEmailChange,
     handleEmailSubmit,
     handleOtpChange,
@@ -177,5 +178,6 @@ export function useAdminLogin(): AdminLoginViewModel {
     handleOtpSubmit,
     handleResendCode,
     handleChangeEmail,
+    handleLogout: logout,
   };
 }

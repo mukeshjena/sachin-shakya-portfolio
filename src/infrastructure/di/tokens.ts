@@ -37,6 +37,9 @@ export const DI_TOKENS = {
   SubmitPromoInquiry: Symbol("SubmitPromoInquiry"),
   RequestAccessCode: Symbol("RequestAccessCode"),
   VerifyAccessCode: Symbol("VerifyAccessCode"),
+  GetAuthorizedEmails: Symbol("GetAuthorizedEmails"),
+  AddAdminEmail: Symbol("AddAdminEmail"),
+  RemoveAdminEmail: Symbol("RemoveAdminEmail"),
 
   // ── System / Infrastructure ──────────────────────────────────────────────
   FirestoreDb: Symbol("FirestoreDb"),

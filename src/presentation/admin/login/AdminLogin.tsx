@@ -6,12 +6,13 @@
 import {
   IoArrowBackOutline,
   IoArrowForwardOutline,
-  IoCheckmarkCircleOutline,
   IoKeyOutline,
+  IoLogOutOutline,
   IoMailOutline,
   IoRefreshOutline,
   IoShieldCheckmarkOutline,
 } from "react-icons/io5";
+import { AuthorizedEmailsManager } from "../authorization/AuthorizedEmailsManager";
 import { useAdminLogin } from "./AdminLogin.hooks";
 import { OtpInput } from "./components/OtpInput";
 import { OTP_COPY } from "./constants/otp.constants";
@@ -24,6 +25,7 @@ export function AdminLogin() {
     cooldown,
     isLoading,
     errorMessage,
+    currentUserEmail,
     handleEmailChange,
     handleEmailSubmit,
     handleOtpChange,
@@ -31,7 +33,45 @@ export function AdminLogin() {
     handleOtpSubmit,
     handleResendCode,
     handleChangeEmail,
+    handleLogout,
   } = useAdminLogin();
+
+  if (step === "authenticated") {
+    return (
+      <div className="min-h-[85vh] py-10 px-4 sm:px-6">
+        <div className="w-full max-w-3xl mx-auto space-y-6 animate-fade-in">
+          {/* Top Session Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-[var(--ink-850)] border border-[var(--line)] rounded-xl">
+            <div className="flex items-center gap-2.5 text-xs font-mono text-[var(--live)]">
+              <span className="w-2 h-2 rounded-full bg-[var(--live)] animate-pulse" />
+              <span className="uppercase tracking-wider">
+                AUTHENTICATED &bull; {currentUserEmail || "ADMIN"}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <a
+                href="/#top"
+                className="text-xs font-mono text-[var(--mist-dim)] hover:text-[var(--paper)] transition-colors"
+              >
+                Return to Site
+              </a>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--ink-800)] hover:bg-[var(--ink-700)] text-xs font-mono text-[var(--mist)] hover:text-red-400 border border-[var(--line)] transition-colors cursor-pointer"
+              >
+                <IoLogOutOutline className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+
+          <AuthorizedEmailsManager />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center p-4 sm:p-6">
@@ -162,35 +202,6 @@ export function AdminLogin() {
                     : OTP_COPY.RESEND_BUTTON}
                 </span>
               </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Authenticated State */}
-        {step === "authenticated" && (
-          <div className="py-6 text-center animate-fade-in">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[var(--live)]/10 border border-[var(--live)]/30 text-[var(--live)] mb-4">
-              <IoCheckmarkCircleOutline className="w-8 h-8" aria-hidden="true" />
-            </div>
-
-            <div className="inline-block px-3 py-1 rounded-full bg-[var(--ink-800)] border border-[var(--line)] text-[10px] font-mono uppercase tracking-widest text-[var(--live)] mb-2">
-              {OTP_COPY.SUCCESS_BADGE}
-            </div>
-
-            <h3 className="text-xl font-bold tracking-tight text-[var(--paper)]">
-              {OTP_COPY.SUCCESS_HEADING}
-            </h3>
-            <p className="mt-2 text-xs text-[var(--mist)] leading-relaxed">
-              {OTP_COPY.SUCCESS_DESC}
-            </p>
-
-            <div className="mt-6">
-              <a
-                href="/#top"
-                className="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-[var(--amber)] text-[var(--ink-900)] text-xs font-mono font-semibold tracking-wide hover:bg-[var(--amber-deep)] transition-colors"
-              >
-                Return to Mission Control
-              </a>
             </div>
           </div>
         )}

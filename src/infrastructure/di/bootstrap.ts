@@ -3,6 +3,9 @@
 // This is the ONLY file that imports both infrastructure classes and DI tokens together.
 // Import this once at app startup (main.tsx), before any component renders.
 
+import { AddAdminEmailUseCase } from "../../application/use-cases/admin-users/AddAdminEmailUseCase";
+import { GetAuthorizedEmailsUseCase } from "../../application/use-cases/admin-users/GetAuthorizedEmailsUseCase";
+import { RemoveAdminEmailUseCase } from "../../application/use-cases/admin-users/RemoveAdminEmailUseCase";
 import { RequestAccessCodeUseCase } from "../../application/use-cases/auth/RequestAccessCodeUseCase";
 import { VerifyAccessCodeUseCase } from "../../application/use-cases/auth/VerifyAccessCodeUseCase";
 import { SubmitContactFormUseCase } from "../../application/use-cases/contact/SubmitContactFormUseCase";
@@ -191,6 +194,33 @@ export function bootstrapContainer(): void {
     singleton(
       () =>
         new VerifyAccessCodeUseCase(
+          container.resolve<IAdminAccessRepository>(DI_TOKENS.AdminAccessRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.GetAuthorizedEmails,
+    singleton(
+      () =>
+        new GetAuthorizedEmailsUseCase(
+          container.resolve<IAdminAccessRepository>(DI_TOKENS.AdminAccessRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.AddAdminEmail,
+    singleton(
+      () =>
+        new AddAdminEmailUseCase(
+          container.resolve<IAdminAccessRepository>(DI_TOKENS.AdminAccessRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.RemoveAdminEmail,
+    singleton(
+      () =>
+        new RemoveAdminEmailUseCase(
           container.resolve<IAdminAccessRepository>(DI_TOKENS.AdminAccessRepository)
         )
     )
