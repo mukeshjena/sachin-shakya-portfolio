@@ -584,6 +584,53 @@
   - Production build: passed cleanly (`npm run build`).
   - E2E Clean Architecture verification: passed (`npx tsx scripts/test-pipeline-e2e.ts`).
 
+---
+
+## 2026-09-18 — Step 13: Global Providers (Theme, Auth, SiteConfig, Errors) (Completed ✅)
+
+**Branch:** `step/13-global-providers`
+**Commit:** `feat(step-13): global providers (theme, auth, site-config realtime, error boundary, toast)`
+
+**What was done:**
+- **Domain Layer (`src/domain/repositories/settings/`):**
+  - Created `ISiteSettingsRepository.ts`: Pure TypeScript contract for fetching, updating, and real-time subscribing to global site configuration.
+- **Application Layer (`src/application/use-cases/settings/`):**
+  - Created `GetSiteSettingsUseCase.ts`: Use-case for one-shot retrieval of site settings with domain fallbacks.
+  - Created `SubscribeSiteSettingsUseCase.ts`: Use-case for subscribing to live `onSnapshot` telemetry updates.
+- **Infrastructure Layer (`src/infrastructure/repositories/settings/`):**
+  - Created `FirestoreSiteSettingsRepository.ts`: Implemented `ISiteSettingsRepository` backed by Firestore's `onSnapshot(doc(db, "siteSettings", "global"))` with multi-tab persistent IndexedDB cache.
+  - Registered `SiteSettingsRepository`, `GetSiteSettings`, and `SubscribeSiteSettings` in `src/infrastructure/di/tokens.ts` and `src/infrastructure/di/bootstrap.ts`.
+- **Presentation Layer Providers:**
+  - **SiteConfig Provider (`src/presentation/providers/site-config/`):**
+    - `SiteConfigProvider.tsx`: Mounts real-time subscription via DI container use-case (`DI_TOKENS.SubscribeSiteSettings`). Admin updates reflect instantaneously across tabs without page reload.
+    - `siteConfigContext.ts` & `useSiteConfig.ts`: Context definition and consumer hook.
+    - `constants/siteConfig.constants.ts`: Complete fallback site settings for offline/uninitialized state.
+  - **Auth Provider (`src/presentation/providers/auth/`):**
+    - `AuthProvider.tsx`: Manages admin session state (`isAuthenticated`, `user`, `tokenExpiresAt`, `login`, `logout`). Stubbed in preparation for Step 20's OTP flow.
+    - `authContext.ts` & `useAuth.ts`: Context and consumer hook.
+  - **Error Boundary (`src/presentation/providers/errors/`):**
+    - `ErrorBoundary.tsx`: React error boundary preventing presentation runtime crashes.
+    - `ErrorBoundaryFallback.tsx`: Sci-fi instrument panel diagnostic interface (amber warning beacon, monospace telemetry, "Reboot Subsystem" action, zero shadows, zero emojis).
+    - `ErrorBoundary.types.ts`: Strongly-typed error boundary contracts.
+  - **Toast Primitive (`src/presentation/providers/toast/`):**
+    - `ToastProvider.tsx` & `toastContext.ts` & `useToast.ts`: Context, state queue, and consumer hook.
+    - Subfolder `components/`: `ToastContainer.tsx`, `ToastItem.tsx`, `ToastItem.types.ts` featuring flat, frosted glass design, 1px hairline borders (`border border-[var(--line)]`), Cupertino outline icons (`react-icons/io5`), and zero emojis.
+  - **Root AppProviders Composer (`src/presentation/providers/`):**
+    - `AppProviders.tsx`: Composes `ErrorBoundary` → `ThemeProvider` → `SiteConfigProvider` → `AuthProvider` → `ToastProvider`.
+    - Integrated into `src/App.tsx`.
+- **Architectural & Aesthetic Invariants Met:**
+  - Max 3 files per directory strictly maintained across all folders.
+  - Maximum lines per file well within bounds (<120 LOC per file).
+  - Strictly shadow-free (zero `box-shadow` / `shadow-*`).
+  - Strictly zero emojis anywhere (only `react-icons/io5`).
+  - Automated pre-commit hook executed all 3 quality gates (Biome, `tsc -b`, Vite build) with zero bypass.
+- **Verification:**
+  - `npx tsx scripts/test-providers-e2e.ts` → ✅ 100% passed (DI resolution + Firestore fetch + real-time subscription).
+  - `npx tsx scripts/test-pipeline-e2e.ts` → ✅ 100% passed.
+  - `npx biome check .` → ✅ 94 files, 0 errors.
+  - `npx tsc -b` → ✅ strict type check passed.
+  - `npx vite build --logLevel silent` → ✅ build succeeded.
+
 
 
 
