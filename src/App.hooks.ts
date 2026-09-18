@@ -11,6 +11,7 @@ export interface AppState {
   readonly pingMessage: string;
   readonly isDynamicRoute: boolean;
   readonly activeSlug: string;
+  readonly isAdminRoute: boolean;
 }
 
 function parseCurrentRoute(): { isDynamic: boolean; slug: string } {
@@ -155,5 +156,6 @@ export function useAppState(): AppState {
     pingMessage,
     isDynamicRoute: routeInfo.isDynamic,
     activeSlug: routeInfo.slug,
+    isAdminRoute: routeInfo.slug === "admin" || routeInfo.slug === "login",
   };
 }

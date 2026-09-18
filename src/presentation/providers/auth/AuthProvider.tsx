@@ -3,6 +3,9 @@
 // Stubbed for Step 13, wired to OTP flow in Step 20.
 
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import type { IVerifyAccessCodeUseCase } from "../../../application/use-cases/auth/VerifyAccessCodeUseCase";
+import { DI_TOKENS } from "../../../infrastructure/di/tokens";
+import { useContainer } from "../../shared/useContainer";
 import { AuthContext, type AuthContextValue, type AuthUser } from "./authContext";
 
 const SESSION_STORAGE_KEY = "ss_admin_auth";
@@ -17,6 +20,7 @@ export interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const verifyAccessCode = useContainer<IVerifyAccessCodeUseCase>(DI_TOKENS.VerifyAccessCode);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [tokenExpiresAt, setTokenExpiresAt] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -43,24 +47,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
-  const login = useCallback(async (email: string, code: string): Promise<boolean> => {
-    setIsLoading(true);
-    try {
-      // Step 20 will bind this to VerifyAccessCode use-case.
-      // Temporary stub acceptance for development:
-      if (code.trim().length === 6) {
-        const expires = Date.now() + 1000 * 60 * 60 * 24; // 24h
-        const session: StoredAuthSession = { email, tokenExpiresAt: expires };
-        sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
-        setUser({ email, role: "admin" });
-        setTokenExpiresAt(expires);
-        return true;
+  const login = useCallback(
+    async (email: string, code: string): Promise<boolean> => {
+      setIsLoading(true);
+      try {
+        const result = await verifyAccessCode.execute({ email, code });
+        if (result.success) {
+          const session: StoredAuthSession = {
+            email: result.email,
+            tokenExpiresAt: result.tokenExpiresAt,
+          };
+          sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+          setUser({ email: result.email, role: "admin" });
+          setTokenExpiresAt(result.tokenExpiresAt);
+          return true;
+        }
+        return false;
+      } finally {
+        setIsLoading(false);
       }
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [verifyAccessCode]
+  );
 
   const logout = useCallback(() => {
     try {

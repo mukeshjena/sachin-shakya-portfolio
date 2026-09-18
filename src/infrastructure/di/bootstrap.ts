@@ -3,6 +3,8 @@
 // This is the ONLY file that imports both infrastructure classes and DI tokens together.
 // Import this once at app startup (main.tsx), before any component renders.
 
+import { RequestAccessCodeUseCase } from "../../application/use-cases/auth/RequestAccessCodeUseCase";
+import { VerifyAccessCodeUseCase } from "../../application/use-cases/auth/VerifyAccessCodeUseCase";
 import { SubmitContactFormUseCase } from "../../application/use-cases/contact/SubmitContactFormUseCase";
 import { ReorderSectionsUseCase } from "../../application/use-cases/pages/mutation/ReorderSectionsUseCase";
 import { GetFooterNavPagesUseCase } from "../../application/use-cases/pages/nav/GetFooterNavPagesUseCase";
@@ -14,6 +16,7 @@ import { GetPromoPopupUseCase } from "../../application/use-cases/promo/GetPromo
 import { SubmitPromoInquiryUseCase } from "../../application/use-cases/promo/SubmitPromoInquiryUseCase";
 import { GetSiteSettingsUseCase } from "../../application/use-cases/settings/GetSiteSettingsUseCase";
 import { SubscribeSiteSettingsUseCase } from "../../application/use-cases/settings/SubscribeSiteSettingsUseCase";
+import type { IAdminAccessRepository } from "../../domain/repositories/admin/IAdminAccessRepository";
 import type { IContactRepository } from "../../domain/repositories/admin/IContactRepository";
 import type { IEmailSender } from "../../domain/repositories/admin/IEmailSender";
 import type { IPageRepository } from "../../domain/repositories/content/IPageRepository";
@@ -23,6 +26,7 @@ import type { ISiteSettingsRepository } from "../../domain/repositories/settings
 import { CloudinaryMediaUploader } from "../cloudinary/CloudinaryMediaUploader";
 import { EmailApiSender } from "../email/EmailApiSender";
 import { getDb } from "../firebase/firebaseClient";
+import { FirestoreAdminAccessRepository } from "../repositories/admin/FirestoreAdminAccessRepository";
 import { FirestoreContactRepository } from "../repositories/admin/FirestoreContactRepository";
 import { FirestorePromoPopupRepository } from "../repositories/admin/FirestorePromoPopupRepository";
 import { FirestorePageRepository } from "../repositories/content/FirestorePageRepository";
@@ -76,6 +80,10 @@ export function bootstrapContainer(): void {
   container.register(
     DI_TOKENS.PromoPopupRepository,
     singleton(() => new FirestorePromoPopupRepository())
+  );
+  container.register(
+    DI_TOKENS.AdminAccessRepository,
+    singleton(() => new FirestoreAdminAccessRepository())
   );
 
   // ── Use-cases (Step 11, 13, 14 & 17) ───────────────────────────────────────
@@ -165,6 +173,25 @@ export function bootstrapContainer(): void {
         new SubmitPromoInquiryUseCase(
           container.resolve<IContactRepository>(DI_TOKENS.ContactRepository),
           container.resolve<IEmailSender>(DI_TOKENS.EmailSender)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.RequestAccessCode,
+    singleton(
+      () =>
+        new RequestAccessCodeUseCase(
+          container.resolve<IAdminAccessRepository>(DI_TOKENS.AdminAccessRepository),
+          container.resolve<IEmailSender>(DI_TOKENS.EmailSender)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.VerifyAccessCode,
+    singleton(
+      () =>
+        new VerifyAccessCodeUseCase(
+          container.resolve<IAdminAccessRepository>(DI_TOKENS.AdminAccessRepository)
         )
     )
   );

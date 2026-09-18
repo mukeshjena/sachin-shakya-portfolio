@@ -3,6 +3,7 @@
 // All logic, state, and DI hooks live in App.hooks.ts.
 
 import { useAppState } from "./App.hooks";
+import { AdminLogin } from "./presentation/admin/login/AdminLogin";
 import { BlackholeHero } from "./presentation/hero/BlackholeHero";
 import { CustomCursor } from "./presentation/hero/cursor/CustomCursor";
 import { ExecutiveOverview } from "./presentation/overview/ExecutiveOverview";
@@ -18,7 +19,7 @@ import { TelemetrySection } from "./presentation/sections/telemetry/TelemetrySec
 import { AppLayout } from "./presentation/shell/layout/AppLayout";
 
 function App() {
-  const { showPipelineTest, isDynamicRoute, activeSlug } = useAppState();
+  const { showPipelineTest, isDynamicRoute, activeSlug, isAdminRoute } = useAppState();
 
   return (
     <AppProviders>
@@ -31,6 +32,8 @@ function App() {
               <PipelineTest />
             </div>
           </div>
+        ) : isAdminRoute ? (
+          <AdminLogin />
         ) : isDynamicRoute ? (
           <DynamicPage slug={activeSlug} />
         ) : (
