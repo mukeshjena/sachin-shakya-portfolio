@@ -20,6 +20,14 @@
   padding: 2rem 1rem;
 }
 
+/* ── Floating theme toggle (Step 12) ───────────────────────────────────────── */
+.theme-toggle-floating {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+}
+
 /* ── Ambient depth layers — no box-shadow, depth via gradient (agent rule #4) ── */
 .aura-top {
   position: fixed;

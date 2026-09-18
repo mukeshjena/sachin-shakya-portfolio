@@ -41,5 +41,10 @@
       "quoteStyle": "double",
       "trailingCommas": "es5"
     }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
   }
 }

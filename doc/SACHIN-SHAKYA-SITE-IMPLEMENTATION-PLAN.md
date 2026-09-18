@@ -66,7 +66,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 9 | Domain model & Firestore schema | Backend | Completed ✅ |
 | 10 | Idempotent seed script + cleanup script | Backend | Completed ✅ |
 | 11 | Clean Architecture layers wired end-to-end | Core | Completed ✅ |
-| 12 | Design tokens + dark/light theme (localStorage) | Core | Pending |
+| 12 | Design tokens + dark/light theme (localStorage) | Core | Completed ✅ |
 | 13 | Global providers (Theme, Auth, SiteConfig, Errors) | Core | Pending |
 | 14 | App shell: header, iOS-liquid-glass bottom nav, footer | Public UI | Pending |
 | 15 | Sci-fi hero: Three.js "blackhole" + Framer Motion + custom cursor | Public UI | Pending |

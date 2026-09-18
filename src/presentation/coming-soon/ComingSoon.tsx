@@ -4,7 +4,8 @@
 // RULE 7 & 13: Zero hardcoded strings, numbers, or constants — lives in .constants.ts.
 // RULE 13 & 14: Zero inline styles or CSS strings — lives in ComingSoon.css with token variables.
 
-import React from "react";
+import { Fragment } from "react";
+import { ThemeToggle } from "../theme/toggle/ThemeToggle";
 import "./ComingSoon.css";
 import { useComingSoon } from "./ComingSoon.hooks";
 import { COMING_SOON_CONTENT } from "./constants/ComingSoon.constants";
@@ -27,6 +28,9 @@ export function ComingSoon() {
 
   return (
     <div className="coming-soon-root">
+      <div className="theme-toggle-floating">
+        <ThemeToggle />
+      </div>
       {/* Ambient background layers — depth without shadows (agent rule #4) */}
       <div className="aura-top" aria-hidden="true" />
       <div className="aura-bottom" aria-hidden="true" />
@@ -63,13 +67,13 @@ export function ComingSoon() {
         {/* Impact stats strip */}
         <section className="stats-strip" aria-label={statsAriaLabel}>
           {stats.map(({ value, unit }, index) => (
-            <React.Fragment key={unit}>
+            <Fragment key={unit}>
               {index > 0 && <div className="stat-divider" aria-hidden="true" />}
               <div className="stat">
                 <span className="stat-value">{value}</span>
                 <span className="stat-unit">{unit}</span>
               </div>
-            </React.Fragment>
+            </Fragment>
           ))}
         </section>
 

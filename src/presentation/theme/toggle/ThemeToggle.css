@@ -1,0 +1,37 @@
+/* presentation/theme/toggle/ThemeToggle.css */
+/* Cupertino outline theme toggle — 100% shadow-free, hairline border tactile depth */
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--r-md, 0.75rem);
+  background-color: var(--ink-800);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--amber);
+  background-color: var(--ink-700);
+  color: var(--amber);
+}
+
+.theme-toggle-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  stroke-width: 1.5px;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.theme-toggle-btn:hover .theme-toggle-icon {
+  transform: rotate(15deg);
+}

@@ -23,6 +23,22 @@
       href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
+    <script>
+      (() => {
+        let stored;
+        let theme;
+        try {
+          stored = localStorage.getItem("theme");
+          theme =
+            stored === "light" || stored === "dark"
+              ? stored
+              : window.matchMedia("(prefers-color-scheme: light)").matches
+                ? "light"
+                : "dark";
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

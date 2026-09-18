@@ -549,6 +549,42 @@
   - Strict TypeScript check (`tsc -b`): 0 errors with Node 24 `erasableSyntaxOnly` compatibility.
   - Production build: passed cleanly (`npm run build`).
 
+---
+
+## 2026-09-18 — Step 12: Design Tokens + Dark/Light Theme (Completed ✅)
+
+**Branch:** `step/12-theme-tokens`
+**Commit:** `feat(step-12): design tokens and persisted dark/light theme (tailwind v4 @theme, zero-flash script, wcag aa contrast)`
+
+**What was done:**
+- **Tailwind CSS v4 `@theme` Engine (`src/index.css`):**
+  - Configured `@theme` directives exposing semantic palette tokens: `--color-ink-900` through `--color-ink-600`, `--color-paper`, `--color-mist`, `--color-amber`, `--color-cyan`, `--color-live`, `--color-line`, and typography/radius scales.
+  - Enabled `"css": { "parser": { "tailwindDirectives": true } }` in `biome.json` so Biome cleanly validates and formats modern Tailwind v4 directives.
+- **Instrument Panel Dual-Theme Palettes (100% Shadow-Free & Accessible):**
+  - **Dark Mode (`:root`, `[data-theme="dark"]`):** Deep petrol navy canvas (`#06121a`), card surface (`#0b1d27`), amber (`#ffb020`), cyan (`#49c7e8`), high-contrast paper (`#e8f1f4`).
+  - **Light Mode (`[data-theme="light"]`):** Paper-forward canvas (`#f2f6f8`), card surface (`#ffffff`), contrast-tuned amber (`#b86800`), deep cyan (`#027a9e`), paper heading (`#081720`) passing WCAG AA 4.5:1+ contrast thresholds on all text elements.
+  - All elevation achieved via 1px hairline borders (`var(--line)`), matte non-reflective background fills, and frosted liquid-glass blurs. Zero `box-shadow` throughout.
+- **Zero-Flash Synchronous Head Script (`index.html`):**
+  - Embedded an inline IIFE in `<head>` that synchronously reads `localStorage['theme']` or system `prefers-color-scheme` before DOM rendering, setting `data-theme` on `<html>` to eliminate white/dark flash on page load.
+- **Theme Subsystem & Context Provider (`src/presentation/theme/`):**
+  - `themeContext.ts`: Defined `Theme` union (`"dark" | "light"`), `ThemeContextValue` interface, and `useThemeContext()` hook.
+  - `useTheme.ts`: State machine hook managing `localStorage['theme']` persistence, document attribute updates, and OS `prefers-color-scheme` change listeners.
+  - `ThemeProvider.tsx`: Declarative context provider wrapping application tree.
+  - Subfolder `toggle/`:
+    - `ThemeToggle.tsx`: Cupertino outline toggle button rendering `IoSunnyOutline` and `IoMoonOutline` from `react-icons/io5`. Zero emojis (Rule 3).
+    - `ThemeToggle.hooks.ts`: Component hook for toggle handling and accessible aria-labels.
+    - `ThemeToggle.css`: Hairline borders, shadow-free tactile design, smooth micro-rotation.
+- **Application Integration:**
+  - Wrapped root in `<ThemeProvider>` in `src/App.tsx`.
+  - Added floating `<ThemeToggle />` to `src/presentation/coming-soon/ComingSoon.tsx`.
+  - Added `<ThemeToggle />` to `src/presentation/pages/pipeline-test/PipelineTest.tsx` header.
+- **Quality Gates:**
+  - Biome linter and formatter: 0 errors, 0 warnings (`npm run check`).
+  - Strict TypeScript check (`tsc -b`): 0 errors.
+  - Production build: passed cleanly (`npm run build`).
+  - E2E Clean Architecture verification: passed (`npx tsx scripts/test-pipeline-e2e.ts`).
+
+
 
 
 

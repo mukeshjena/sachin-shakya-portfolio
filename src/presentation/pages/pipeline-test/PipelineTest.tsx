@@ -1,6 +1,7 @@
 // presentation/pages/pipeline-test/PipelineTest.tsx
 // Pure declarative component proving Clean Architecture end-to-end telemetry wiring.
 
+import { ThemeToggle } from "../../theme/toggle/ThemeToggle";
 import { usePipelineTest } from "./PipelineTest.hooks";
 import "./PipelineTest.css";
 
@@ -19,14 +20,17 @@ export function PipelineTest() {
           <h2 className="text-xl font-bold tracking-tight text-[var(--paper)] mt-2">{title}</h2>
         </div>
 
-        <button
-          type="button"
-          onClick={reload}
-          disabled={loading}
-          className="px-3 py-1.5 text-xs font-mono font-medium rounded-lg border border-[var(--line)] bg-[var(--ink-700)] text-[var(--mist)] hover:border-[var(--amber)] hover:text-[var(--paper)] transition-colors"
-        >
-          {loading ? "Streaming..." : "Poll State"}
-        </button>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={reload}
+            disabled={loading}
+            className="px-3 py-1.5 text-xs font-mono font-medium rounded-lg border border-[var(--line)] bg-[var(--ink-700)] text-[var(--mist)] hover:border-[var(--amber)] hover:text-[var(--paper)] transition-colors"
+          >
+            {loading ? "Streaming..." : "Poll State"}
+          </button>
+        </div>
       </header>
 
       {error ? (
