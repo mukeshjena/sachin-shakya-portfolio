@@ -161,7 +161,13 @@ async function main() {
 
   // Clean up the created test section
   await sectionRepo.delete(testSection.id);
-  console.log("✓ Test section cleaned up.");
+  const homeAfter = await pageRepo.getBySlug(new Slug("home"));
+  if (homeAfter) {
+    await pageRepo.update(homeAfter.id, {
+      sectionOrder: homeAfter.sectionOrder.filter((id) => id !== testSection.id),
+    });
+  }
+  console.log("✓ Test section cleaned up and removed from home page sectionOrder.");
 
   // 6. Test UpdateSiteSettingsUseCase & SaveTelemetryMetricsUseCase
   console.log("\n[6/6] Testing UpdateSiteSettingsUseCase & SaveTelemetryMetricsUseCase...");

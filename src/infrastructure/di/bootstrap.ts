@@ -29,6 +29,7 @@ import { SaveSectionUseCase } from "../../application/use-cases/sections/SaveSec
 import { GetSiteSettingsUseCase } from "../../application/use-cases/settings/GetSiteSettingsUseCase";
 import { SubscribeSiteSettingsUseCase } from "../../application/use-cases/settings/SubscribeSiteSettingsUseCase";
 import { UpdateSiteSettingsUseCase } from "../../application/use-cases/settings/UpdateSiteSettingsUseCase";
+import { GetTelemetryMetricsUseCase } from "../../application/use-cases/telemetry/GetTelemetryMetricsUseCase";
 import { SaveTelemetryMetricsUseCase } from "../../application/use-cases/telemetry/SaveTelemetryMetricsUseCase";
 import type { IAdminAccessRepository } from "../../domain/repositories/admin/IAdminAccessRepository";
 import type { IContactRepository } from "../../domain/repositories/admin/IContactRepository";
@@ -299,6 +300,15 @@ export function bootstrapContainer(): void {
     singleton(
       () =>
         new SaveTelemetryMetricsUseCase(
+          container.resolve<ITelemetryRepository>(DI_TOKENS.TelemetryRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.GetTelemetryMetrics,
+    singleton(
+      () =>
+        new GetTelemetryMetricsUseCase(
           container.resolve<ITelemetryRepository>(DI_TOKENS.TelemetryRepository)
         )
     )

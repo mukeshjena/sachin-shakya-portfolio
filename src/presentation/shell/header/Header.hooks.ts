@@ -68,12 +68,24 @@ export function useHeaderLogic(): HeaderState {
       setIsScrolled(window.scrollY > 20);
 
       // Identify currently visible section
+      const sectionMapping: Record<string, string> = {
+        contact: "contact",
+        credentials: "credentials",
+        capabilities: "capabilities",
+        experience: "experience",
+        overview: "overview",
+        impact: "overview",
+        metrics: "metrics",
+        telemetry: "metrics",
+      };
       const sectionIds = [
         "contact",
         "credentials",
         "capabilities",
         "experience",
+        "overview",
         "impact",
+        "metrics",
         "telemetry",
       ];
       const scrollPos = window.scrollY + 180;
@@ -83,7 +95,7 @@ export function useHeaderLogic(): HeaderState {
         if (el) {
           const top = el.offsetTop;
           if (scrollPos >= top) {
-            setActiveSection(id);
+            setActiveSection(sectionMapping[id] || id);
             return;
           }
         }

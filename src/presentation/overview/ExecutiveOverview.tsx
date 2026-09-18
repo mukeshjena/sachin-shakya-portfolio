@@ -42,10 +42,11 @@ export function ExecutiveOverview() {
 
   return (
     <section
-      id="impact"
+      id="overview"
       aria-label="Professional Architecture Impact"
       className="relative w-full py-16 md:py-24 scroll-mt-20 border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >
+      <span id="impact" className="sr-only" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
         <motion.div
           variants={OVERVIEW_ANIMATION_VARIANTS.container}

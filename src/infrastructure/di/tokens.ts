@@ -47,6 +47,7 @@ export const DI_TOKENS = {
   SaveSection: Symbol("SaveSection"),
   UpdateSiteSettings: Symbol("UpdateSiteSettings"),
   SaveTelemetryMetrics: Symbol("SaveTelemetryMetrics"),
+  GetTelemetryMetrics: Symbol("GetTelemetryMetrics"),
   UploadMedia: Symbol("UploadMedia"),
   DeleteMedia: Symbol("DeleteMedia"),
   GetMediaAssets: Symbol("GetMediaAssets"),

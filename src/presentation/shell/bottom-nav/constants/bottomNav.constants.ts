@@ -21,22 +21,22 @@ export interface MobileBottomNavTab {
 
 export const MOBILE_BOTTOM_NAV_TABS: readonly MobileBottomNavTab[] = [
   {
-    id: "top",
-    label: "Home",
-    href: "#top",
+    id: "overview",
+    label: "Overview",
+    href: "#overview",
+    icon: IoStatsChartOutline,
+  },
+  {
+    id: "architecture",
+    label: "Architecture",
+    href: "/cloud-architecture",
     icon: IoCompassOutline,
   },
   {
-    id: "telemetry",
+    id: "metrics",
     label: "Metrics",
-    href: "#telemetry",
+    href: "#metrics",
     icon: IoHardwareChipOutline,
-  },
-  {
-    id: "impact",
-    label: "Overview",
-    href: "#impact",
-    icon: IoStatsChartOutline,
   },
   {
     id: "experience",

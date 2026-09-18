@@ -376,6 +376,34 @@ export async function seedContent(media: SeededMediaMap): Promise<void> {
     );
   }
 
+  // 4b. Global Telemetry Config (used by TelemetryEditorModal & CostTrajectoryChart)
+  console.log("Seeding telemetryMetrics/global...");
+  await setDoc(
+    doc(db, "telemetryMetrics", "global"),
+    {
+      annualSavingsHeadline: "$170K/mo",
+      monthlyTarget: "$170K/month Cloud Cost Savings",
+      mttrReductionPercent: 40,
+      managedResourcesCount: 2000,
+      points: [
+        { month: "Jan", baseline: 450, optimized: 450, milestone: "Baseline Audit" },
+        { month: "Feb", baseline: 450, optimized: 432 },
+        { month: "Mar", baseline: 452, optimized: 410, milestone: "Workload Rightsizing" },
+        { month: "Apr", baseline: 448, optimized: 388 },
+        { month: "May", baseline: 450, optimized: 365, milestone: "Storage Tiering" },
+        { month: "Jun", baseline: 454, optimized: 345 },
+        { month: "Jul", baseline: 450, optimized: 328, milestone: "Idle Reclamation" },
+        { month: "Aug", baseline: 452, optimized: 312 },
+        { month: "Sep", baseline: 448, optimized: 298, milestone: "85% RI / Savings Plan" },
+        { month: "Oct", baseline: 450, optimized: 290 },
+        { month: "Nov", baseline: 452, optimized: 282 },
+        { month: "Dec", baseline: 450, optimized: 280 },
+      ],
+      updatedAt: timestamp,
+    },
+    { merge: true }
+  );
+
   // 5. FinOps Multi-Month Trajectory Series
   console.log("Seeding telemetryCostSeries/finops-trajectory-12m...");
   await setDoc(

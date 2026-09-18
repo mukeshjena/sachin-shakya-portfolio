@@ -4,6 +4,7 @@
 // Strictly shadow-free, monospaced tabular figures, and zero emojis.
 
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 import { AutomationGainsChart } from "./charts/finops/AutomationGainsChart";
 import { CostTrajectoryChart } from "./charts/finops/CostTrajectoryChart";
 import { FleetDistributionChart } from "./charts/fleet/FleetDistributionChart";
@@ -17,7 +18,7 @@ import { useTelemetrySectionLogic } from "./TelemetrySection.hooks";
 import type { TelemetryTabKey } from "./TelemetrySection.types";
 
 export function TelemetrySection() {
-  const { activeTab, setActiveTab } = useTelemetrySectionLogic();
+  const { activeTab, setActiveTab, metricsData } = useTelemetrySectionLogic();
 
   const tabOptions: readonly { key: TelemetryTabKey; label: string }[] = [
     { key: "spend", label: TELEMETRY_COPY.tabs.spend },
@@ -26,12 +27,37 @@ export function TelemetrySection() {
     { key: "fleet", label: TELEMETRY_COPY.tabs.fleet },
   ];
 
+  const dynamicKpis = useMemo(() => {
+    return TELEMETRY_KPIS.map((kpi) => {
+      if (kpi.label === "Recurring Cloud Savings") {
+        return {
+          ...kpi,
+          value: metricsData.annualSavingsHeadline || kpi.value,
+        };
+      }
+      if (kpi.label === "Mean Time to Resolution") {
+        return {
+          ...kpi,
+          value: `-${metricsData.mttrReductionPercent}%`,
+        };
+      }
+      if (kpi.label === "Managed Cloud Fleet") {
+        return {
+          ...kpi,
+          value: `${metricsData.managedResourcesCount.toLocaleString()}+`,
+        };
+      }
+      return kpi;
+    });
+  }, [metricsData]);
+
   return (
     <section
-      id="telemetry"
+      id="metrics"
       aria-label="Architecture and Performance Metrics"
       className="relative w-full py-16 md:py-24 scroll-mt-20 border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >
+      <span id="telemetry" className="sr-only" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10 space-y-12">
         {/* Section Header */}
         <motion.div
@@ -62,7 +88,7 @@ export function TelemetrySection() {
           viewport={{ once: true, margin: "-60px" }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
         >
-          {TELEMETRY_KPIS.map((kpi) => (
+          {dynamicKpis.map((kpi) => (
             <motion.div
               key={kpi.label}
               variants={TELEMETRY_ANIMATION_VARIANTS.item}
@@ -127,7 +153,7 @@ export function TelemetrySection() {
 
           {/* Active Chart View */}
           <div className="w-full">
-            {activeTab === "spend" && <CostTrajectoryChart />}
+            {activeTab === "spend" && <CostTrajectoryChart {...metricsData} />}
             {activeTab === "mttr" && <MttrBenchmarkChart />}
             {activeTab === "automation" && <AutomationGainsChart />}
             {activeTab === "fleet" && <FleetDistributionChart />}

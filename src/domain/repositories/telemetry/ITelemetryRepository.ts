@@ -5,4 +5,5 @@
 export interface ITelemetryRepository {
   saveFinOpsMetrics(data: Record<string, unknown>): Promise<void>;
   getFinOpsMetrics(): Promise<Record<string, unknown> | null>;
+  subscribeFinOpsMetrics(callback: (data: Record<string, unknown> | null) => void): () => void;
 }
