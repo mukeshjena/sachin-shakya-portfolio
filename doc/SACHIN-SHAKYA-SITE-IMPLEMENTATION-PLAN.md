@@ -90,6 +90,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 33 | Animated vintage grid, transparent light-mode hero header, contact portrait redesign & professional terminology | Polish | Completed ✅ |
 | 34 | Admin CMS modal polish, parity, visual refinements, and full section editing | Polish | Completed ✅ |
 | 35 | Observability matrix cleanup, single-word header navigation (Overview, Architecture, Metrics) & dynamic telemetry graph | Polish | Completed ✅ |
+| 36 | Exact 1:1 visual parity for FinOps cost curve console with Image 1 (canonical spline, dark instrument styling, unclipped tags) | Polish | Completed ✅ |
 
 ---
 

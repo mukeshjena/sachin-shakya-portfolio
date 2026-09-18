@@ -1694,8 +1694,36 @@
 - `npx vite build --logLevel silent` → ✅ production build passed cleanly
 - `npx tsx scripts/test-content-management-e2e.ts` → ✅ all 6 integration tests passed with clean teardown
 - Pre-commit automated gate executed Biome, TSC, and Vite build before committing.
+
+---
+
+## 2026-09-19 — Step 36: Exact 1:1 Visual Parity for FinOps Cost Curve Console (Completed ✅)
+
+**Branch:** `step/36-exact-finops-graph-design-parity` → `release/v1.0.0` → `main` → `develop`
+**Commit:** `3d64283 feat: exact 1:1 visual parity for FinOps cost curve console with Image 1`
+
+**What was done:**
+1. **Canonical Spline Geometry Restoration:**
+   - In `CostTrajectoryChart.utils.ts`, restored the exact canonical SVG line path (`M8,52 C60,44 96,70 132,62 S196,40 236,58 C268,74 288,124 330,136 S404,152 448,148 C492,144 524,152 552,150`) and area fill from the reference design.
+   - Preserved dynamic adaptability: when custom spend figures are saved in the CMS, the wave crests, inflection plunge through milestone line at `x=262`, and lower plateau scale proportionally without distorting the signature silhouette.
+
+2. **Mission-Control Console Styling Discipline:**
+   - Locked `CostTrajectoryChart.tsx` into its deep dark petrol-navy palette (`bg-gradient-to-br from-[#102a36] to-[#08171f]` with `border-[rgba(130,180,200,0.16)]`) across both dark and light modes, preventing light-mode background bleaching.
+   - Tag styling parity: Top-left `MONTHLY CLOUD SPEND` in `#6b8896`, bottom-right `−$170K / MONTH` and `AFTER OPTIMISATION` in bold `#ffb020` without text clipping.
+   - Monumental readouts: `$2M` `ANNUAL CLOUD SAVINGS` and `−40%` `FASTER INCIDENT RESOLUTION` in `#e8f1f4` with `#6b8896` monospaced uppercase descriptors.
+
+3. **Elimination of Visual Artifacts:**
+   - Removed stuck hover dots and vertical dashed lines on initial load.
+   - Seamless interactive cursor tracking illuminates hairline crosshairs and displays frosted telemetry pills only when actively moving across the canvas.
+
+**Verification:**
+- `npx biome check .` → ✅ 302 files checked, 0 errors
+- `npx tsc -b` → ✅ strict typecheck passed with 0 errors
+- `npx vite build --logLevel silent` → ✅ production build passed cleanly
+- Pre-commit automated gate passed.
 - Merged sequentially into `release/v1.0.0` → `main` → `develop`.
 - Deployment workflow triggered on GitHub Actions.
+
 
 
 
