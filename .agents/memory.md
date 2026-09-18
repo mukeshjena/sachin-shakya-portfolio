@@ -1037,5 +1037,39 @@
 - `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
 - `npx vite build --logLevel silent` → ✅ Production build succeeded.
 - `npx tsx scripts/test-multi-admin-emails-e2e.ts` → ✅ 100% passed (7/7).
-- Pre-commit automated quality gate passed cleanly on git commit.
 - Sequential branch promotion completed: `step/21-multi-admin-emails` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+
+---
+
+## 2026-09-18 — Step 22: Admin Dashboard Shell (Completed ✅)
+
+**Branch:** `step/22-admin-dashboard-shell` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `81bdf28 feat(step-22): admin dashboard shell — 3-dot contextual menus, realtime Firestore sync, and executive telemetry console`
+
+**What was done:**
+1. **Domain Layer (`src/domain/services/realtime/`):**
+   - `IRealtimeSyncService.ts`: Pure TypeScript domain contract for real-time Firestore collection and document synchronizers with sorting, limits, and unsubscribe listeners.
+2. **Infrastructure Layer (`src/infrastructure/services/realtime/`):**
+   - `FirestoreRealtimeSyncService.ts`: Implementation of `IRealtimeSyncService` wrapping `onSnapshot` with multi-tab IndexedDB cache support.
+   - `tokens.ts` & `bootstrap.ts`: Registered `RealtimeSyncService` DI token and singleton container registration.
+3. **Presentation Layer — Shared Components & Hooks:**
+   - `src/presentation/shared/menu/`: `ThreeDotMenu.tsx`, `ThreeDotMenu.hooks.ts`, `ThreeDotMenu.types.ts` — Universal 3-dot overflow menu (`role="menu"`) with flat shadow-free surface, hairline borders (`border-[var(--line)]`), click-outside handling, and Escape key dismissal.
+   - `src/presentation/shared/hooks/useRealtimeSync.ts`: Clean Architecture presentation hook resolving `IRealtimeSyncService` via `useContainer()` with automatic subscription lifecycle management.
+4. **Presentation Layer — Admin Dashboard Shell (`src/presentation/admin/dashboard/`):**
+   - `constants/dashboard.constants.ts`: Complete copy, navigation tabs (`overview`, `pages`, `content`, `contacts`, `settings`), badges, and metrics copy.
+   - `DashboardShell.types.ts`: State contracts, page items, inquiry items, and metrics types.
+   - `DashboardShell.hooks.ts`: Manages multi-collection real-time listeners (`pages`, `contactSubmissions`, `adminEmails`), computed KPI telemetry metrics, and tab navigation.
+   - `DashboardShell.tsx`: Executive instrument panel layout with left navigation rail, top header telemetry strip with live pulse indicator (`REALTIME SYNC // ONLINE`), active session admin badge, and modular views for Overview, Pages, Content, Contacts, and Settings (integrating `<AuthorizedEmailsManager />`).
+5. **Admin Login Integration (`src/presentation/admin/login/AdminLogin.tsx`):**
+   - Mounted `<DashboardShell />` directly in the authenticated state (`step === "authenticated"`).
+6. **Automated Verification (`scripts/test-dashboard-shell-e2e.ts`):**
+   - 100% test pass across DI resolution, initial collection snapshot retrieval, real-time snapshot emission on document write within ~1s, clean listener unsubscribe, ThreeDotMenu action contract, and flat shadow-free UI verification (6/6 tests passed).
+
+**Verification:**
+- `npx biome check .` → ✅ 209 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build succeeded.
+- `npx tsx scripts/test-dashboard-shell-e2e.ts` → ✅ 100% passed (6/6).
+- Pre-commit automated quality gate passed cleanly on git commit without `--no-verify`.
+- Sequential branch promotion completed: `step/22-admin-dashboard-shell` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+

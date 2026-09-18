@@ -76,7 +76,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 19 | Promo popup (image + inquiry form, admin-controlled) | Public UI | Completed ✅ |
 | 20 | Admin OTP access flow (6-digit, auto-advance, paste) | Admin | Completed ✅ |
 | 21 | Multi-email admin authorization | Admin | Completed ✅ |
-| 22 | Admin dashboard shell (3-dot menus, realtime updates) | Admin | Pending |
+| 22 | Admin dashboard shell (3-dot menus, realtime updates) | Admin | Completed ✅ |
 | 23 | Content management modules (pages/sections/logo/text/social links) | Admin | Pending |
 | 24 | Media manager (Cloudinary upload+preview+cascade delete) + inbox | Admin | Pending |
 | 25 | SEO pass (meta/JSON-LD/sitemap/OG/favicons) | Quality | Pending |
