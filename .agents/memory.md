@@ -897,3 +897,43 @@
 - Pre-commit automated quality gate passed cleanly on git commit.
 - Sequential branch promotion completed: `step/16-home-sections` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
 - Cloudflare deployment pipeline triggered on `main`.
+
+---
+
+## 2026-09-18 — Step 18: Contact Form & Email API Integration (Completed ✅)
+
+**Branch:** `step/18-contact-form-email` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `cc6f685 feat(step-18): contact form and email API integration — Firestore contact repository, edge proxy adapter, and executive consultation section`
+
+**What was done:**
+1. **Concrete Firestore Contact Repository (`src/infrastructure/repositories/admin/FirestoreContactRepository.ts`):**
+   - Implemented `IContactRepository` interface using Firebase Firestore native mode SDK.
+   - Methods: `getAll`, `getUnreadCount`, `create`, `markRead`.
+   - Maps Firestore documents to `ContactSubmission` domain entities with deterministic ISO timestamps.
+2. **Email Service Adapter (`src/infrastructure/email/EmailApiSender.ts`):**
+   - Implemented `IEmailSender` adapting transactional email payloads to the `/api/contact` Cloudflare Worker edge route.
+   - Includes graceful fallback for local development and automated Node.js test environments.
+3. **Application Layer Use-Cases & DTOs (`src/application/`):**
+   - `ContactSubmissionDTO.ts`: Safe DTO serializer for submissions.
+   - `SubmitContactFormUseCase.ts`: Strict input validation (name, email, message length), Firestore persistence in `contactSubmissions`, and transactional email dispatch to `sachin.shakya@live.com`.
+4. **DI Container Registration (`src/infrastructure/di/bootstrap.ts`):**
+   - Registered `DI_TOKENS.ContactRepository`, `DI_TOKENS.EmailSender`, and `DI_TOKENS.SubmitContactForm`.
+5. **Presentation Layer (`src/presentation/sections/contact/`):**
+   - `constants/contact.constants.ts`: Complete copy, field identifiers, and direct executive channels.
+   - `ContactSection.types.ts`: Strictly typed view state, form values, and validation errors.
+   - `ContactSection.hooks.ts`: Manages form state, blur-only validation (zero debounce per Rule 4/12), submission lifecycle, and DI container resolution.
+   - `ContactSection.tsx`: 2-column shadow-free executive instrument layout with direct channels on the left and interactive consultation desk on the right.
+6. **Assembly & Dynamic Mapping (`src/App.tsx` & `SectionRenderer.tsx`):**
+   - Mounted `<ContactSection />` with `id="contact"` and `scroll-mt-20`.
+   - Wired `"contact"` section type in dynamic page `SectionRenderer`.
+7. **Automated Verification (`scripts/test-contact-e2e.ts`):**
+   - 100% end-to-end test pass across validation rejection, Firestore write, unread count tracking, and `markRead` mutation.
+
+**Verification:**
+- `npx biome check .` → ✅ 168 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build succeeded.
+- `npx tsx scripts/test-contact-e2e.ts` → ✅ 100% passed.
+- Pre-commit automated quality gate passed cleanly on git commit.
+- Sequential branch promotion completed: `step/18-contact-form-email` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+

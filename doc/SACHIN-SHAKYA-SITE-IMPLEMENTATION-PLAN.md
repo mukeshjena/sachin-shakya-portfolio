@@ -72,7 +72,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 15 | Sci-fi hero: Three.js "blackhole" + Framer Motion + custom cursor | Public UI | Completed ✅ |
 | 16 | Home sections from résumé content (Impact/Experience/Capabilities/Credentials) | Public UI | Completed ✅ |
 | 17 | Dynamic page engine (admin-created pages, slugs, section shuffle) | Public UI | Completed ✅ |
-| 18 | Contact form + email API integration | Public UI | Pending |
+| 18 | Contact form + email API integration | Public UI | Completed ✅ |
 | 19 | Promo popup (image + inquiry form, admin-controlled) | Public UI | Pending |
 | 20 | Admin OTP access flow (6-digit, auto-advance, paste) | Admin | Pending |
 | 21 | Multi-email admin authorization | Admin | Pending |
