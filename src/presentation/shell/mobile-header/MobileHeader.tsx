@@ -17,10 +17,10 @@ export function MobileHeader() {
             <img
               src={logoUrl}
               alt={`${fullName} mark`}
-              className="w-8 h-8 rounded-lg object-contain border border-[var(--line)] bg-[var(--ink-800)] p-0.5"
+              className="w-8 h-8 rounded-full object-cover border border-[var(--line)] bg-[var(--ink-800)]"
             />
           ) : (
-            <div className="w-8 h-8 rounded-lg bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-xs">
+            <div className="w-8 h-8 rounded-full bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-xs">
               SS
             </div>
           )}

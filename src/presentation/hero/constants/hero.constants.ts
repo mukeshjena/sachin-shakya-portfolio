@@ -6,8 +6,8 @@ export const HERO_FALLBACK_CONTENT = {
   headline: "Enterprise Cloud Reliability at Mission-Critical Scale",
   subheadline:
     "Architecting high-availability multi-cloud landing zones across Azure & AWS, slashing monthly cloud expenditure by $170K, and cutting operational incident MTTR by 40%.",
-  ctaPrimary: "Explore Architecture Telemetry",
-  ctaSecondary: "Executive Résumé",
+  ctaPrimary: "View Telemetry",
+  ctaSecondary: "Get Résumé",
   statusTag: "SYSTEM TELEMETRY // ALL NODES OPERATIONAL",
 } as const;
 

@@ -57,7 +57,7 @@ export function Footer() {
           {/* Column 1: Identity & Executive Mission */}
           <div className="space-y-4">
             <div className="flex items-center gap-3 select-none">
-              <div className="w-9 h-9 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-sm">
+              <div className="w-9 h-9 rounded-full bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-sm">
                 SS
               </div>
               <div>

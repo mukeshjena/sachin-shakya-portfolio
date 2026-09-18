@@ -123,11 +123,11 @@ export function BlackholeHero() {
             {/* Dual CTA Action Controls */}
             <motion.div
               variants={HERO_ANIMATION_VARIANTS.item}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2"
             >
               <a
                 href="#telemetry"
-                className="px-6 py-3.5 rounded-xl bg-[var(--amber)] text-[var(--ink-900)] font-semibold text-xs sm:text-sm uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all flex items-center justify-center gap-2.5 cursor-pointer select-none"
+                className="px-5 py-3 rounded-xl bg-[var(--amber)] text-[var(--ink-900)] font-semibold text-xs sm:text-sm uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all flex items-center justify-center gap-2 cursor-pointer select-none whitespace-nowrap"
               >
                 <span>{content.ctaPrimary}</span>
                 <IoArrowForwardOutline className="w-4 h-4" aria-hidden="true" />
@@ -137,7 +137,7 @@ export function BlackholeHero() {
                 href={content.resumePdfUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3.5 rounded-xl bg-[var(--ink-800)] text-[var(--paper)] border border-[var(--line)] hover:border-[var(--cyan)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2.5 cursor-pointer select-none"
+                className="px-5 py-3 rounded-xl bg-[var(--ink-800)] text-[var(--paper)] border border-[var(--line)] hover:border-[var(--cyan)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer select-none whitespace-nowrap"
               >
                 <IoDocumentTextOutline className="w-4 h-4 text-[var(--cyan)]" aria-hidden="true" />
                 <span>{content.ctaSecondary}</span>
@@ -188,7 +188,7 @@ export function BlackholeHero() {
               </div>
 
               {/* Portrait Image Container */}
-              <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-[var(--ink-900)] border border-[var(--line)]">
+              <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[var(--ink-900)] border border-[var(--line)]">
                 <img
                   src={content.heroPhotoUrl}
                   alt="Sachin Shakya — Lead Cloud Architect"

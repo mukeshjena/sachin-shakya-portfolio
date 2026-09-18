@@ -21,5 +21,5 @@ export const HEADER_COPY = {
   brandTitle: "SACHIN SHAKYA",
   brandSubtitle: "LEAD CLOUD ARCHITECT",
   availabilityDefault: "AVAILABLE FOR ADVISORY",
-  contactCta: "Initiate Contact",
+  contactCta: "Contact",
 } as const;

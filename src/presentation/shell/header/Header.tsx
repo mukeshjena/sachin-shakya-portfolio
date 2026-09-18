@@ -7,7 +7,7 @@ import { HEADER_COPY } from "./constants/header.constants";
 import { useHeaderLogic } from "./Header.hooks";
 
 export function Header() {
-  const { isScrolled, logoUrl, fullName, availabilityNote, navLinks } = useHeaderLogic();
+  const { isScrolled, logoUrl, fullName, navLinks } = useHeaderLogic();
 
   return (
     <header
@@ -24,10 +24,10 @@ export function Header() {
             <img
               src={logoUrl}
               alt={`${fullName} emblem`}
-              className="w-10 h-10 rounded-xl object-contain border border-[var(--line)] bg-[var(--ink-800)] p-1 transition-colors group-hover:border-[var(--cyan)]"
+              className="w-10 h-10 rounded-full object-cover border border-[var(--line)] bg-[var(--ink-800)] transition-colors group-hover:border-[var(--cyan)]"
             />
           ) : (
-            <div className="w-10 h-10 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-base">
+            <div className="w-10 h-10 rounded-full bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-sm">
               SS
             </div>
           )}
@@ -59,24 +59,13 @@ export function Header() {
 
         {/* Right Telemetry Controls */}
         <div className="flex items-center gap-3.5">
-          {/* Availability Status Beacon */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--ink-800)] border border-[var(--line)] select-none">
-            <span
-              className="w-2 h-2 rounded-full bg-[var(--live)] animate-pulse"
-              aria-hidden="true"
-            />
-            <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--live)] font-medium">
-              {availabilityNote}
-            </span>
-          </div>
-
           {/* Cupertino Theme Toggle */}
           <ThemeToggle />
 
           {/* Contact Action CTA */}
           <a
             href="#contact"
-            className="px-4 py-2 rounded-xl bg-[var(--amber)] text-[var(--ink-900)] font-semibold text-xs uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-[var(--amber)] text-[var(--ink-900)] font-semibold text-xs uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all cursor-pointer whitespace-nowrap"
           >
             {HEADER_COPY.contactCta}
           </a>

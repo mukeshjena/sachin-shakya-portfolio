@@ -105,8 +105,8 @@ export async function seedContent(media: SeededMediaMap): Promise<void> {
         headline: "Enterprise Cloud Reliability at Mission-Critical Scale",
         subheadline:
           "Architecting high-availability infrastructure across Azure & AWS, slashing cloud bills by $170K/month, and reducing incident MTTR by 40%.",
-        ctaPrimary: "Explore Architecture Telemetry",
-        ctaSecondary: "Download Executive Résumé",
+        ctaPrimary: "View Telemetry",
+        ctaSecondary: "Get Résumé",
         heroPhotoUrl: media.heroPhotoUrl,
       },
     },
