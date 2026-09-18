@@ -26,19 +26,10 @@ export function CapabilitiesSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
-          className="space-y-4 max-w-3xl"
+          className="space-y-3 max-w-3xl"
         >
           <motion.div variants={CAPABILITIES_ANIMATION_VARIANTS.item}>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
-              <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
-                {CAPABILITIES_COPY.eyebrow}
-              </span>
-            </div>
-          </motion.div>
-
-          <motion.div variants={CAPABILITIES_ANIMATION_VARIANTS.item}>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[var(--paper)] leading-[1.08]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--paper)] leading-tight">
               {CAPABILITIES_COPY.headline}
             </h2>
           </motion.div>

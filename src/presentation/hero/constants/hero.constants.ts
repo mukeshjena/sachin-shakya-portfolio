@@ -2,7 +2,7 @@
 // Telemetry copy, shader configuration presets, and animation variants for 21st.dev Blackhole Hero.
 
 export const HERO_COPY = {
-  eyebrow: "TECHNICAL LEAD — CLOUDOPS // CLOUD & DEVOPS ARCHITECT",
+  eyebrow: "TECHNICAL LEAD — CLOUDOPS",
   titleLine1: "Architecting Autonomous",
   titleLine2: "Cloud Horizons",
   subheadline:

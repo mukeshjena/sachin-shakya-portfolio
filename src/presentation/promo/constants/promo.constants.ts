@@ -17,10 +17,10 @@ export const PROMO_COPY = {
   DEFAULT_HEADING: "Optimize Your Cloud Infrastructure",
   DEFAULT_SUBHEADING:
     "Looking to reduce Azure/AWS spend or accelerate your DevOps delivery pipeline? Let's schedule a 30-minute cloud architecture review.",
-  CTA_BUTTON: "Request Executive Review",
+  CTA_BUTTON: "Request Review",
   SUBMITTING: "Transmitting Request...",
   SUCCESS_BADGE: "CONSULTATION INITIATED",
-  SUCCESS_TITLE: "Executive Consultation Reserved",
+  SUCCESS_TITLE: "Consultation Reserved",
   SUCCESS_MESSAGE:
     "Your architecture review request has been routed directly to Sachin Shakya. An initial discovery response will arrive within 24 hours.",
   CLOSE_ARIA: "Close consultation review modal",

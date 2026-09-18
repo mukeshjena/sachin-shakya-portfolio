@@ -6,7 +6,6 @@ import type React from "react";
 import {
   IoDocumentTextOutline,
   IoMailOutline,
-  IoPulseOutline,
   IoShieldCheckmarkOutline,
   IoTrendingUpOutline,
 } from "react-icons/io5";
@@ -95,21 +94,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             onClick={onOpenTelemetry}
             className="mt-3 inline-flex items-center gap-1 text-[11px] font-mono text-[var(--cyan)] hover:underline cursor-pointer"
           >
-            Configure Spend Benchmarks &rarr;
+            Configure Spend &rarr;
           </button>
-        </div>
-      </div>
-
-      {/* Realtime Fleet Status Banner */}
-      <div className="p-4 rounded-xl bg-[var(--ink-850)] border border-[var(--line)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
-        <div className="flex items-center gap-2 text-[var(--live)]">
-          <IoPulseOutline className="w-4 h-4 animate-spin" aria-hidden="true" />
-          <span>Realtime telemetry active &bull; IndexedDB multi-tab cache synchronized</span>
-        </div>
-        <div className="text-[var(--mist-dim)] text-[11px]">
-          {metrics.lastSyncedAt
-            ? `${DASHBOARD_COPY.LAST_SYNC_LABEL}: ${metrics.lastSyncedAt.toLocaleTimeString()}`
-            : "Connecting to live cloud stream..."}
         </div>
       </div>
 
@@ -117,14 +103,14 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
       <div className="p-6 rounded-2xl bg-[var(--ink-850)] border border-[var(--line)]">
         <div className="flex items-center justify-between pb-4 border-b border-[var(--line)] mb-4">
           <h3 className="text-sm font-bold font-mono tracking-tight text-[var(--paper)] uppercase">
-            Dynamic Pages Telemetry
+            Dynamic Pages
           </h3>
           <button
             type="button"
             onClick={() => onSelectTab("pages")}
             className="text-xs font-mono text-[var(--cyan)] hover:underline cursor-pointer"
           >
-            View All Pages &rarr;
+            All Pages &rarr;
           </button>
         </div>
 

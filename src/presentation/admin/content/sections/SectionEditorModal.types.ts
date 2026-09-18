@@ -1,5 +1,5 @@
 // presentation/admin/content/sections/SectionEditorModal.types.ts
-// Type contracts for the section configuration modal.
+// Type contracts for the section configuration modal supporting full type-aware editing.
 
 export interface SectionEditorFormData {
   readonly title: string;
@@ -7,6 +7,35 @@ export interface SectionEditorFormData {
   readonly isVisible: boolean;
   readonly headline: string;
   readonly description: string;
+  // Hero section fields
+  readonly eyebrow?: string;
+  readonly titleLine1?: string;
+  readonly subheadline?: string;
+  readonly ctaPrimary?: string;
+  readonly ctaSecondary?: string;
+  readonly heroPhotoUrl?: string;
+  // Contact section fields
+  readonly fullName?: string;
+  readonly role?: string;
+  readonly email?: string;
+  readonly phone?: string;
+  readonly linkedinUrl?: string;
+  readonly locationUrl?: string;
+  readonly resumePdfUrl?: string;
+  readonly photoUrl?: string;
+  // Overview / Impact fields
+  readonly metric1Value?: string;
+  readonly metric1Label?: string;
+  readonly metric2Value?: string;
+  readonly metric2Label?: string;
+  readonly metric3Value?: string;
+  readonly metric3Label?: string;
+  readonly metric4Value?: string;
+  readonly metric4Label?: string;
+  // Telemetry fields
+  readonly targetSavings?: string;
+  readonly mttrImprovement?: string;
+  readonly fleetManaged?: string;
 }
 
 export interface SectionEditTarget {

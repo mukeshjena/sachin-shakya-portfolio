@@ -2,7 +2,6 @@
 // Compact iOS-style title bar for mobile viewports (< md).
 // Separated from desktop Header per Rule 8 (Dual Chrome Experience).
 
-import { IoPersonOutline } from "react-icons/io5";
 import { ThemeToggle } from "../../theme/toggle/ThemeToggle";
 import { useMobileHeaderLogic } from "./MobileHeader.hooks";
 
@@ -45,16 +44,6 @@ export function MobileHeader() {
               </span>
             </div>
           )}
-
-          {/* Admin Portal Circle Icon (DIIRA Parity) */}
-          <a
-            href="/admin"
-            aria-label="Admin Portal"
-            title="Admin Portal"
-            className="flex w-8 h-8 rounded-lg border border-[var(--line)] bg-[var(--ink-800)] items-center justify-center text-[var(--mist)] hover:text-[var(--amber)] hover:border-[var(--amber)] transition-colors shrink-0 cursor-pointer select-none"
-          >
-            <IoPersonOutline className="w-3.5 h-3.5" aria-hidden="true" />
-          </a>
 
           <ThemeToggle />
         </div>

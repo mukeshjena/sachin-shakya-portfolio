@@ -12,7 +12,7 @@ export const FOOTER_COPY = {
 } as const;
 
 export const FOOTER_DEFAULT_SECTION_LINKS = [
-  { id: "top", label: "Mission Control", href: "#top" },
+  { id: "top", label: "Home", href: "#top" },
   { id: "telemetry", label: "Cloud Fleet Telemetry", href: "#telemetry" },
   { id: "impact", label: "Financial & MTTR Impact", href: "#impact" },
   { id: "experience", label: "Enterprise Experience", href: "#experience" },
@@ -27,5 +27,5 @@ export const FOOTER_STACK_ITEMS = [
   "Terraform & OpenTofu IaC",
   "Azure DevOps YAML Pipelines",
   "Datadog, Dynatrace & Azure Monitor",
-  "FinOps Cloud Cost Reclamation",
+  "Cloud Cost Optimization",
 ] as const;

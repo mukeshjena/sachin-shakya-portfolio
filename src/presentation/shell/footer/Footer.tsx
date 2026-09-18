@@ -217,7 +217,7 @@ export function Footer() {
                 className="w-full py-2.5 px-4 rounded-xl bg-[var(--ink-850)] border border-[var(--line-soft)] hover:border-[var(--line)] text-[var(--mist)] hover:text-[var(--paper)] text-xs font-mono flex items-center gap-2 transition-colors cursor-pointer select-none"
               >
                 <IoPersonOutline className="w-4 h-4 text-[var(--mist-dim)]" aria-hidden="true" />
-                <span>Mission Control Portal</span>
+                <span>Admin Console</span>
               </a>
             </div>
           </div>

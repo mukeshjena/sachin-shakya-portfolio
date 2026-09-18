@@ -74,13 +74,13 @@ export class RequestAccessCodeUseCase implements IRequestAccessCodeUseCase {
     const emailHtml = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace; max-width: 540px; margin: 0 auto; padding: 28px; background-color: #08080a; color: #fafafa; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px;">
         <div style="display: inline-block; padding: 4px 10px; background-color: #0f0f13; border: 1px solid rgba(255,176,32,0.3); border-radius: 9999px; color: #ffb020; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">
-          Mission Control // Security Telemetry
+          Sachin Shakya — Admin Access
         </div>
         <h2 style="color: #fafafa; margin-top: 16px; margin-bottom: 8px; font-size: 20px; font-weight: 700; letter-spacing: -0.5px;">
           Admin Authentication Code
         </h2>
         <p style="font-size: 13px; color: #a1a1aa; line-height: 1.6; margin-top: 0;">
-          A single-use verification passcode has been generated for administrative access to the Sachin Shakya Executive Console.
+          A single-use verification passcode has been generated for administrative access to the Sachin Shakya Admin Console.
         </p>
         
         <div style="margin: 28px 0; padding: 20px; background-color: #000000; border: 1px solid rgba(73,199,232,0.3); border-radius: 8px; text-align: center;">

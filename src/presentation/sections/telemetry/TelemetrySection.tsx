@@ -1,5 +1,5 @@
 // presentation/sections/telemetry/TelemetrySection.tsx
-// State-of-the-art FinOps & Cloud Telemetry Command Center.
+// State-of-the-art Cloud Architecture & Cost Telemetry Console.
 // Declarative view template composing KPI counters and interactive multi-graph suite.
 // Strictly shadow-free, monospaced tabular figures, and zero emojis.
 
@@ -29,7 +29,7 @@ export function TelemetrySection() {
   return (
     <section
       id="telemetry"
-      aria-label="CloudOps and Infrastructure Telemetry Command Center"
+      aria-label="CloudOps and Infrastructure Telemetry Console"
       className="relative w-full py-16 md:py-24 scroll-mt-20 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10 space-y-12">
@@ -39,19 +39,10 @@ export function TelemetrySection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
-          className="space-y-4 max-w-3xl"
+          className="space-y-3 max-w-3xl"
         >
           <motion.div variants={TELEMETRY_ANIMATION_VARIANTS.item}>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
-              <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
-                {TELEMETRY_COPY.eyebrow}
-              </span>
-            </div>
-          </motion.div>
-
-          <motion.div variants={TELEMETRY_ANIMATION_VARIANTS.item}>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[var(--paper)] leading-[1.08]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--paper)] leading-tight">
               {TELEMETRY_COPY.headline}
             </h2>
           </motion.div>
@@ -63,7 +54,7 @@ export function TelemetrySection() {
           </motion.div>
         </motion.div>
 
-        {/* 4 Executive KPI Cards */}
+        {/* 4 Professional KPI Cards */}
         <motion.div
           variants={TELEMETRY_ANIMATION_VARIANTS.container}
           initial="hidden"

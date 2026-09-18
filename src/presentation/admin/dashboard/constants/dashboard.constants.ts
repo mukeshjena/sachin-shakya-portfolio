@@ -2,12 +2,12 @@
 // Constants, static copy, and navigation definitions for the Admin Dashboard Shell.
 
 export const DASHBOARD_COPY = {
-  BADGE: "MISSION CONTROL // TELEMETRY",
-  TITLE: "Executive Administration",
-  SUBTITLE: "Real-time multi-cloud architecture, dynamic page engine, and CMS controls.",
+  BADGE: "ADMIN CONSOLE",
+  TITLE: "Admin Console",
+  SUBTITLE: "Content management, page engine, and operational controls.",
   LIVE_SYNC_ACTIVE: "REALTIME SYNC ACTIVE",
   LIVE_SYNC_OFFLINE: "SYNC OFFLINE",
-  RETURN_TO_SITE: "Return to Site",
+  RETURN_TO_SITE: "Public Site",
   LOGOUT: "Logout",
   STATUS_ONLINE: "ONLINE",
   LAST_SYNC_LABEL: "Last Synced",
@@ -41,8 +41,8 @@ export const DASHBOARD_NAV_TABS: readonly NavTabItem[] = [
   },
   {
     id: "content",
-    label: "Content",
-    description: "Experience, capabilities, and credentials",
+    label: "Sections & Content",
+    description: "Homepage section management & content",
   },
   {
     id: "media",

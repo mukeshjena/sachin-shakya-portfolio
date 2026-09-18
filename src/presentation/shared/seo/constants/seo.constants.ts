@@ -2,7 +2,7 @@
 // Centralized SEO constants, fallback copy, credentials, and social URLs.
 
 export const SEO_CONSTANTS = {
-  SITE_NAME: "Sachin Shakya — Executive Cloud & DevOps Portfolio",
+  SITE_NAME: "Sachin Shakya — Professional Cloud & DevOps Portfolio",
   DEFAULT_TITLE: "Sachin Shakya — Lead Cloud Architect & DevOps Consultant",
   DEFAULT_DESCRIPTION:
     "AI-Native Lead Cloud Architect managing 2,000+ multi-cloud resources with $170K/month verified cost optimization and 40% MTTR reduction across AWS, Microsoft Azure, and Kubernetes.",

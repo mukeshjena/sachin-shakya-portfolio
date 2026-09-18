@@ -49,7 +49,7 @@ export class SubmitPromoInquiryUseCase implements ISubmitPromoInquiryUseCase {
 
     const compiledMessage = optionalMsg
       ? `[Interest: ${interest}]\n\n${optionalMsg}`
-      : `[Interest: ${interest}]\nRequested a 30-minute cloud architecture and FinOps consultation.`;
+      : `[Interest: ${interest}]\nRequested a 30-minute cloud architecture and cost optimization consultation.`;
 
     // 2. Persist to Firestore contactSubmissions with source: "promo-popup"
     const submission = await this.contactRepository.create({

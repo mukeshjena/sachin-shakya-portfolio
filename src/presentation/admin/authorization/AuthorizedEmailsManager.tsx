@@ -32,7 +32,7 @@ export function AuthorizedEmailsManager() {
   } = useAuthorizedEmailsManager();
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-[var(--ink-850)] border border-[var(--line)] rounded-2xl p-6 sm:p-8">
+    <div className="w-full bg-[var(--ink-850)] border border-[var(--line)] rounded-2xl p-6 sm:p-8">
       {/* Panel Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[var(--line)]">
         <div>

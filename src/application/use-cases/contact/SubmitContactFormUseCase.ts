@@ -68,8 +68,8 @@ export class SubmitContactFormUseCase implements ISubmitContactFormUseCase {
     // 3. Dispatch transactional notification email via IEmailSender
     const emailHtml = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background-color: #08080a; color: #fafafa; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
-        <h2 style="color: #ffb020; margin-top: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Executive Consultation Inquiry</h2>
-        <p style="font-size: 14px; color: #a1a1aa; line-height: 1.6;">A new technical leadership or advisory inquiry has been submitted via the executive portfolio.</p>
+        <h2 style="color: #ffb020; margin-top: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Professional Consultation Inquiry</h2>
+        <p style="font-size: 14px; color: #a1a1aa; line-height: 1.6;">A new technical leadership or advisory inquiry has been submitted via the portfolio.</p>
         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;" />
         <p style="margin: 8px 0;"><strong>Name:</strong> ${trimmedName}</p>
         <p style="margin: 8px 0;"><strong>Email:</strong> <a href="mailto:${trimmedEmail}" style="color: #49c7e8;">${trimmedEmail}</a></p>

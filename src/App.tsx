@@ -4,17 +4,11 @@
 
 import { useAppState } from "./App.hooks";
 import { AdminLogin } from "./presentation/admin/login/AdminLogin";
-import { BlackholeHero } from "./presentation/hero/BlackholeHero";
-import { ExecutiveOverview } from "./presentation/overview/ExecutiveOverview";
 import { DynamicPage } from "./presentation/pages/dynamic/DynamicPage";
 import { PipelineTest } from "./presentation/pages/pipeline-test/PipelineTest";
 import { PromoPopupModal } from "./presentation/promo/PromoPopupModal";
 import { AppProviders } from "./presentation/providers/AppProviders";
-import { CapabilitiesSection } from "./presentation/sections/capabilities/CapabilitiesSection";
-import { ContactSection } from "./presentation/sections/contact/ContactSection";
-import { CredentialsSection } from "./presentation/sections/credentials/CredentialsSection";
-import { ExperienceSection } from "./presentation/sections/experience/ExperienceSection";
-import { TelemetrySection } from "./presentation/sections/telemetry/TelemetrySection";
+import { HomeSections } from "./presentation/sections/home/HomeSections";
 import { PwaInstallPrompt } from "./presentation/shared/pwa/PwaInstallPrompt";
 import { SeoHead } from "./presentation/shared/seo/SeoHead";
 import { AppLayout } from "./presentation/shell/layout/AppLayout";
@@ -45,13 +39,7 @@ function App() {
               canonicalPath="/"
               ogImage="/og-image.png"
             />
-            <BlackholeHero />
-            <TelemetrySection />
-            <ExecutiveOverview />
-            <ExperienceSection />
-            <CapabilitiesSection />
-            <CredentialsSection />
-            <ContactSection />
+            <HomeSections />
           </>
         )}
       </AppLayout>

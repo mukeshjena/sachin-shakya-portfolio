@@ -180,7 +180,7 @@ export const AUTOMATION_METRICS: readonly AutomationMetricItem[] = [
     frequency: "Weekly",
   },
   {
-    category: "FinOps Cost Anomaly Triage",
+    category: "Cloud Cost Optimization",
     manualHours: 9,
     automatedHours: 2.5,
     reductionPercent: 72,

@@ -91,9 +91,9 @@ export function generatePersonGraph(options?: PersonSchemaOptions): object {
         "@type": "WebSite",
         "@id": `${baseUrl}/#website`,
         url: baseUrl,
-        name: `${name} — Executive Portfolio & Telemetry`,
+        name: `${name} — Professional Portfolio & Telemetry`,
         description:
-          "Executive portfolio, telemetry benchmarks, and cloud architecture capabilities of Sachin Shakya.",
+          "Professional portfolio, telemetry benchmarks, and cloud architecture capabilities of Sachin Shakya.",
         publisher: {
           "@id": `${baseUrl}/#person`,
         },

@@ -31,12 +31,34 @@ interface AdminEmailDoc {
 
 const DEFAULT_SECTIONS: readonly Section[] = [
   {
+    id: "hero",
+    pageId: "home",
+    type: "hero",
+    title: "Hero & Accretion Horizon",
+    content: {},
+    order: 0,
+    isVisible: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "telemetry",
+    pageId: "home",
+    type: "telemetry",
+    title: "CloudOps & Spend Telemetry",
+    content: {},
+    order: 1,
+    isVisible: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
     id: "impact",
     pageId: "home",
     type: "impact",
-    title: "CloudOps Telemetry & Enterprise Impact",
+    title: "Enterprise Impact & Metrics",
     content: {},
-    order: 0,
+    order: 2,
     isVisible: true,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -45,9 +67,9 @@ const DEFAULT_SECTIONS: readonly Section[] = [
     id: "experience",
     pageId: "home",
     type: "experience",
-    title: "Executive Experience Timeline",
+    title: "Professional Trajectory Timeline",
     content: {},
-    order: 1,
+    order: 3,
     isVisible: true,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -56,9 +78,9 @@ const DEFAULT_SECTIONS: readonly Section[] = [
     id: "capabilities",
     pageId: "home",
     type: "capabilities",
-    title: "Cloud & DevOps Architecture Capabilities",
+    title: "Core Architecture Capabilities",
     content: {},
-    order: 2,
+    order: 4,
     isVisible: true,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -67,9 +89,9 @@ const DEFAULT_SECTIONS: readonly Section[] = [
     id: "credentials",
     pageId: "home",
     type: "credentials",
-    title: "Certifications & Telemetry Badges",
+    title: "Certifications & Qualifications",
     content: {},
-    order: 3,
+    order: 5,
     isVisible: true,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -78,9 +100,9 @@ const DEFAULT_SECTIONS: readonly Section[] = [
     id: "contact",
     pageId: "home",
     type: "contact",
-    title: "Consultation & Leadership Advisory",
+    title: "Consultation & Contact Desk",
     content: {},
-    order: 4,
+    order: 6,
     isVisible: true,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -150,8 +172,17 @@ export function useDashboardShell(): DashboardShellViewModel {
   });
 
   const sections = useMemo(() => {
-    return realtimeSections.length > 0 ? realtimeSections : DEFAULT_SECTIONS;
+    const homeSections = realtimeSections.filter((s) => !s.pageId || s.pageId === "home");
+    return homeSections.length > 0
+      ? [...homeSections].sort((a, b) => a.order - b.order)
+      : DEFAULT_SECTIONS;
   }, [realtimeSections]);
+
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+
+  const toggleSidebarCollapsed = useCallback(() => {
+    setIsCollapsed((prev) => !prev);
+  }, []);
 
   const toggleMobileNav = useCallback(() => {
     setIsMobileNavOpen((prev) => !prev);
@@ -431,6 +462,8 @@ export function useDashboardShell(): DashboardShellViewModel {
     isMobileNavOpen,
     toggleMobileNav,
     closeMobileNav,
+    isCollapsed,
+    toggleSidebarCollapsed,
     handleLogout: logout,
 
     // Modals

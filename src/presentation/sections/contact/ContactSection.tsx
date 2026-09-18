@@ -23,6 +23,7 @@ export function ContactSection() {
     isSubmitting,
     isSubmitted,
     generalError,
+    contactInfo,
     handleFieldChange,
     handleFieldBlur,
     handleSubmit,
@@ -32,7 +33,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      aria-label="Executive Consultation Desk"
+      aria-label="Consultation Desk"
       className="relative w-full py-20 md:py-28 bg-[var(--ink-900)] border-t border-[var(--line)] scroll-mt-20 overflow-hidden"
     >
       {/* Background Subtle Hairline Grid */}
@@ -43,14 +44,7 @@ export function ContactSection() {
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-12">
         {/* Section Header */}
-        <div className="max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
-            <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--live)] font-semibold">
-              {CONTACT_COPY.eyebrow}
-            </span>
-          </div>
-
+        <div className="max-w-3xl space-y-3">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--paper)] leading-tight">
             {CONTACT_COPY.headline}
           </h2>
@@ -61,27 +55,21 @@ export function ContactSection() {
         </div>
 
         {/* 2-Column Command Desk Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Left Column (5 cols): Executive Portrait & Direct Channels */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="rounded-2xl overflow-hidden border border-[var(--line)] bg-[var(--ink-850)]/90 backdrop-blur-md space-y-5 p-5 sm:p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+          {/* Left Column (5 cols): Professional Portrait & Direct Channels */}
+          <div className="lg:col-span-5 flex flex-col h-full">
+            <div className="rounded-2xl overflow-hidden border border-[var(--line)] bg-[var(--ink-850)]/90 backdrop-blur-md space-y-5 p-5 sm:p-6 flex flex-col flex-1 justify-between h-full">
               {/* Sachin Shakya Portrait */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[var(--ink-900)] border border-[var(--line-soft)]">
+              <div className="relative flex-1 min-h-[420px] lg:min-h-[520px] w-full overflow-hidden rounded-xl bg-[var(--ink-900)] border border-[var(--line-soft)]">
                 <img
-                  src="/assets/sachin-three.png"
-                  alt="Sachin Shakya — Technical Lead — CloudOps"
+                  src={contactInfo.photoUrl}
+                  alt={`${contactInfo.fullName} — ${contactInfo.headline}`}
                   className="w-full h-full object-cover object-top"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink-900)]/60 via-transparent to-transparent" />
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)]">
-                    <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
-                    <span className="text-[10px] font-mono text-[var(--live)] font-semibold uppercase tracking-wider">
-                      AVAILABLE FOR ADVISORY
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono text-[var(--amber)] bg-[var(--ink-900)]/90 px-2 py-0.5 rounded border border-[var(--line)] font-bold">
+                <div className="absolute bottom-3 right-3 flex items-center">
+                  <span className="text-[10px] font-mono text-[var(--amber)] bg-[var(--ink-900)]/90 px-2.5 py-1 rounded border border-[var(--line)] font-bold">
                     ~9 YRS EXP
                   </span>
                 </div>
@@ -90,44 +78,44 @@ export function ContactSection() {
               {/* Direct Identity */}
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-[var(--paper)]">Sachin Shakya</h3>
-                  <p className="text-xs text-[var(--cyan)] font-mono">Technical Lead — CloudOps</p>
+                  <h3 className="text-lg font-bold text-[var(--paper)]">{contactInfo.fullName}</h3>
+                  <p className="text-xs text-[var(--cyan)] font-mono">{contactInfo.headline}</p>
                 </div>
               </div>
 
               {/* Direct Channels Icon Bar */}
               <div className="flex items-center gap-2.5 pt-2 border-t border-[var(--line-soft)]">
                 <a
-                  href="mailto:sachinshakya69@gmail.com"
-                  title="Direct Email (sachinshakya69@gmail.com)"
+                  href={`mailto:${contactInfo.email}`}
+                  title={`Direct Email (${contactInfo.email})`}
                   className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
-                  aria-label="Email Sachin Shakya"
+                  aria-label={`Email ${contactInfo.fullName}`}
                 >
                   <IoMailOutline className="w-5 h-5" aria-hidden="true" />
                 </a>
 
                 <a
-                  href="tel:+919953060735"
-                  title="Direct Phone / WhatsApp (+91 99530 60735)"
+                  href={`tel:${contactInfo.phone.replace(/\s+/g, "")}`}
+                  title={`Direct Phone / WhatsApp (${contactInfo.phone})`}
                   className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
-                  aria-label="Call Sachin Shakya"
+                  aria-label={`Call ${contactInfo.fullName}`}
                 >
                   <IoCallOutline className="w-5 h-5" aria-hidden="true" />
                 </a>
 
                 <a
-                  href="https://linkedin.com/in/sachin-shakya0782"
+                  href={contactInfo.linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   title="LinkedIn Profile"
                   className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
-                  aria-label="Sachin Shakya LinkedIn Profile"
+                  aria-label={`${contactInfo.fullName} LinkedIn Profile`}
                 >
                   <IoLogoLinkedin className="w-5 h-5" aria-hidden="true" />
                 </a>
 
                 <a
-                  href="https://maps.google.com/?q=Faridabad,+Haryana+121005,+India"
+                  href={contactInfo.locationUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   title="Location (Faridabad / Delhi NCR, India)"
@@ -138,7 +126,7 @@ export function ContactSection() {
                 </a>
 
                 <a
-                  href="/Sachin_Shakya_Resume.pdf"
+                  href={contactInfo.resumePdfUrl}
                   download
                   title="Download Verified CV (PDF)"
                   className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--amber)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer ml-auto"
@@ -151,8 +139,8 @@ export function ContactSection() {
           </div>
 
           {/* Right Column (7 cols): Consultation Inquiry Form */}
-          <div className="lg:col-span-7">
-            <div className="p-6 sm:p-8 rounded-2xl bg-[var(--ink-850)]/90 backdrop-blur-md border border-[var(--line)]">
+          <div className="lg:col-span-7 flex flex-col h-full">
+            <div className="p-6 sm:p-8 rounded-2xl bg-[var(--ink-850)]/90 backdrop-blur-md border border-[var(--line)] flex-1 flex flex-col justify-between">
               {isSubmitted ? (
                 <div className="py-8 space-y-6 text-center">
                   <div className="w-16 h-16 rounded-full bg-[var(--ink-800)] border border-[var(--live)]/50 mx-auto flex items-center justify-center text-[var(--live)]">

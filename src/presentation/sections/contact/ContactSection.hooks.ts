@@ -6,6 +6,7 @@ import type React from "react";
 import { useCallback, useState } from "react";
 import type { ISubmitContactFormUseCase } from "../../../application/use-cases/contact/SubmitContactFormUseCase";
 import { DI_TOKENS } from "../../../infrastructure/di/tokens";
+import { useSiteConfig } from "../../providers/site-config/useSiteConfig";
 import { notificationService } from "../../shared/notifications/notification.service";
 import { useContainer } from "../../shared/useContainer";
 import type {
@@ -123,6 +124,22 @@ export function useContactSectionLogic(): ContactSectionState {
     [values, submitUseCase]
   );
 
+  const { siteSettings } = useSiteConfig();
+  const linkedinUrl =
+    siteSettings?.socialLinks?.find((s) => s.platform === "linkedin")?.url ||
+    "https://linkedin.com/in/sachin-shakya0782";
+
+  const contactInfo = {
+    email: siteSettings?.email || "sachinshakya69@gmail.com",
+    phone: siteSettings?.phone || "+91 99530 60735",
+    linkedinUrl,
+    locationUrl: "https://maps.google.com/?q=Faridabad,+Haryana+121005,+India",
+    resumePdfUrl: siteSettings?.resumePdfUrl || "/Sachin_Shakya_Resume.pdf",
+    photoUrl: siteSettings?.avatarUrl || "/assets/sachin-three.png",
+    fullName: siteSettings?.fullName || "Sachin Shakya",
+    headline: siteSettings?.headline || "Technical Lead — CloudOps",
+  };
+
   const handleReset = useCallback(() => {
     setIsSubmitted(false);
     setGeneralError(null);
@@ -136,6 +153,7 @@ export function useContactSectionLogic(): ContactSectionState {
     isSubmitting,
     isSubmitted,
     generalError,
+    contactInfo,
     handleFieldChange,
     handleFieldBlur,
     handleSubmit,

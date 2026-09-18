@@ -35,12 +35,12 @@
   --radius-lg: var(--r-lg);
 }
 
-/* ── Light Mode Palette (Default Executive Paper Canvas) ───────────────────── */
+/* ── Light Mode Palette (Default Professional Paper Canvas) ───────────────── */
 :root,
 [data-theme="light"] {
   color-scheme: light;
 
-  /* Canvas layers — crisp executive paper canvas */
+  /* Canvas layers — crisp professional paper canvas */
   --ink-900: #f4f7f9;
   --ink-850: #ebf1f4;
   --ink-800: #ffffff;
@@ -186,6 +186,22 @@ select:focus {
 ::selection {
   background: var(--amber);
   color: var(--ink-900);
+}
+
+/* ── Modern Webkit Scrollbar Design ────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ink-600);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--amber);
 }
 
 #root {

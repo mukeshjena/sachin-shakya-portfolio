@@ -11,7 +11,13 @@ export interface SiteSettingsFormData {
   readonly phone: string;
   readonly location: string;
   readonly logoUrl: string;
+  readonly avatarUrl?: string;
+  readonly resumePdfUrl?: string;
   readonly socialLinks: readonly SocialLink[];
+}
+
+export interface SiteSettingsEditorProps {
+  readonly subTab?: "identity" | "contact";
 }
 
 export interface SiteSettingsEditorViewModel {

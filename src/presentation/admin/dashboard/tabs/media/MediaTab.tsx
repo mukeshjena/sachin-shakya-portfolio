@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import {
   IoCheckmarkOutline,
   IoCopyOutline,
+  IoDocumentTextOutline,
   IoImageOutline,
   IoOpenOutline,
   IoTrashOutline,
@@ -68,9 +69,9 @@ export const MediaTab: React.FC<MediaTabProps> = ({
         <button
           type="button"
           onClick={onOpenMediaPicker}
-          className="px-4 py-2.5 rounded-xl bg-[var(--amber)] hover:bg-[var(--amber-deep)] text-[var(--ink-950)] text-xs font-mono font-semibold tracking-wide transition-colors cursor-pointer shrink-0"
+          className="px-4 py-2 rounded-xl bg-[var(--amber)] hover:bg-[var(--amber-deep)] text-[var(--ink-950)] text-xs font-mono font-semibold tracking-wide transition-colors cursor-pointer shrink-0"
         >
-          + Upload Asset
+          + Upload
         </button>
       </div>
 
@@ -107,21 +108,36 @@ export const MediaTab: React.FC<MediaTabProps> = ({
             const isCopied = copiedId === asset.id;
             const fileSizeKb = asset.bytes ? (asset.bytes / 1024).toFixed(0) : null;
 
+            const isPdf =
+              asset.format?.toLowerCase() === "pdf" || asset.url.toLowerCase().endsWith(".pdf");
+
             return (
               <div
                 key={asset.id}
-                className="group rounded-2xl bg-[var(--ink-850)] border border-[var(--line)] overflow-hidden flex flex-col justify-between hover:border-[var(--cyan)]/40 transition-colors"
+                className="group rounded-2xl bg-[var(--ink-850)] border border-[var(--line)] flex flex-col justify-between hover:border-[var(--cyan)]/40 transition-colors relative"
               >
                 {/* Thumbnail Preview Area */}
-                <div className="relative aspect-video w-full bg-[var(--ink-900)] border-b border-[var(--line)] overflow-hidden flex items-center justify-center">
-                  <img
-                    src={asset.url}
-                    alt={asset.altText || asset.publicId}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                  />
+                <div className="relative aspect-video w-full bg-[var(--ink-900)] border-b border-[var(--line)] rounded-t-2xl flex items-center justify-center">
+                  {isPdf ? (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-[var(--ink-900)] space-y-2 select-none">
+                      <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
+                        <IoDocumentTextOutline className="w-6 h-6" />
+                      </div>
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-red-400 font-semibold">
+                        PDF Document
+                      </span>
+                    </div>
+                  ) : (
+                    <img
+                      src={asset.url}
+                      alt={asset.altText || asset.publicId}
+                      loading="lazy"
+                      className="w-full h-full object-cover rounded-t-2xl"
+                    />
+                  )}
+
                   {/* Format & Size Badge */}
-                  <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                  <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 z-10">
                     {asset.format && (
                       <span className="px-2 py-0.5 rounded bg-[var(--ink-900)]/90 backdrop-blur-sm border border-[var(--line)] text-[9px] font-mono uppercase tracking-wider text-[var(--cyan)]">
                         {asset.format}
@@ -135,17 +151,17 @@ export const MediaTab: React.FC<MediaTabProps> = ({
                   </div>
 
                   {/* Context Menu */}
-                  <div className="absolute top-2.5 right-2.5">
+                  <div className="absolute top-2.5 right-2.5 z-20">
                     <ThreeDotMenu
                       actions={[
                         {
                           id: `copy-${asset.id}`,
-                          label: "Copy CDN URL",
+                          label: "Copy URL",
                           onClick: () => handleCopyUrl(asset),
                         },
                         {
                           id: `open-${asset.id}`,
-                          label: "Open in New Tab",
+                          label: "Open in Tab",
                           onClick: () => window.open(asset.url, "_blank"),
                         },
                         {

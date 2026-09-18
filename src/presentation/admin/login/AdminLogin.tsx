@@ -38,8 +38,8 @@ export function AdminLogin() {
     return (
       <>
         <SeoHead
-          title="Executive Mission Control // Sachin Shakya"
-          description="Authenticated telemetry and administration interface."
+          title="Admin Console // Sachin Shakya"
+          description="Authenticated administration interface."
           noIndex={true}
         />
         <DashboardShell />

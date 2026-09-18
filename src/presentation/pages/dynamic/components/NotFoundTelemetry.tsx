@@ -54,7 +54,7 @@ export function NotFoundTelemetry({ slug, onReturnHome }: NotFoundTelemetryProps
             className="px-6 py-3 rounded-full bg-[var(--amber)] text-black font-semibold text-xs sm:text-sm uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all flex items-center gap-2 select-none cursor-pointer"
           >
             <IoArrowBackOutline className="w-4 h-4" aria-hidden="true" />
-            <span>Return to Mission Control</span>
+            <span>Return to Home</span>
           </button>
 
           <a

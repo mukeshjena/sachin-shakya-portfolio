@@ -26,7 +26,7 @@ export class EmailApiSender implements IEmailSender {
           "x-requested-with": "XMLHttpRequest",
         },
         body: JSON.stringify({
-          name: payload.replyTo || "Executive Consultation Lead",
+          name: payload.replyTo || "Consultation Inquiry",
           email: payload.replyTo || "inquiry@sachin-shakya.com",
           subject: payload.subject,
           message: payload.html,
@@ -34,7 +34,7 @@ export class EmailApiSender implements IEmailSender {
           to: payload.to,
           profile: env.email.profile,
           customConfig: {
-            fromName: "Sachin Shakya — Mission Control",
+            fromName: "Sachin Shakya — Admin Console",
             fromEmail: "sachin.shakya@live.com",
           },
         }),

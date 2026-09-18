@@ -11,7 +11,6 @@ import { VscAzure } from "react-icons/vsc";
 import {
   type InfraBadgeIconKey,
   OVERVIEW_ANIMATION_VARIANTS,
-  OVERVIEW_FALLBACK_CONTENT,
   OVERVIEW_INFRA_BADGES,
   OVERVIEW_KEY_METRICS,
 } from "./constants/overview.constants";
@@ -44,7 +43,7 @@ export function ExecutiveOverview() {
   return (
     <section
       id="impact"
-      aria-label="Executive Architecture Telemetry"
+      aria-label="Professional Architecture Impact"
       className="relative w-full py-16 md:py-24 scroll-mt-20 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >
       {/* Hairline Grid Subtle Background */}
@@ -61,25 +60,11 @@ export function ExecutiveOverview() {
           viewport={{ once: true, margin: "-80px" }}
           className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center"
         >
-          {/* Left Column (7 cols): Executive Command & Telemetry */}
+          {/* Left Column (7 cols): Architecture Impact & Highlights */}
           <div className="lg:col-span-7 space-y-7">
-            {/* Mission Eyebrow Telemetry Beacon */}
+            {/* Monumental Impact Headline */}
             <motion.div variants={OVERVIEW_ANIMATION_VARIANTS.item}>
-              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)]/90 border border-[var(--line)] select-none">
-                <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
-                <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
-                  {content.eyebrow}
-                </span>
-                <span className="text-[11px] text-[var(--line)]">|</span>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--mist-dim)] hidden sm:inline">
-                  {OVERVIEW_FALLBACK_CONTENT.statusTag}
-                </span>
-              </div>
-            </motion.div>
-
-            {/* Monumental Headline */}
-            <motion.div variants={OVERVIEW_ANIMATION_VARIANTS.item}>
-              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--paper)] leading-[1.08]">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--paper)] leading-tight">
                 {content.headline}
               </h2>
             </motion.div>

@@ -11,13 +11,15 @@ import type { SiteSettingsEditorViewModel, SiteSettingsFormData } from "./SiteSe
 
 const INITIAL_FORM: SiteSettingsFormData = {
   fullName: "Sachin Shakya",
-  headline: "Technical Lead — CloudOps // Cloud & DevOps Architect",
+  headline: "Technical Lead — CloudOps",
   shortBio:
     "Lead Cloud Architect managing 2,000+ multi-cloud resources with $170K/month verified cost optimization and 40% MTTR reduction across AWS, Microsoft Azure, and Kubernetes.",
   email: "sachin.shakya@live.com",
   phone: "+91 99530 60735",
   location: "Faridabad, Haryana 121005, India",
   logoUrl: "/assets/sachin-logo.png",
+  avatarUrl: "/assets/sachin-one.png",
+  resumePdfUrl: "/Sachin_Shakya_Resume.pdf",
   socialLinks: [
     {
       platform: "linkedin",
@@ -66,6 +68,8 @@ export function useSiteSettingsEditor(): SiteSettingsEditorViewModel {
           phone: settings.phone || INITIAL_FORM.phone,
           location: settings.location || INITIAL_FORM.location,
           logoUrl: settings.logoUrl || INITIAL_FORM.logoUrl,
+          avatarUrl: settings.avatarUrl || INITIAL_FORM.avatarUrl,
+          resumePdfUrl: settings.resumePdfUrl || INITIAL_FORM.resumePdfUrl,
           socialLinks:
             settings.socialLinks && settings.socialLinks.length > 0
               ? settings.socialLinks
@@ -92,8 +96,10 @@ export function useSiteSettingsEditor(): SiteSettingsEditorViewModel {
     (index: number, field: keyof SocialLink, value: unknown) => {
       setFormData((prev) => {
         const updated = [...prev.socialLinks];
+        const target = updated[index];
+        if (!target) return prev;
         updated[index] = {
-          ...updated[index],
+          ...target,
           [field]: value,
         };
         return {
@@ -121,13 +127,15 @@ export function useSiteSettingsEditor(): SiteSettingsEditorViewModel {
         },
       ],
     }));
+    setIsSuccess(false);
   }, []);
 
   const handleRemoveSocialLink = useCallback((index: number) => {
     setFormData((prev) => ({
       ...prev,
-      socialLinks: prev.socialLinks.filter((_, i) => i !== index),
+      socialLinks: prev.socialLinks.filter((_, idx) => idx !== index),
     }));
+    setIsSuccess(false);
   }, []);
 
   const handleSubmit = useCallback(
@@ -146,6 +154,8 @@ export function useSiteSettingsEditor(): SiteSettingsEditorViewModel {
           phone: formData.phone.trim(),
           location: formData.location.trim(),
           logoUrl: formData.logoUrl.trim(),
+          avatarUrl: formData.avatarUrl?.trim(),
+          resumePdfUrl: formData.resumePdfUrl?.trim(),
           socialLinks: formData.socialLinks,
         });
 

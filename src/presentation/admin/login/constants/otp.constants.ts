@@ -9,9 +9,9 @@ export const OTP_CONFIG = {
 } as const;
 
 export const OTP_COPY = {
-  TITLE: "Mission Control // Access Terminal",
-  SUBTITLE: "Zero-password cryptographic entry for authorized platform administrators.",
-  BADGE: "RESTRICTED ACCESS LEVEL 0",
+  TITLE: "Admin Access Portal",
+  SUBTITLE: "Secure passwordless verification for authorized platform administrators.",
+  BADGE: "AUTHORIZED ACCESS ONLY",
   EMAIL_STEP_HEADING: "Request Verification Key",
   EMAIL_STEP_DESC:
     "Enter your authorized administrator email to receive a single-use 6-digit access code.",
@@ -23,12 +23,12 @@ export const OTP_COPY = {
   OTP_STEP_DESC: "Enter the 6-digit verification key dispatched to your administrator inbox.",
   OTP_INPUT_ARIA: "Digit",
   VERIFY_BUTTON: "Authenticate Session",
-  VERIFYING: "Verifying Cryptographic Hash...",
+  VERIFYING: "Verifying Authentication...",
   RESEND_BUTTON: "Request New Code",
   RESEND_COOLDOWN_PREFIX: "Request new code in",
   BACK_BUTTON: "Change Email Address",
   SUCCESS_BADGE: "SESSION AUTHENTICATED",
   SUCCESS_HEADING: "Access Granted",
-  SUCCESS_DESC: "Cryptographic credentials verified. Redirecting to executive control panel...",
+  SUCCESS_DESC: "Verification successful. Redirecting to admin console...",
   ROOT_HINT: "Authorized root: sachin.shakya@live.com",
 } as const;

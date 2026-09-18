@@ -50,7 +50,7 @@ export const TelemetryEditorModal: React.FC<TelemetryEditorModalProps> = (props)
                 id="telemetry-editor-title"
                 className="text-base font-semibold text-[var(--paper)] tracking-tight"
               >
-                FinOps Telemetry Configuration
+                Cloud Cost & Telemetry Configuration
               </h2>
               <p className="text-xs text-[var(--mist-dim)] font-mono">
                 Realtime spend curve and operational benchmark points

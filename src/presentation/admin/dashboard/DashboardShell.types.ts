@@ -47,6 +47,8 @@ export interface DashboardShellViewModel {
   readonly isMobileNavOpen: boolean;
   readonly toggleMobileNav: () => void;
   readonly closeMobileNav: () => void;
+  readonly isCollapsed: boolean;
+  readonly toggleSidebarCollapsed: () => void;
   readonly handleLogout: () => void;
 
   // Page Editor State
