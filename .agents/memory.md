@@ -817,8 +817,50 @@
 - `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
 - `npx vite build --logLevel silent` → ✅ Production build succeeded.
 - Pre-commit automated quality gate passed cleanly on git commit.
-- Sequential branch promotion completed: `step/15c...` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+- Sequential branch promotion completed: `step/16-home-sections` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
 - Cloudflare deployment pipeline triggered on `main`.
+
+---
+
+## 2026-09-18 — Step 17: Dynamic Page Engine & Section Mapper (Completed ✅)
+
+**Branch:** `step/17-dynamic-page-engine` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `9426d91 feat(step-17): dynamic page engine — Firestore section repository, dynamic routing, and section mapper`
+
+**What was done:**
+1. **Concrete Firestore Section Repository (`src/infrastructure/repositories/content/FirestoreSectionRepository.ts`):**
+   - Implemented `ISectionRepository` using Firebase Firestore native mode SDK.
+   - Methods: `getByPage`, `getVisibleByPage`, `getById`, `create`, `update`, `delete`, and atomic batch `reorder`.
+   - Maps Firestore documents to the pure domain `Section` entity with safe Date conversions and type guards.
+2. **Application Layer Query & Mutation Use-Cases (`src/application/use-cases/pages/`):**
+   - Created `GetPageSectionsUseCase` in `query/` subfolder: resolves visible sections and strictly sorts according to `Page.sectionOrder[]` with fallback to `Section.order`.
+   - Created `ReorderSectionsUseCase` in `mutation/` subfolder: atomic dual-sync of section documents and `Page.sectionOrder`.
+   - Organized `src/application/use-cases/pages/` into 3 subfolders (`nav/`, `query/`, `mutation/`) strictly satisfying the max 3 files per folder rule.
+3. **DI Container Registration (`src/infrastructure/di/`):**
+   - Registered `DI_TOKENS.SectionRepository`, `DI_TOKENS.GetPageSections`, and `DI_TOKENS.ReorderSections` in `bootstrap.ts` and `tokens.ts`.
+4. **Dynamic Page Component & Section Mapper (`src/presentation/pages/dynamic/`):**
+   - `DynamicPage.tsx`: Declarative page view with telemetry scanner loading animation, section mapping, empty state, and 404 signal loss fallback.
+   - `DynamicPage.hooks.ts`: Extracts active slug from URL paths (`/slug`, `/pages/slug`), hashes (`#/slug`), or query parameters (`?page=slug`), resolves page and section data via DI, and dynamically syncs `document.title` and meta tags for SEO.
+   - `components/SectionRenderer.tsx`: Maps each `SectionDTO` to its concrete presentation component (`BlackholeHero`, `ExecutiveOverview`, `TelemetrySection`, `ExperienceSection`, `CapabilitiesSection`, `CredentialsSection`, or `CustomSection`).
+   - `components/CustomSection.tsx`: Generic, shadow-free instrument panel section layout for admin-created sections with title, eyebrow, subtitle, card grids, and CTA actions.
+   - `components/NotFoundTelemetry.tsx`: Bespoke 404 Telemetry Signal Loss screen with cluster diagnostics and "Return to Mission Control" action.
+5. **App-Level Router & SPA Link Interception (`src/App.hooks.ts` & `src/App.tsx`):**
+   - Detects dynamic routes and renders `<DynamicPage slug={activeSlug} />` while preserving the default Home composition on `/`.
+   - Intercepts internal relative links for instantaneous, seamless SPA client-side transitions.
+6. **Seeded Dynamic Page Example (`scripts/seed/seed-content.ts`):**
+   - Seeded `pages/cloud-architecture` with 4 ordered sections (`arch-telemetry-0`, `arch-capabilities-1`, `arch-experience-2`, `arch-custom-3`), proving that adding a page in Firestore immediately creates a working route with zero code changes.
+7. **Automated E2E Integration Test (`scripts/test-dynamic-page-e2e.ts`):**
+   - Verified DI resolution, dynamic page retrieval, section ordering, and 404 unknown slug handling with 100% test pass.
+
+**Verification:**
+- `npx biome check .` → ✅ 159 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build succeeded.
+- `npx tsx scripts/test-dynamic-page-e2e.ts` → ✅ 100% passed.
+- Pre-commit automated quality gate passed cleanly on git commit.
+- Sequential branch promotion completed: `step/17-dynamic-page-engine` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+- Cloudflare deployment pipeline triggered on `main`.
+
 
 ---
 
