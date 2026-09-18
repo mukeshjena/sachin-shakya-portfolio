@@ -1611,6 +1611,50 @@
 - `npm run build` → ✅ production build passed cleanly in 594ms
 - Branch promotion: `step/33-vintage-bg-professional-identity` → `release/v1.0.0` → `main` → `develop`
 
+---
+
+## 2026-09-19 — Step 34: Admin CMS Modal Polish, Parity & Visual Refinements (Completed ✅)
+
+**Branch:** `step/34-admin-cms-modal-polish-parity` → merged sequentially into `release/v1.0.0` → `main` → `develop`
+**Commit:** `d9658eb feat: complete UI polish, dynamic page rich content, and full CMS section editing parity`
+
+**What was done:**
+1. **Visual & Theme Restorations:**
+   - Restored pure obsidian dark mode palette in `src/index.css` (`--ink-900: #000000`, `--ink-850: #08080a`, `--ink-800: #0f0f13`, `--ink-700: #18181f`, `--ink-600: #24242e`, `--line: rgba(255, 255, 255, 0.09)`) while preserving the vintage grid canvas.
+   - Fixed hero headline sizing in `BlackholeHero.tsx` from `text-3xl sm:text-5xl lg:text-7xl` down to `text-2xl sm:text-4xl lg:text-5xl leading-[1.12]` to prevent text wrapping or breaking layout boundaries.
+   - In `ExecutiveOverview.tsx`, moved Sachin Shakya identity pill to the bottom away from the face, removed the bullet dot `•`, removed "VERIFIED IDENTITY" and "ONLINE" badges, and guaranteed dark card background (`bg-[#050508]`) with dark vignette in both light and dark themes.
+   - Eliminated nested double-card wrappers across the entire site.
+   - In `ContactSection.hooks.ts` and `ContactSection.tsx`, restored original contact portrait photo (`/assets/sachin-three.png`) and fixed dark background styling.
+
+2. **Admin Chrome Isolation:**
+   - In `src/App.hooks.ts` and `src/presentation/shell/layout/AppLayout.tsx`, completely isolated public header, mobile header, footer, and mobile bottom nav when viewing `/admin`, `/login`, `?page=admin`, `?tab=admin`, `#/admin`.
+
+3. **Telemetry 12-Month Scroll Fix:**
+   - In `TelemetryEditorModal.tsx`, restructured modal container with `h-[85vh] max-h-[85vh]`, scrollable form body with `min-h-0`, and pinned footer action bar so all 12 monthly data points scroll freely and cleanly.
+
+4. **Media Tab & Confirm Dialog DIIRA Parity:**
+   - In `MediaTab.tsx`, adopted DIIRA's compact `aspect-[4/3]` card design with badge tags, format pills, hover preview, copy URL, and delete action.
+   - Created reusable `<ConfirmDialog />` and replaced native `window.confirm` / `alert` across Media, Contacts, and Authorized Emails tabs.
+   - Unlocked dummy admin email `sachin.shakya@live.com` from root locks in `FirestoreAdminAccessRepository.ts` and `RemoveAdminEmailUseCase.ts` so it can be deleted.
+
+5. **Dynamic Page Engine Rich Content:**
+   - Extended `Page` domain entity, `PageDTO`, `SavePageUseCase`, and `FirestorePageRepository` with `subtitle`, `richContent`, `content`, `category`, and `order`.
+   - Integrated `<RichEditor />` for Markdown/HTML/CSS into `PageEditorModal.tsx`.
+   - Updated `DynamicPage.tsx` to render full rich article view (breadcrumbs, category badge, title, subtitle, markdown/HTML body) whenever richContent exists instead of displaying "SECTIONS PENDING".
+
+6. **Sections & Content Full CMS Parity:**
+   - Created sub-editors: `ExperienceFields.tsx`, `CapabilitiesFields.tsx`, `CredentialsFields.tsx` in `src/presentation/admin/content/sections/fields/`.
+   - Created core sub-editors: `ContactFields.tsx`, `HeroFields.tsx`, `MetricsFields.tsx` in `src/presentation/admin/content/sections/core-fields/`.
+   - Re-architected `SectionEditorModal.tsx` from 587 lines to 218 lines, strictly adhering to Clean Architecture Rule 4 (max 500 lines per file, max 3 files per folder).
+   - Connected public sections (`ExperienceSection`, `CapabilitiesSection`, `CredentialsSection`) and `SectionRenderer.tsx` to receive and render live content from Firestore with default constants fallback.
+
+**Verification:**
+- `npx biome check .` → ✅ 300 files checked, 0 errors
+- `npx tsc -b` → ✅ strict typecheck passed with 0 errors
+- `npx vite build --logLevel silent` → ✅ production build passed cleanly
+- Git workflow: Automated pre-commit gate passed (Biome, TSC, Vite build), pushed to origin, sequentially merged into `release/v1.0.0` → `main` → `develop`, and deployment workflow triggered on GitHub.
+
+
 
 
 

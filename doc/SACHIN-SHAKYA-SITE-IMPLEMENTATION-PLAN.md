@@ -88,6 +88,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 31 | UI/UX polish feedback, email routing, animated cost curve, and redesign parity | Polish | Completed ✅ |
 | 32 | Admin CMS parity, section-wise dynamic editing, tabbed settings & UI polish | Polish | Completed ✅ |
 | 33 | Animated vintage grid, transparent light-mode hero header, contact portrait redesign & professional terminology | Polish | Completed ✅ |
+| 34 | Admin CMS modal polish, parity, visual refinements, and full section editing | Polish | Completed ✅ |
 
 ---
 
