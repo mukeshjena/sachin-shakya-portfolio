@@ -18,7 +18,7 @@ export function useThemeToggle(): UseThemeToggleResult {
     toggleTheme();
   }, [toggleTheme]);
 
-  const ariaLabel = isDark ? "Switch to accessible light theme" : "Switch to telemetry dark theme";
+  const ariaLabel = isDark ? "Switch to accessible light theme" : "Switch to executive dark theme";
 
   return {
     isDark,

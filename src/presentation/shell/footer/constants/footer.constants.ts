@@ -13,12 +13,12 @@ export const FOOTER_COPY = {
 
 export const FOOTER_DEFAULT_SECTION_LINKS = [
   { id: "top", label: "Home", href: "#top" },
-  { id: "telemetry", label: "Cloud Fleet Telemetry", href: "#telemetry" },
-  { id: "impact", label: "Financial & MTTR Impact", href: "#impact" },
+  { id: "telemetry", label: "Architecture & Metrics", href: "#telemetry" },
+  { id: "impact", label: "Executive Overview", href: "#impact" },
   { id: "experience", label: "Enterprise Experience", href: "#experience" },
-  { id: "capabilities", label: "Technical Capabilities", href: "#capabilities" },
-  { id: "credentials", label: "Certifications & Degrees", href: "#credentials" },
-  { id: "contact", label: "Direct Inquiries", href: "#contact" },
+  { id: "capabilities", label: "Core Competencies", href: "#capabilities" },
+  { id: "credentials", label: "Certifications & Education", href: "#credentials" },
+  { id: "contact", label: "Consultation & Contact", href: "#contact" },
 ] as const;
 
 export const FOOTER_STACK_ITEMS = [

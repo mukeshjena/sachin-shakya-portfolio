@@ -6,10 +6,16 @@ import { ThemeToggle } from "../../theme/toggle/ThemeToggle";
 import { useMobileHeaderLogic } from "./MobileHeader.hooks";
 
 export function MobileHeader() {
-  const { logoUrl, fullName, isAvailable } = useMobileHeaderLogic();
+  const { logoUrl, fullName, isAvailable, isScrolled } = useMobileHeaderLogic();
 
   return (
-    <header className="md:hidden fixed top-0 inset-x-0 z-40 w-full bg-[var(--ink-900)]/85 backdrop-blur-xl border-b border-[var(--line)]">
+    <header
+      className={`md:hidden fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 border-b ${
+        isScrolled
+          ? "bg-[var(--ink-900)]/90 backdrop-blur-xl border-[var(--line)]"
+          : "bg-transparent backdrop-blur-none border-transparent"
+      }`}
+    >
       <div className="px-4 h-14 flex items-center justify-between gap-3">
         {/* Brand Link */}
         <a href="#top" className="flex items-center gap-2.5 select-none">
@@ -25,10 +31,18 @@ export function MobileHeader() {
             </div>
           )}
           <div className="flex flex-col">
-            <span className="text-xs font-bold tracking-tight text-[var(--paper)] uppercase">
+            <span
+              className={`text-xs font-bold tracking-tight uppercase ${
+                isScrolled ? "text-[var(--paper)]" : "text-white"
+              }`}
+            >
               {fullName}
             </span>
-            <span className="text-[9px] font-mono tracking-widest text-[var(--mist-dim)] uppercase">
+            <span
+              className={`text-[9px] font-mono tracking-widest uppercase ${
+                isScrolled ? "text-[var(--mist-dim)]" : "text-zinc-400"
+              }`}
+            >
               ARCHITECT &bull; CLOUDOPS
             </span>
           </div>

@@ -32,7 +32,7 @@ export const DASHBOARD_NAV_TABS: readonly NavTabItem[] = [
   {
     id: "overview",
     label: "Overview",
-    description: "Telemetry, KPIs, and fleet health",
+    description: "Executive metrics, KPIs, and fleet health",
   },
   {
     id: "pages",

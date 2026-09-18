@@ -82,21 +82,21 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  /* Canvas layers — deep obsidian space canvas matching blackhole hero */
-  --ink-900: #000000;
-  --ink-850: #08080a;
-  --ink-800: #0f0f13;
-  --ink-700: #18181f;
-  --ink-600: #24242e;
+  /* Canvas layers — deep rich petrol canvas matching instrument panel aesthetics */
+  --ink-900: #06121a;
+  --ink-850: #08171f;
+  --ink-800: #0b1d27;
+  --ink-700: #102a36;
+  --ink-600: #17394a;
 
   /* Lines & structural boundaries (shadow-free depth) */
-  --line: rgba(255, 255, 255, 0.09);
-  --line-soft: rgba(255, 255, 255, 0.04);
+  --line: rgba(130, 180, 200, 0.16);
+  --line-soft: rgba(130, 180, 200, 0.09);
 
   /* Typography tones */
-  --mist: #a1a1aa;
-  --mist-dim: #71717a;
-  --paper: #fafafa;
+  --mist: #93aeba;
+  --mist-dim: #6b8896;
+  --paper: #e8f1f4;
 
   /* Signal accents */
   --amber: #ffb020;
@@ -208,4 +208,66 @@ select:focus {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+}
+
+/* ── Animated Dark Gradient & Vintage Grid Background ──────────────────────── */
+@keyframes vintageGradientShift {
+  0% {
+    background-position:
+      0% 0%,
+      100% 100%,
+      50% 0%;
+  }
+  50% {
+    background-position:
+      100% 50%,
+      0% 50%,
+      50% 100%;
+  }
+  100% {
+    background-position:
+      0% 0%,
+      100% 100%,
+      50% 0%;
+  }
+}
+
+.vintage-animated-gradient {
+  background:
+    radial-gradient(ellipse 85% 55% at 50% -15%, rgba(20, 55, 80, 0.4), transparent 70%),
+    radial-gradient(circle 850px at 100% 35%, rgba(14, 42, 60, 0.3), transparent 60%),
+    radial-gradient(circle 750px at 0% 85%, rgba(18, 48, 70, 0.25), transparent 60%),
+    linear-gradient(180deg, #050d14 0%, #071520 45%, #050f17 80%, #04090e 100%);
+  background-size: 140% 140%;
+  animation: vintageGradientShift 22s ease-in-out infinite alternate;
+}
+
+[data-theme="light"] .vintage-animated-gradient {
+  background:
+    radial-gradient(ellipse 70% 40% at 50% -10%, rgba(215, 232, 242, 0.7), transparent 70%),
+    linear-gradient(180deg, #f4f7f9 0%, #edf3f7 50%, #f1f5f8 100%);
+  background-size: 120% 120%;
+  animation: vintageGradientShift 26s ease-in-out infinite alternate;
+}
+
+.vintage-grid-canvas {
+  background-image:
+    linear-gradient(to right, rgba(130, 180, 200, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(130, 180, 200, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+[data-theme="light"] .vintage-grid-canvas {
+  background-image:
+    linear-gradient(to right, rgba(15, 45, 60, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 45, 60, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.vintage-vignette {
+  background: radial-gradient(circle at 50% 50%, transparent 45%, rgba(4, 10, 15, 0.55) 100%);
+}
+
+[data-theme="light"] .vintage-vignette {
+  background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(220, 230, 238, 0.35) 100%);
 }

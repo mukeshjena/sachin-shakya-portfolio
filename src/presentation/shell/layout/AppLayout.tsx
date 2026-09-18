@@ -13,7 +13,14 @@ export function AppLayout({ children }: AppLayoutProps) {
   const { handleNavigate } = useAppLayoutLogic();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--ink-900)] text-[var(--paper)] selection:bg-[var(--cyan)] selection:text-[var(--ink-900)]">
+    <div className="relative min-h-screen flex flex-col bg-[var(--ink-900)] text-[var(--paper)] selection:bg-[var(--cyan)] selection:text-[var(--ink-900)]">
+      {/* Animated Dark Gradient & Vintage Grid Background Canvas */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+        <div className="absolute inset-0 vintage-animated-gradient" />
+        <div className="absolute inset-0 vintage-grid-canvas" />
+        <div className="absolute inset-0 vintage-vignette" />
+      </div>
+
       {/* Desktop Header (>= md) */}
       <Header />
 
@@ -21,12 +28,14 @@ export function AppLayout({ children }: AppLayoutProps) {
       <MobileHeader />
 
       {/* Page View Canvas */}
-      <main id="top" className="flex-1 w-full">
+      <main id="top" className="relative z-10 flex-1 w-full">
         {children}
       </main>
 
       {/* Universal Executive Footer */}
-      <Footer />
+      <div className="relative z-10">
+        <Footer />
+      </div>
 
       {/* Mobile Liquid-Glass Bottom Nav (< md) */}
       <MobileBottomNav onTabSelect={handleNavigate} />

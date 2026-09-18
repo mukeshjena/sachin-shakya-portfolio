@@ -48,7 +48,7 @@ export function generatePersonGraph(options?: PersonSchemaOptions): object {
           "Cloud Cost Optimization (FinOps)",
           "Site Reliability Engineering (SRE)",
           "CI/CD Automation",
-          "Datadog & Dynatrace Telemetry",
+          "Datadog & Dynatrace Observability & Monitoring",
         ],
         hasCredential: [
           {
@@ -91,9 +91,9 @@ export function generatePersonGraph(options?: PersonSchemaOptions): object {
         "@type": "WebSite",
         "@id": `${baseUrl}/#website`,
         url: baseUrl,
-        name: `${name} — Professional Portfolio & Telemetry`,
+        name: `${name} — Cloud Architecture & DevOps Executive Portfolio`,
         description:
-          "Professional portfolio, telemetry benchmarks, and cloud architecture capabilities of Sachin Shakya.",
+          "Professional portfolio, enterprise cloud architecture, cost optimization, and DevOps advisory of Sachin Shakya.",
         publisher: {
           "@id": `${baseUrl}/#person`,
         },

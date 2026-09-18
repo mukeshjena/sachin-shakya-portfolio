@@ -3,13 +3,13 @@
 
 export const HERO_COPY = {
   eyebrow: "TECHNICAL LEAD — CLOUDOPS",
-  titleLine1: "Architecting Autonomous",
-  titleLine2: "Cloud Horizons",
+  titleLine1: "Architecting Resilient",
+  titleLine2: "Multi-Cloud Platforms",
   subheadline:
-    "Engineering resilient multi-cloud architectures, mission-critical Kubernetes clusters, and automated CloudOps telemetry delivering $170K/month in verified cloud efficiency.",
-  ctaPrimary: "Explore Telemetry",
+    "Engineering enterprise multi-cloud architectures, mission-critical Kubernetes clusters, and automated DevOps delivery with $170K/month in verified cloud efficiency.",
+  ctaPrimary: "Explore Architecture",
   ctaSecondary: "Download CV",
-  scrollPrompt: "DISCOVER TELEMETRY",
+  scrollPrompt: "SCROLL TO EXPLORE",
 } as const;
 
 export const DESKTOP_BLACKHOLE_SETTINGS = {

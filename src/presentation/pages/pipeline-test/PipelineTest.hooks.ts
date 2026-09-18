@@ -18,7 +18,7 @@ export function usePipelineTest(): PipelineTestState {
   const { page, loading, error, reload } = usePage("home");
 
   return {
-    title: page?.title ?? "Awaiting Telemetry Stream...",
+    title: page?.title ?? "Awaiting Data Stream...",
     slug: page?.slug ?? "home",
     isPublished: page?.isPublished ?? false,
     sectionCount: page?.sectionOrder.length ?? 0,

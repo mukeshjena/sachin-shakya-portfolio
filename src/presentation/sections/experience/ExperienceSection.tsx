@@ -14,7 +14,7 @@ export function ExperienceSection() {
     <section
       id="experience"
       aria-label="Enterprise Experience Timeline"
-      className="relative w-full py-16 md:py-24 scroll-mt-20 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
+      className="relative w-full py-16 md:py-24 scroll-mt-20 border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10 space-y-16">
         {/* Section Header */}

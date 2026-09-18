@@ -8,7 +8,7 @@ export const OVERVIEW_FALLBACK_CONTENT = {
     "Operating high-availability multi-cloud platforms across Azure & AWS, eliminating $170K/month in cloud spend, and cutting operational incident MTTR by 40%.",
   ctaPrimary: "Explore Architecture",
   ctaSecondary: "Download Résumé",
-  statusTag: "SYSTEM TELEMETRY // ALL NODES OPERATIONAL",
+  statusTag: "ENTERPRISE ARCHITECTURE // HIGH AVAILABILITY ACTIVE",
 } as const;
 
 export const OVERVIEW_KEY_METRICS = [
@@ -44,7 +44,7 @@ export const OVERVIEW_INFRA_BADGES: readonly InfraStackBadge[] = [
   { name: "Amazon Web Services", iconKey: "aws" },
   { name: "Kubernetes (AKS/EKS)", iconKey: "k8s" },
   { name: "Terraform IaC", iconKey: "terraform" },
-  { name: "Datadog Telemetry", iconKey: "datadog" },
+  { name: "Datadog Observability", iconKey: "datadog" },
   { name: "CloudOps Leadership", iconKey: "finops" },
 ] as const;
 

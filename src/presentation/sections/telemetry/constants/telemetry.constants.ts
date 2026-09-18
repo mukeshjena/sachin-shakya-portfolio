@@ -47,10 +47,10 @@ export interface TelemetryKpiCard {
 }
 
 export const TELEMETRY_COPY = {
-  eyebrow: "IMPACT // SIX MEASURED PRODUCTION OUTCOMES",
+  eyebrow: "ARCHITECTURAL IMPACT // MEASURED PRODUCTION OUTCOMES",
   headline: "Numbers I Am Accountable For",
   subheadline:
-    "Cloud operations is judged on two things: what it costs and whether it stays up. Grounded in verified multi-cloud production telemetry and automated runbooks.",
+    "Cloud operations is judged on two things: what it costs and whether it stays up. Grounded in verified multi-cloud production architecture, observability metrics, and automated runbooks.",
   tabs: {
     spend: "Cost Curve",
     mttr: "MTTR Benchmark",

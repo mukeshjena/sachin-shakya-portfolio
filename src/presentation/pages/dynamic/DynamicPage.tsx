@@ -23,15 +23,15 @@ export function DynamicPage({ slug }: DynamicPageProps) {
     return (
       <section
         role="status"
-        aria-label="Loading Telemetry Page"
-        className="min-h-[70dvh] w-full flex flex-col items-center justify-center p-6 bg-[var(--ink-900)] space-y-6"
+        aria-label="Loading Page"
+        className="min-h-[70dvh] w-full flex flex-col items-center justify-center p-6 space-y-6"
       >
         <div className="w-12 h-12 rounded-full border border-[var(--line)] flex items-center justify-center">
           <span className="w-3 h-3 rounded-full bg-[var(--amber)] animate-ping" />
         </div>
         <div className="space-y-2 text-center font-mono text-xs text-[var(--mist-dim)] uppercase tracking-widest">
-          <div>{"//"} SYNCHRONIZING CLUSTER TELEMETRY</div>
-          <div className="text-[10px] text-[var(--cyan)]">RESOLVING VECTOR: /{activeSlug}</div>
+          <div>{"//"} LOADING PAGE CONTENT</div>
+          <div className="text-[10px] text-[var(--cyan)]">RESOLVING PATH: /{activeSlug}</div>
         </div>
       </section>
     );
@@ -43,7 +43,7 @@ export function DynamicPage({ slug }: DynamicPageProps) {
 
   if (!sections.length) {
     return (
-      <div className="min-h-[60dvh] w-full flex flex-col items-center justify-center p-6 bg-[var(--ink-900)]">
+      <div className="min-h-[60dvh] w-full flex flex-col items-center justify-center p-6">
         <div className="max-w-md p-6 rounded-2xl bg-[var(--ink-850)] border border-[var(--line)] text-center space-y-4">
           <span className="text-xs font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
             SECTIONS PENDING
@@ -64,7 +64,7 @@ export function DynamicPage({ slug }: DynamicPageProps) {
   }
 
   return (
-    <div className="w-full flex flex-col bg-[var(--ink-900)]">
+    <div className="w-full flex flex-col">
       {page && (
         <SeoHead
           title={page.seoTitle || page.title}

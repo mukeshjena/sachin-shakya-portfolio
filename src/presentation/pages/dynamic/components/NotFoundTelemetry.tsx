@@ -8,21 +8,15 @@ import type { NotFoundTelemetryProps } from "../DynamicPage.types";
 export function NotFoundTelemetry({ slug, onReturnHome }: NotFoundTelemetryProps) {
   return (
     <section
-      aria-label="404 Telemetry Signal Loss"
-      className="relative min-h-[80dvh] w-full py-24 flex items-center justify-center bg-[var(--ink-900)] overflow-hidden"
+      aria-label="404 Page Not Found"
+      className="relative min-h-[80dvh] w-full py-24 flex items-center justify-center overflow-hidden"
     >
-      {/* Background Hairline Grid */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(to_right,rgba(130,180,200,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(130,180,200,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none"
-      />
-
       <div className="max-w-2xl mx-auto px-6 text-center space-y-8 relative z-10">
         {/* Beacon Badge */}
         <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[var(--ink-850)] border border-[var(--line)] select-none">
           <IoWarningOutline className="w-4 h-4 text-[var(--amber)]" aria-hidden="true" />
           <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
-            TELEMETRY SIGNAL LOSS {"//"} CODE 404
+            PAGE NOT FOUND {"//"} CODE 404
           </span>
         </div>
 
@@ -32,16 +26,16 @@ export function NotFoundTelemetry({ slug, onReturnHome }: NotFoundTelemetryProps
             404
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--paper)]">
-            Route Coordinate Unresolved
+            Page Not Found
           </h1>
           <p className="text-xs sm:text-sm font-mono text-[var(--mist-dim)] uppercase tracking-wider">
-            VECTOR: /{slug}
+            PATH: /{slug}
           </p>
         </div>
 
-        {/* Telemetry Log Box */}
+        {/* Diagnostic Box */}
         <div className="p-4 rounded-xl bg-[var(--ink-850)]/90 border border-[var(--line)] text-left max-w-lg mx-auto font-mono text-xs text-[var(--mist)] space-y-1">
-          <div className="text-[var(--cyan)]">{"//"} CLUSTER SUBSYSTEM DIAGNOSTIC:</div>
+          <div className="text-[var(--cyan)]">{"//"} SYSTEM DIAGNOSTIC:</div>
           <div>STATUS: 404_PAGE_NOT_FOUND</div>
           <div>DETAILS: Document not found or unpublished in Firestore catalog.</div>
         </div>
@@ -61,7 +55,7 @@ export function NotFoundTelemetry({ slug, onReturnHome }: NotFoundTelemetryProps
             href="/#telemetry"
             className="px-6 py-3 rounded-full bg-[var(--ink-800)] text-[var(--paper)] border border-[var(--line)] hover:border-[var(--cyan)] hover:text-[var(--cyan)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center gap-2 select-none cursor-pointer"
           >
-            <span>Telemetry Dashboard</span>
+            <span>Architecture & Metrics</span>
           </a>
         </div>
       </div>

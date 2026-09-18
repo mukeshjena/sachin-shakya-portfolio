@@ -29,8 +29,8 @@ export function TelemetrySection() {
   return (
     <section
       id="telemetry"
-      aria-label="CloudOps and Infrastructure Telemetry Console"
-      className="relative w-full py-16 md:py-24 scroll-mt-20 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
+      aria-label="Architecture and Performance Metrics"
+      className="relative w-full py-16 md:py-24 scroll-mt-20 border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10 space-y-12">
         {/* Section Header */}

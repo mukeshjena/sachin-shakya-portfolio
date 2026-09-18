@@ -89,7 +89,7 @@ $cyanBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromAr
 $mistBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(147, 174, 186))
 
 # Text layout
-$ogG.DrawString("MISSION CONTROL // ARCHITECTURE TELEMETRY", $fontBadge, $amberBrush, 360, 150)
+$ogG.DrawString("EXECUTIVE PORTFOLIO // CLOUD ARCHITECTURE", $fontBadge, $amberBrush, 360, 150)
 $ogG.DrawString("Sachin Shakya", $fontTitle, $paperBrush, 360, 190)
 $ogG.DrawString("Lead Cloud Architect & DevOps Consultant", $fontSubtitle, $cyanBrush, 360, 265)
 $ogG.DrawString("AWS · Microsoft Azure · Kubernetes · Terraform · SRE", $fontSubtitle, $mistBrush, 360, 310)

@@ -15,8 +15,8 @@ export const CONTACT_COPY = {
   formSubtitle:
     "Fill out the parameters below. Submissions are saved securely and dispatched directly to Sachin's private mailbox.",
   submitButtonText: "Send Message",
-  submittingText: "Dispatching Transmission...",
-  successTitle: "TRANSMISSION CONFIRMED // INQUIRY RECORDED",
+  submittingText: "Sending Message...",
+  successTitle: "MESSAGE RECEIVED // INQUIRY RECORDED",
   successMessage:
     "Your consultation inquiry has been recorded and forwarded to Sachin Shakya. Expect a direct, technical response within 24 business hours.",
   sendAnotherButton: "Send Another Message",

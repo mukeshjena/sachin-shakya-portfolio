@@ -50,7 +50,7 @@ export const ContentTab: React.FC<ContentTabProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* CloudOps Telemetry Module */}
+      {/* Architecture & Cost Metrics Module */}
       <div className="p-6 rounded-2xl bg-[var(--ink-850)] border border-[var(--line)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)]">
@@ -58,10 +58,10 @@ export const ContentTab: React.FC<ContentTabProps> = ({
           </div>
           <div>
             <h3 className="text-base font-bold text-[var(--paper)]">
-              CloudOps & Cost Optimization Telemetry
+              Cloud Architecture & Cost Metrics
             </h3>
             <p className="text-xs text-[var(--mist)] mt-0.5">
-              12-month cloud cost curve ($170K/mo target), MTTR reduction %, and fleet stats.
+              12-month cloud cost curve ($170K/mo target), MTTR reduction %, and fleet metrics.
             </p>
           </div>
         </div>
@@ -70,7 +70,7 @@ export const ContentTab: React.FC<ContentTabProps> = ({
           onClick={onOpenTelemetry}
           className="px-4 py-2 rounded-xl bg-[var(--ink-800)] hover:bg-[var(--ink-750)] border border-[var(--line)] hover:border-[var(--amber)] text-xs font-mono font-medium text-[var(--amber)] transition-colors cursor-pointer shrink-0"
         >
-          Configure Spend &rarr;
+          Configure Metrics &rarr;
         </button>
       </div>
 

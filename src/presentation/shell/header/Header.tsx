@@ -14,11 +14,11 @@ export function Header() {
       className={`hidden md:block fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 border-b ${
         isScrolled
           ? "border-[var(--line)] bg-[var(--ink-900)]/90 backdrop-blur-xl"
-          : "border-transparent bg-[var(--ink-900)]/50 backdrop-blur-md"
+          : "border-transparent bg-transparent backdrop-blur-none"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-6">
-        {/* Brand & Telemetry Mark */}
+        {/* Brand Mark */}
         <a href="#top" className="flex items-center gap-3.5 group cursor-pointer select-none">
           {logoUrl ? (
             <img
@@ -32,10 +32,20 @@ export function Header() {
             </div>
           )}
           <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-[var(--paper)] group-hover:text-[var(--cyan)] transition-colors uppercase">
+            <span
+              className={`text-sm font-bold tracking-tight uppercase transition-colors ${
+                isScrolled
+                  ? "text-[var(--paper)] group-hover:text-[var(--cyan)]"
+                  : "text-white group-hover:text-[var(--cyan)]"
+              }`}
+            >
               {fullName}
             </span>
-            <span className="text-[10px] font-mono tracking-widest text-[var(--mist-dim)] uppercase">
+            <span
+              className={`text-[10px] font-mono tracking-widest uppercase ${
+                isScrolled ? "text-[var(--mist-dim)]" : "text-zinc-400"
+              }`}
+            >
               {HEADER_COPY.brandSubtitle}
             </span>
           </div>
@@ -52,8 +62,12 @@ export function Header() {
                     href={item.href}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
                       isActive
-                        ? "text-[var(--amber)] bg-[var(--ink-800)] font-semibold border border-[var(--amber)]/30"
-                        : "text-[var(--mist)] hover:text-[var(--paper)] hover:bg-[var(--ink-800)]/70 border border-transparent"
+                        ? isScrolled
+                          ? "text-[var(--amber)] bg-[var(--ink-800)] font-semibold border border-[var(--amber)]/30"
+                          : "text-[var(--amber)] bg-white/10 font-semibold border border-[var(--amber)]/40"
+                        : isScrolled
+                          ? "text-[var(--mist)] hover:text-[var(--paper)] hover:bg-[var(--ink-800)]/70 border border-transparent"
+                          : "text-zinc-300 hover:text-white hover:bg-white/10 border border-transparent"
                     }`}
                   >
                     {item.label}
@@ -64,7 +78,7 @@ export function Header() {
           </ul>
         </nav>
 
-        {/* Right Telemetry Controls */}
+        {/* Actions & Controls */}
         <div className="flex items-center gap-3">
           {/* Cupertino Theme Toggle */}
           <ThemeToggle />

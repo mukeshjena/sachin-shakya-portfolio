@@ -5,4 +5,5 @@ export interface MobileHeaderState {
   readonly logoUrl: string;
   readonly fullName: string;
   readonly isAvailable: boolean;
+  readonly isScrolled: boolean;
 }

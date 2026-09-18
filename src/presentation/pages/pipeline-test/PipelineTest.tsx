@@ -38,7 +38,7 @@ export function PipelineTest() {
           role="alert"
           className="p-3 rounded-lg border border-red-500/30 bg-red-950/20 text-red-300 text-xs font-mono"
         >
-          Telemetry Error: {error}
+          Pipeline Error: {error}
         </div>
       ) : (
         <div className="space-y-4">

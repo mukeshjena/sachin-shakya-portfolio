@@ -114,7 +114,7 @@ export function useContactSectionLogic(): ContactSectionState {
         const msg =
           err instanceof Error
             ? err.message
-            : "Transmission failed. Please check your network or try direct email.";
+            : "Message dispatch failed. Please check your network or try direct email.";
         setGeneralError(msg);
         notificationService.error(msg);
       } finally {

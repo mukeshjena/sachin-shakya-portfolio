@@ -241,7 +241,7 @@ export default {
             ? message
             : `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(/\n/g, "<br>")}</p>`,
           customConfig: {
-            fromName: "Sachin Shakya — Mission Control",
+            fromName: "Sachin Shakya — Consultation Desk",
             fromEmail: "sachin.shakya@live.com",
           },
         };

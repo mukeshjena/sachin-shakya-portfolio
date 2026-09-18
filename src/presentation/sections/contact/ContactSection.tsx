@@ -34,14 +34,8 @@ export function ContactSection() {
     <section
       id="contact"
       aria-label="Consultation Desk"
-      className="relative w-full py-20 md:py-28 bg-[var(--ink-900)] border-t border-[var(--line)] scroll-mt-20 overflow-hidden"
+      className="relative w-full py-20 md:py-28 border-t border-[var(--line)] scroll-mt-20 overflow-hidden"
     >
-      {/* Background Subtle Hairline Grid */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(to_right,rgba(130,180,200,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(130,180,200,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none"
-      />
-
       <div className="max-w-7xl mx-auto px-6 relative z-10 space-y-12">
         {/* Section Header */}
         <div className="max-w-3xl space-y-3">
@@ -56,84 +50,88 @@ export function ContactSection() {
 
         {/* 2-Column Command Desk Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
-          {/* Left Column (5 cols): Professional Portrait & Direct Channels */}
+          {/* Left Column (5 cols): Full-Bleed Portrait Card with Bottom Vintage Overlay */}
           <div className="lg:col-span-5 flex flex-col h-full">
-            <div className="rounded-2xl overflow-hidden border border-[var(--line)] bg-[var(--ink-850)]/90 backdrop-blur-md space-y-5 p-5 sm:p-6 flex flex-col flex-1 justify-between h-full">
-              {/* Sachin Shakya Portrait */}
-              <div className="relative flex-1 min-h-[420px] lg:min-h-[520px] w-full overflow-hidden rounded-xl bg-[var(--ink-900)] border border-[var(--line-soft)]">
-                <img
-                  src={contactInfo.photoUrl}
-                  alt={`${contactInfo.fullName} — ${contactInfo.headline}`}
-                  className="w-full h-full object-cover object-top"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink-900)]/60 via-transparent to-transparent" />
-                <div className="absolute bottom-3 right-3 flex items-center">
-                  <span className="text-[10px] font-mono text-[var(--amber)] bg-[var(--ink-900)]/90 px-2.5 py-1 rounded border border-[var(--line)] font-bold">
-                    ~9 YRS EXP
-                  </span>
-                </div>
+            <div className="relative flex-1 min-h-[480px] lg:min-h-[560px] w-full overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--ink-850)] flex flex-col justify-end">
+              {/* Full-Bleed Portrait Image */}
+              <img
+                src={contactInfo.photoUrl}
+                alt={`${contactInfo.fullName} — ${contactInfo.headline}`}
+                className="absolute inset-0 w-full h-full object-cover object-top"
+                loading="lazy"
+              />
+
+              {/* Experience Badge */}
+              <div className="absolute top-4 right-4 z-10">
+                <span className="text-[10px] font-mono text-[var(--amber)] bg-[var(--ink-900)]/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-[var(--line)] font-bold select-none">
+                  ~9 YRS EXP
+                </span>
               </div>
 
-              {/* Direct Identity */}
-              <div className="flex items-center justify-between">
+              {/* Bottom Vintage Gradient Overlay with Identity and Icons */}
+              <div className="relative z-10 w-full bg-gradient-to-t from-[var(--ink-900)] via-[var(--ink-900)]/85 to-transparent pt-24 pb-6 px-6 space-y-4">
+                {/* Direct Identity */}
                 <div>
-                  <h3 className="text-lg font-bold text-[var(--paper)]">{contactInfo.fullName}</h3>
-                  <p className="text-xs text-[var(--cyan)] font-mono">{contactInfo.headline}</p>
+                  <h3 className="text-xl font-bold tracking-tight text-[var(--paper)]">
+                    {contactInfo.fullName}
+                  </h3>
+                  <p className="text-xs text-[var(--cyan)] font-mono mt-0.5">
+                    {contactInfo.headline}
+                  </p>
                 </div>
-              </div>
 
-              {/* Direct Channels Icon Bar */}
-              <div className="flex items-center gap-2.5 pt-2 border-t border-[var(--line-soft)]">
-                <a
-                  href={`mailto:${contactInfo.email}`}
-                  title={`Direct Email (${contactInfo.email})`}
-                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
-                  aria-label={`Email ${contactInfo.fullName}`}
-                >
-                  <IoMailOutline className="w-5 h-5" aria-hidden="true" />
-                </a>
+                {/* Direct Channels Icon Bar */}
+                <div className="flex items-center gap-2.5 pt-3 border-t border-[var(--line-soft)]">
+                  <a
+                    href={`mailto:${contactInfo.email}`}
+                    title={`Direct Email (${contactInfo.email})`}
+                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                    aria-label={`Email ${contactInfo.fullName}`}
+                  >
+                    <IoMailOutline className="w-5 h-5" aria-hidden="true" />
+                  </a>
 
-                <a
-                  href={`tel:${contactInfo.phone.replace(/\s+/g, "")}`}
-                  title={`Direct Phone / WhatsApp (${contactInfo.phone})`}
-                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
-                  aria-label={`Call ${contactInfo.fullName}`}
-                >
-                  <IoCallOutline className="w-5 h-5" aria-hidden="true" />
-                </a>
+                  <a
+                    href={`tel:${contactInfo.phone.replace(/\s+/g, "")}`}
+                    title={`Direct Phone / WhatsApp (${contactInfo.phone})`}
+                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                    aria-label={`Call ${contactInfo.fullName}`}
+                  >
+                    <IoCallOutline className="w-5 h-5" aria-hidden="true" />
+                  </a>
 
-                <a
-                  href={contactInfo.linkedinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="LinkedIn Profile"
-                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
-                  aria-label={`${contactInfo.fullName} LinkedIn Profile`}
-                >
-                  <IoLogoLinkedin className="w-5 h-5" aria-hidden="true" />
-                </a>
+                  <a
+                    href={contactInfo.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="LinkedIn Profile"
+                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                    aria-label={`${contactInfo.fullName} LinkedIn Profile`}
+                  >
+                    <IoLogoLinkedin className="w-5 h-5" aria-hidden="true" />
+                  </a>
 
-                <a
-                  href={contactInfo.locationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="Location (Faridabad / Delhi NCR, India)"
-                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
-                  aria-label="Location Map"
-                >
-                  <IoLocationOutline className="w-5 h-5" aria-hidden="true" />
-                </a>
+                  <a
+                    href={contactInfo.locationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Location (Faridabad / Delhi NCR, India)"
+                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                    aria-label="Location Map"
+                  >
+                    <IoLocationOutline className="w-5 h-5" aria-hidden="true" />
+                  </a>
 
-                <a
-                  href={contactInfo.resumePdfUrl}
-                  download
-                  title="Download Verified CV (PDF)"
-                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--amber)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer ml-auto"
-                  aria-label="Download Verified Résumé PDF"
-                >
-                  <IoDocumentTextOutline className="w-5 h-5" aria-hidden="true" />
-                </a>
+                  <a
+                    href={contactInfo.resumePdfUrl}
+                    download
+                    title="Download Verified CV (PDF)"
+                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--amber)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer ml-auto"
+                    aria-label="Download Verified Résumé PDF"
+                  >
+                    <IoDocumentTextOutline className="w-5 h-5" aria-hidden="true" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>

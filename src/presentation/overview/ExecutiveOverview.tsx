@@ -1,5 +1,5 @@
 // presentation/overview/ExecutiveOverview.tsx
-// Repurposed Executive Mission Control Telemetry Section.
+// Executive Overview and Architecture Impact Section.
 // Preserves Sachin Shakya's verified identity, key operational telemetry, and résumé action.
 // Strictly adheres to shadow-free surfaces, Cupertino outline icons, and zero emojis.
 
@@ -44,14 +44,8 @@ export function ExecutiveOverview() {
     <section
       id="impact"
       aria-label="Professional Architecture Impact"
-      className="relative w-full py-16 md:py-24 scroll-mt-20 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
+      className="relative w-full py-16 md:py-24 scroll-mt-20 border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >
-      {/* Hairline Grid Subtle Background */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(to_right,rgba(130,180,200,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(130,180,200,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none"
-      />
-
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
         <motion.div
           variants={OVERVIEW_ANIMATION_VARIANTS.container}
