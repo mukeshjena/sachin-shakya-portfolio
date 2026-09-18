@@ -1510,6 +1510,60 @@
 - `npm run build` → ✅ production build passed cleanly in 631ms
 - `npx tsx scripts/test-audit-gates.ts` → ✅ 0 box-shadow, 0 emojis, max 3 files/folder, max 500 LOC
 
+---
+
+## 2026-09-18 — Step 32: Admin CMS Parity, Section-Wise Dynamic Editing, Tabbed Settings & UI Polish (Completed ✅)
+
+**Branch:** `step/32-admin-cms-parity-polish` → merged sequentially into `release/v1.0.0` → `main` → `develop`
+**Commit:** `b512417 feat(step-32): admin CMS parity, section-wise editing, tabbed settings, and UI polish`
+
+**What was done:**
+1. **Webkit Scrollbar Design:**
+   - Implemented slim, modern 6px custom webkit scrollbar in `src/index.css` (`::-webkit-scrollbar`, thumb `var(--ink-600)`, hover `var(--amber)`).
+2. **Dynamic Section-Wise Home Page Rendering:**
+   - Created `src/presentation/sections/home/HomeSections.tsx`, `HomeSections.hooks.ts`, and `HomeSections.constants.ts` dynamically resolving visible homepage sections in order from Firestore via `useRealtimeSync<Section>("sections")`.
+   - Updating, reordering, or hiding sections in the admin console now immediately updates the live public site.
+3. **Admin Dashboard Shell (DIIRA Parity):**
+   - Replaced clumsy header navigation with a pinned, collapsible desktop sidebar (`w-60` / `w-16`), brand header with theme toggle, "Public Site" button, and user profile badge.
+   - Built iOS-style floating liquid-glass bottom pill navigation dock on mobile (`< md`) for native app feel.
+4. **Section Reordering, Visibility & 3-Dot Menus:**
+   - In `ContentTab.tsx`, replaced row buttons with a clean 3-dot dropdown menu (`Edit Section Content`, `Move Up`, `Move Down`, `Toggle Live Visibility`).
+   - Populated `DEFAULT_SECTIONS` in `DashboardShell.hooks.ts` with all 7 core homepage sections.
+5. **Full Type-Aware Section Content Editor (`SectionEditorModal`):**
+   - Expanded `SectionEditorModal.types.ts`, `SectionEditorModal.hooks.ts`, and `SectionEditorModal.tsx` to support dedicated type-aware editing forms for:
+     - `contact`: Full Name, Role, Email, Phone, LinkedIn URL, Maps URL, Resume PDF URL, and Portrait Photo URL (with preview). Automatically synchronizes with global site settings.
+     - `hero`: Eyebrow, Title Line 1, Subheadline, CTA labels, and Hero Photo URL.
+     - `impact`: Section Heading, Subheading, and 4 KPI Metric values/labels.
+     - `telemetry`: Heading, Subheading, Target Savings ($170K/mo), MTTR Reduction (40%), and Fleets (2,000+).
+     - `experience`, `capabilities`, `credentials`, `custom`: Heading, Subheading, and full RichEditor for markdown narrative.
+6. **Admin Settings Sub-Tabs (DIIRA Parity):**
+   - Upgraded `SettingsTab.tsx` from a cramped scrolling card stack into 4 spacious sub-tabs:
+     - `Brand & Identity` (`SiteSettingsEditor subTab="identity"`): Full Name, Headline, Bio, Brand Logo, Avatar, and Verified Résumé PDF.
+     - `Contact & Coordinates` (`SiteSettingsEditor subTab="contact"`): Public Email, Phone, Location, and Social Links CRUD.
+     - `Consultation Popup`: `PromoPopupEditor`.
+     - `Admin Access & Whitelist`: `AuthorizedEmailsManager` (widened to full-width).
+   - Added sticky/prominent "Save Changes" action with instant feedback.
+7. **Media Tab PDF Previews & Menu Clipping Fix:**
+   - Fixed PDF asset display in `MediaTab.tsx` by replacing broken `<img>` tags with document preview cards (`IoDocumentTextOutline`, "PDF Document" badge).
+   - Removed `overflow-hidden` from media card containers, eliminating dropdown menu clipping.
+8. **Removed Admin Portal Icon from Header:**
+   - Removed `IoPersonOutline` admin portal button from both desktop and mobile headers; kept exclusively in the footer.
+9. **Contact Section Image Card Height Equalization:**
+   - Updated `ContactSection.tsx` portrait card with `min-h-[420px] lg:min-h-[520px]` and `flex-1 flex flex-col justify-between`, perfectly matching the contact form height on the right.
+10. **Removed All Section Eyebrow Badges:**
+    - Stripped robotic badges (`CONTACT // UTC+5:30`, `AVAILABLE FOR ADVISORY`, `ENTERPRISE LEADERSHIP`, `ACADEMIC CREDENTIALS`, `ENTERPRISE COMPETENCIES`, `LIVE ARCHITECTURE METRICS`) across all sections for a clean, human-crafted professional look.
+11. **Terminology & FinOps Cleanup:**
+    - Removed `Realtime telemetry active • IndexedDB multi-tab cache synchronized`.
+    - Cleaned up hero eyebrow to strictly `TECHNICAL LEAD — CLOUDOPS`.
+    - Replaced "executive" with "professional", "Mission Control" with "Admin Console" or "Home", and "FinOps" with "Cloud Cost Optimization" across the entire codebase.
+
+**Verification:**
+- `npx biome check .` → ✅ 292 files checked, 0 errors
+- `npx tsc -b` → ✅ strict typecheck passed with 0 errors
+- `npm run build` → ✅ production build passed cleanly in 614ms
+- Branch promotion: `step/32-admin-cms-parity-polish` → `release/v1.0.0` → `main` → `develop`
+
+
 
 
 
