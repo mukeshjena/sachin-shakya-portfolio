@@ -16,6 +16,7 @@ import { ContactSection } from "./presentation/sections/contact/ContactSection";
 import { CredentialsSection } from "./presentation/sections/credentials/CredentialsSection";
 import { ExperienceSection } from "./presentation/sections/experience/ExperienceSection";
 import { TelemetrySection } from "./presentation/sections/telemetry/TelemetrySection";
+import { PwaInstallPrompt } from "./presentation/shared/pwa/PwaInstallPrompt";
 import { SeoHead } from "./presentation/shared/seo/SeoHead";
 import { AppLayout } from "./presentation/shell/layout/AppLayout";
 
@@ -26,6 +27,7 @@ function App() {
     <AppProviders>
       <CustomCursor />
       <PromoPopupModal />
+      <PwaInstallPrompt />
       <AppLayout>
         {showPipelineTest ? (
           <div className="p-6 md:p-12 flex items-center justify-center">

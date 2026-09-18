@@ -1208,6 +1208,54 @@
 - `npx tsx scripts/test-seo-e2e.ts` → ✅ 100% passed (5/5).
 - `npx tsx scripts/test-media-inbox-e2e.ts` → ✅ 100% passed (5/5, zero regressions).
 
+---
+
+## 2026-09-18 — Step 26: PWA Setup (Web App Manifest, Service Worker Caching, Offline Support, Install Prompt) (Completed ✅)
+
+**Branch:** `step/26-pwa-setup` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `feat(pwa): implement manifest.webmanifest, workbox runtime caching, and liquid-glass install prompt for step 26`
+
+**What was done:**
+1. **PWA Web App Manifest (`public/manifest.webmanifest`):**
+   - Implemented compliant W3C manifest with `name: "Sachin Shakya — Lead Cloud Architect & DevOps Consultant"`, `short_name: "Sachin Shakya"`, `display: "standalone"`, `orientation: "portrait-primary"`.
+   - Mapped `background_color` and `theme_color` to `--ink-900` token (`#06121a`).
+   - Configured multi-resolution icon suite from Step 25: 32×32, 48×48, 180×180 (apple-touch-icon), 192×192 (any), 512×512 (any), and 512×512 (maskable).
+2. **Vite & Workbox Offline Caching (`vite.config.ts`):**
+   - Configured `VitePWA` with `registerType: "autoUpdate"`.
+   - Pre-caching app shell: HTML, CSS, JS, favicons, OG image, robots, sitemap.
+   - Workbox runtime caching:
+     - Google Fonts stylesheets & webfonts (`CacheFirst`, 365-day max age).
+     - Cloudinary media assets (`StaleWhileRevalidate`, 30-day max age).
+3. **Index HTML & Apple Mobile Metadata (`index.html`):**
+   - Linked `/manifest.webmanifest`.
+   - Added `<meta name="theme-color" content="#06121a" />`.
+   - Added `<meta name="mobile-web-app-capable" content="yes" />`, `<meta name="apple-mobile-web-app-capable" content="yes" />`, `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />`, and `<meta name="apple-mobile-web-app-title" content="Sachin Shakya" />`.
+4. **Infrastructure Layer (`src/infrastructure/pwa/`):**
+   - `pwa.types.ts`: Interface definitions for service worker registration, install prompt event, and connectivity status.
+   - `ServiceWorkerManager.ts`: Handles service worker registration via `virtual:pwa-register` and network online/offline event listeners.
+   - `PwaInstallManager.ts`: Pure helper for detecting standalone mode, handling install prompt events, checking iOS Safari, and managing dismissal storage.
+   - Strictly satisfies Rule 4 (exactly 3 files in `src/infrastructure/pwa/`).
+5. **Presentation Layer — Liquid-Glass Install Prompt (`src/presentation/shared/pwa/`):**
+   - `PwaInstallPrompt.tsx`: Pure declarative JSX markup for the floating prompt; supports iOS Safari share instructions and native Android/Desktop install prompt trigger.
+   - `PwaInstallPrompt.hooks.ts`: Manages `beforeinstallprompt` event, iOS Safari detection, standalone mode, and dismissal retention.
+   - `PwaInstallPrompt.css`: Co-located token-based styles with hairline borders, `backdrop-filter: blur(16px)`, zero `box-shadow`.
+   - Subfolders `constants/`, `types/`, and `utils/` strictly maintain the ≤ 3 files per directory rule.
+   - Strictly zero emojis and outline icons only (`PiDeviceMobile`, `PiDownloadSimple`, `PiShareNetwork`, `PiPlusSquare`, `PiX`).
+6. **Application Integration & Bootstrap:**
+   - Mounted `<PwaInstallPrompt />` in `src/App.tsx`.
+   - Initialized `registerServiceWorker()` on application bootstrap in `src/main.tsx`.
+7. **Automated Verification (`scripts/test-pwa-e2e.ts`):**
+   - Comprehensive test suite validating manifest JSON, all icon assets, `index.html` meta tags, `vite.config.ts` caching, Rule 4 folder constraints, and shadow-free/emoji-free aesthetics (28/28 checks passed).
+
+**Verification:**
+- `npx biome check .` → ✅ 264 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build verified; `dist/manifest.webmanifest`, `dist/sw.js`, and `dist/workbox-*.js` generated.
+- `npx tsx scripts/test-pwa-e2e.ts` → ✅ 100% passed (28/28).
+- `npx tsx scripts/test-seo-e2e.ts` → ✅ 100% passed (5/5).
+- `npx tsx scripts/test-media-inbox-e2e.ts` → ✅ 100% passed (5/5).
+
+
 
 
 

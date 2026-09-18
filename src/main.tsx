@@ -3,11 +3,13 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { bootstrapContainer } from "./infrastructure/di/bootstrap";
+import { registerServiceWorker } from "./infrastructure/pwa/ServiceWorkerManager";
 import { loadRemoteEnvConfig } from "./infrastructure/system/env";
 
 async function bootstrap() {
   await loadRemoteEnvConfig();
   bootstrapContainer();
+  registerServiceWorker();
 
   const rootElement = document.getElementById("root");
   if (!rootElement) throw new Error("Root element #root not found in index.html");

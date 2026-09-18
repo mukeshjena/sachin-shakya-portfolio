@@ -10,21 +10,115 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      // Manifest and icons will be finalized in Step 26
+      includeAssets: [
+        "favicon.ico",
+        "favicon-16x16.png",
+        "favicon-32x32.png",
+        "favicon-48x48.png",
+        "apple-touch-icon.png",
+        "icon-192x192.png",
+        "icon-512x512.png",
+        "og-image.png",
+        "robots.txt",
+        "sitemap.xml",
+      ],
       manifest: {
-        name: "Sachin Shakya — AI-Native CloudOps Lead",
+        name: "Sachin Shakya — Lead Cloud Architect & DevOps Consultant",
         short_name: "Sachin Shakya",
         description:
-          "Portfolio of Sachin Shakya — AI-Native CloudOps Technical Lead with ~9 years of Azure/AWS, FinOps, and SRE expertise.",
-        theme_color: "#0a0e1a",
-        background_color: "#0a0e1a",
+          "Lead Cloud Architect managing 2,000+ multi-cloud resources with $170K/month verified cost optimization. AWS, Azure, Kubernetes, Terraform, and SRE.",
+        theme_color: "#06121a",
+        background_color: "#06121a",
         display: "standalone",
         orientation: "portrait-primary",
         start_url: "/",
-        icons: [], // Icons added in Step 26
+        scope: "/",
+        categories: ["business", "productivity", "utilities"],
+        icons: [
+          {
+            src: "/favicon-32x32.png",
+            sizes: "32x32",
+            type: "image/png",
+          },
+          {
+            src: "/favicon-48x48.png",
+            sizes: "48x48",
+            type: "image/png",
+          },
+          {
+            src: "/apple-touch-icon.png",
+            sizes: "180x180",
+            type: "image/png",
+          },
+          {
+            src: "/icon-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
+        ],
+      },
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,json,woff,woff2}"],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "google-fonts-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "gstatic-fonts-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/res\.cloudinary\.com\/.*/i,
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "cloudinary-media-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
       },
       devOptions: {
-        enabled: false, // Enable in Step 26 when icons are ready
+        enabled: false,
       },
     }),
   ],
