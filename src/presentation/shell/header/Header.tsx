@@ -11,7 +11,7 @@ export function Header() {
 
   return (
     <header
-      className={`hidden md:block sticky top-0 z-40 w-full transition-all duration-300 border-b ${
+      className={`hidden md:block fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 border-b ${
         isScrolled
           ? "border-[var(--line)] bg-[var(--ink-900)]/90 backdrop-blur-xl"
           : "border-transparent bg-[var(--ink-900)]/50 backdrop-blur-md"

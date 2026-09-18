@@ -40,26 +40,26 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  /* Canvas layers — deep petrol navy */
-  --ink-900: #06121a;
-  --ink-850: #08171f;
-  --ink-800: #0b1d27;
-  --ink-700: #102a36;
-  --ink-600: #17394a;
+  /* Canvas layers — deep obsidian space canvas matching blackhole hero */
+  --ink-900: #000000;
+  --ink-850: #08080a;
+  --ink-800: #0f0f13;
+  --ink-700: #18181f;
+  --ink-600: #24242e;
 
   /* Lines & structural boundaries (shadow-free depth) */
-  --line: rgba(130, 180, 200, 0.16);
-  --line-soft: rgba(130, 180, 200, 0.09);
+  --line: rgba(255, 255, 255, 0.09);
+  --line-soft: rgba(255, 255, 255, 0.04);
 
   /* Typography tones */
-  --mist: #93aeba;
-  --mist-dim: #6b8896;
-  --paper: #e8f1f4;
+  --mist: #a1a1aa;
+  --mist-dim: #71717a;
+  --paper: #fafafa;
 
   /* Signal accents */
   --amber: #ffb020;
   --amber-deep: #e08c00;
-  --cyan: #49c7e8;
+  --cyan: #38bdf8;
   --live: #3fd08a;
 
   /* Radii scale (flat instrument panel with modern rounded corners) */

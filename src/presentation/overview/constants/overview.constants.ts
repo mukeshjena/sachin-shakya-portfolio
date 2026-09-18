@@ -32,13 +32,20 @@ export const OVERVIEW_KEY_METRICS = [
   },
 ] as const;
 
-export const OVERVIEW_INFRA_BADGES = [
-  "Microsoft Azure",
-  "Amazon Web Services",
-  "Kubernetes (AKS/EKS)",
-  "Terraform IaC",
-  "Datadog Telemetry",
-  "FinOps Certified",
+export type InfraBadgeIconKey = "azure" | "aws" | "k8s" | "terraform" | "datadog" | "finops";
+
+export interface InfraStackBadge {
+  readonly name: string;
+  readonly iconKey: InfraBadgeIconKey;
+}
+
+export const OVERVIEW_INFRA_BADGES: readonly InfraStackBadge[] = [
+  { name: "Microsoft Azure", iconKey: "azure" },
+  { name: "Amazon Web Services", iconKey: "aws" },
+  { name: "Kubernetes (AKS/EKS)", iconKey: "k8s" },
+  { name: "Terraform IaC", iconKey: "terraform" },
+  { name: "Datadog Telemetry", iconKey: "datadog" },
+  { name: "FinOps Certified", iconKey: "finops" },
 ] as const;
 
 export const OVERVIEW_ANIMATION_VARIANTS = {

@@ -4,19 +4,39 @@
 // Strictly adheres to shadow-free surfaces, Cupertino outline icons, and zero emojis.
 
 import { motion } from "framer-motion";
+import { FaAws } from "react-icons/fa6";
+import { IoPulseOutline, IoShieldCheckmarkOutline } from "react-icons/io5";
+import { SiDatadog, SiKubernetes, SiTerraform } from "react-icons/si";
+import { VscAzure } from "react-icons/vsc";
 import {
-  IoArrowForwardOutline,
-  IoDocumentTextOutline,
-  IoPulseOutline,
-  IoShieldCheckmarkOutline,
-} from "react-icons/io5";
-import {
+  type InfraBadgeIconKey,
   OVERVIEW_ANIMATION_VARIANTS,
   OVERVIEW_FALLBACK_CONTENT,
   OVERVIEW_INFRA_BADGES,
   OVERVIEW_KEY_METRICS,
 } from "./constants/overview.constants";
 import { useExecutiveOverviewLogic } from "./ExecutiveOverview.hooks";
+
+function getStackBadgeIcon(iconKey: InfraBadgeIconKey) {
+  switch (iconKey) {
+    case "azure":
+      return <VscAzure className="w-3.5 h-3.5 text-[#0078d4]" aria-hidden="true" />;
+    case "aws":
+      return <FaAws className="w-3.5 h-3.5 text-[var(--amber)]" aria-hidden="true" />;
+    case "k8s":
+      return <SiKubernetes className="w-3.5 h-3.5 text-[#326ce5]" aria-hidden="true" />;
+    case "terraform":
+      return <SiTerraform className="w-3.5 h-3.5 text-[#844fba]" aria-hidden="true" />;
+    case "datadog":
+      return <SiDatadog className="w-3.5 h-3.5 text-[#632ca6]" aria-hidden="true" />;
+    case "finops":
+      return (
+        <IoShieldCheckmarkOutline className="w-3.5 h-3.5 text-[var(--live)]" aria-hidden="true" />
+      );
+    default:
+      return null;
+  }
+}
 
 export function ExecutiveOverview() {
   const { content } = useExecutiveOverviewLogic();
@@ -25,7 +45,7 @@ export function ExecutiveOverview() {
     <section
       id="telemetry"
       aria-label="Executive Architecture Telemetry"
-      className="relative w-full py-16 md:py-24 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
+      className="relative w-full py-16 md:py-24 scroll-mt-20 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >
       {/* Hairline Grid Subtle Background */}
       <div
@@ -107,35 +127,6 @@ export function ExecutiveOverview() {
               ))}
             </motion.div>
 
-            {/* Dual Action Controls */}
-            <motion.div
-              variants={OVERVIEW_ANIMATION_VARIANTS.item}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2"
-            >
-              <a
-                href="#architecture"
-                className="px-5 py-3 rounded-xl bg-[var(--amber)] text-[var(--ink-900)] font-semibold text-xs sm:text-sm uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all flex items-center justify-center gap-2 cursor-pointer select-none whitespace-nowrap"
-              >
-                <span>{content.ctaPrimary}</span>
-                <IoArrowForwardOutline className="w-4 h-4" aria-hidden="true" />
-              </a>
-
-              {content.resumePdfUrl && (
-                <a
-                  href={content.resumePdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-5 py-3 rounded-xl bg-[var(--ink-800)] text-[var(--paper)] border border-[var(--line)] hover:border-[var(--cyan)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer select-none whitespace-nowrap"
-                >
-                  <IoDocumentTextOutline
-                    className="w-4 h-4 text-[var(--cyan)]"
-                    aria-hidden="true"
-                  />
-                  <span>{content.ctaSecondary}</span>
-                </a>
-              )}
-            </motion.div>
-
             {/* Infrastructure Technology Badges */}
             <motion.div
               variants={OVERVIEW_ANIMATION_VARIANTS.item}
@@ -146,10 +137,11 @@ export function ExecutiveOverview() {
               </span>
               {OVERVIEW_INFRA_BADGES.map((badge) => (
                 <span
-                  key={badge}
-                  className="px-2.5 py-1 rounded-lg bg-[var(--ink-800)]/80 border border-[var(--line-soft)] text-[11px] font-mono text-[var(--mist)]"
+                  key={badge.name}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--ink-800)]/80 border border-[var(--line-soft)] text-xs font-mono text-[var(--mist)] hover:text-[var(--paper)] hover:border-[var(--line)] transition-colors"
                 >
-                  {badge}
+                  {getStackBadgeIcon(badge.iconKey)}
+                  <span>{badge.name}</span>
                 </span>
               ))}
             </motion.div>

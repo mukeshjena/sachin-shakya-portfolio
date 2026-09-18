@@ -11,7 +11,6 @@ import {
   IoLogoLinkedin,
   IoLogoTwitter,
   IoMailOutline,
-  IoRadioOutline,
 } from "react-icons/io5";
 import type { SocialLink } from "../../../domain/entities/admin/SiteSettings";
 import { FOOTER_COPY, FOOTER_TELEMETRY_PILLS } from "./constants/footer.constants";
@@ -39,16 +38,25 @@ export function Footer() {
     useFooterLogic();
 
   return (
-    <footer className="w-full bg-[var(--ink-850)] border-t border-[var(--line)] text-[var(--paper)]">
+    <footer className="w-full bg-[var(--ink-900)] border-t border-[var(--line)] text-[var(--paper)]">
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-28 md:pb-16 space-y-12">
         {/* Top Operational Status Bar */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 border-b border-[var(--line-soft)]">
-          <div className="flex items-center gap-2 text-xs font-mono text-[var(--live)]">
-            <IoRadioOutline className="w-4 h-4 animate-pulse" aria-hidden="true" />
-            <span className="font-semibold tracking-wider">{FOOTER_COPY.systemStatus}</span>
+          <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)] border border-[var(--line)] text-xs font-mono text-[var(--live)] select-none">
+            <span
+              className="w-2 h-2 rounded-full bg-[var(--live)] animate-pulse"
+              aria-hidden="true"
+            />
+            <span className="font-semibold tracking-wider uppercase">
+              {FOOTER_COPY.systemStatus}
+            </span>
           </div>
-          <div className="text-[11px] font-mono text-[var(--mist-dim)] tracking-wider uppercase">
-            {FOOTER_COPY.telemetryStamp}
+          <div className="text-[11px] font-mono text-[var(--mist-dim)] tracking-wider uppercase flex items-center gap-2 select-none">
+            <span className="text-[var(--cyan)] font-semibold">EDGE</span>
+            <span>&bull;</span>
+            <span>CLOUDFLARE WORKERS</span>
+            <span>&bull;</span>
+            <span>FIRESTORE CACHE</span>
           </div>
         </div>
 
@@ -57,7 +65,7 @@ export function Footer() {
           {/* Column 1: Identity & Executive Mission */}
           <div className="space-y-4">
             <div className="flex items-center gap-3 select-none">
-              <div className="w-9 h-9 rounded-full bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-sm">
+              <div className="w-10 h-10 rounded-full bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-sm">
                 SS
               </div>
               <div>
@@ -74,7 +82,15 @@ export function Footer() {
               {FOOTER_COPY.summaryDescription}
             </p>
 
-            <div className="pt-2 space-y-1.5 text-xs font-mono text-[var(--mist)]">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[var(--ink-850)] border border-[var(--line-soft)] text-[10px] font-mono text-[var(--live)] select-none">
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-[var(--live)] animate-pulse"
+                aria-hidden="true"
+              />
+              <span>OPEN TO STRATEGIC ADVISORY</span>
+            </div>
+
+            <div className="pt-1 space-y-1.5 text-xs font-mono text-[var(--mist)]">
               <div className="flex items-center gap-2">
                 <IoLocationOutline className="w-4 h-4 text-[var(--cyan)]" aria-hidden="true" />
                 <span>{location}</span>
@@ -98,9 +114,12 @@ export function Footer() {
                 <li key={item.id}>
                   <a
                     href={item.href}
-                    className="text-xs text-[var(--mist)] hover:text-[var(--paper)] hover:translate-x-1 inline-block transition-all cursor-pointer"
+                    className="group text-xs text-[var(--mist)] hover:text-[var(--paper)] transition-colors inline-flex items-center gap-1.5 cursor-pointer"
                   >
-                    {item.label}
+                    <span className="text-[var(--mist-dim)] group-hover:text-[var(--cyan)] group-hover:translate-x-0.5 transition-all font-mono text-[10px]">
+                      &rarr;
+                    </span>
+                    <span>{item.label}</span>
                   </a>
                 </li>
               ))}
@@ -116,7 +135,7 @@ export function Footer() {
               {FOOTER_TELEMETRY_PILLS.map((pill) => (
                 <div
                   key={pill.label}
-                  className="p-2.5 rounded-xl bg-[var(--ink-900)] border border-[var(--line-soft)] space-y-0.5"
+                  className="p-2.5 rounded-xl bg-[var(--ink-850)] border border-[var(--line-soft)] hover:border-[var(--line)] transition-colors space-y-0.5 select-none"
                 >
                   <span className="text-[10px] font-mono uppercase text-[var(--mist-dim)] block">
                     {pill.label}
@@ -148,7 +167,7 @@ export function Footer() {
                       rel="noopener noreferrer"
                       aria-label={link.label}
                       title={link.label}
-                      className="w-10 h-10 rounded-full bg-[var(--ink-800)] border border-[var(--line)] text-[var(--mist)] hover:text-[var(--paper)] hover:border-[var(--cyan)] transition-all cursor-pointer flex items-center justify-center"
+                      className="w-9 h-9 rounded-full bg-[var(--ink-850)] border border-[var(--line)] text-[var(--mist)] hover:text-[var(--paper)] hover:border-[var(--cyan)] active:translate-y-px transition-all cursor-pointer flex items-center justify-center"
                     >
                       <Icon className="w-4 h-4" aria-hidden="true" />
                     </a>
@@ -162,10 +181,10 @@ export function Footer() {
                   href={resumePdfUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--ink-800)] border border-[var(--amber)]/30 text-[var(--amber)] text-xs font-semibold hover:bg-[var(--amber)] hover:text-[var(--ink-900)] transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--amber)] text-black text-xs font-semibold hover:bg-[var(--amber-deep)] active:translate-y-px transition-all cursor-pointer select-none"
                 >
-                  <IoDocumentTextOutline className="w-4 h-4" aria-hidden="true" />
-                  <span>Download Executive Résumé (PDF)</span>
+                  <IoDocumentTextOutline className="w-4 h-4 text-black" aria-hidden="true" />
+                  <span>Download CV (PDF)</span>
                 </a>
               </div>
             )}
@@ -178,7 +197,7 @@ export function Footer() {
             &copy; <span className="tabular-nums">{currentYear}</span> {fullName}. All rights
             reserved.
           </div>
-          <div className="text-[10px] tracking-wider uppercase">
+          <div className="text-[10px] tracking-wider uppercase text-[var(--mist-dim)]">
             {"ENTERPRISE ARCHITECTURE // ZERO DROP SHADOWS"}
           </div>
         </div>

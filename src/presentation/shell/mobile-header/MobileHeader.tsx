@@ -9,7 +9,7 @@ export function MobileHeader() {
   const { logoUrl, fullName, isAvailable } = useMobileHeaderLogic();
 
   return (
-    <header className="md:hidden sticky top-0 z-40 w-full bg-[var(--ink-900)]/85 backdrop-blur-xl border-b border-[var(--line)]">
+    <header className="md:hidden fixed top-0 inset-x-0 z-40 w-full bg-[var(--ink-900)]/85 backdrop-blur-xl border-b border-[var(--line)]">
       <div className="px-4 h-14 flex items-center justify-between gap-3">
         {/* Brand Link */}
         <a href="#top" className="flex items-center gap-2.5 select-none">

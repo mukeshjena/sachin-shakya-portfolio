@@ -2,13 +2,13 @@
 // Telemetry copy, shader configuration presets, and animation variants for 21st.dev Blackhole Hero.
 
 export const HERO_COPY = {
-  eyebrow: "ENTERPRISE ARCHITECTURE // RELATIVISTIC PRECISION",
-  titleLine1: "Light does not",
-  titleLine2: "leave here",
+  eyebrow: "LEAD CLOUD ARCHITECT // FINOPS & SRE EXECUTIVE",
+  titleLine1: "Architecting Autonomous",
+  titleLine2: "Cloud Horizons",
   subheadline:
-    "The ring above the shadow is the far side of the disc, bent over the top. Gravitational precision engineered for mission-critical multi-cloud infrastructure.",
-  ctaPrimary: "Explore Architecture",
-  ctaSecondary: "Mission Telemetry",
+    "Engineering resilient multi-cloud architectures, mission-critical Kubernetes clusters, and automated FinOps telemetry delivering $170K/month in verified cloud efficiency.",
+  ctaPrimary: "Explore Telemetry",
+  ctaSecondary: "Download CV",
   scrollPrompt: "DISCOVER TELEMETRY",
 } as const;
 
@@ -25,15 +25,15 @@ export const DESKTOP_BLACKHOLE_SETTINGS = {
 } as const;
 
 export const MOBILE_BLACKHOLE_SETTINGS = {
-  focus: [0.5, 0.76] as const,
-  scrim: "top" as const,
-  scrimStrength: 0.92,
-  distance: 24,
-  elevation: -7.0,
-  fov: 58,
-  glow: 0.85,
-  steps: 200,
-  resolution: 0.6,
+  focus: [0.5, 0.52] as const,
+  scrim: "none" as const,
+  scrimStrength: 0.85,
+  distance: 26,
+  elevation: -6.0,
+  fov: 52,
+  glow: 0.9,
+  steps: 220,
+  resolution: 0.65,
 } as const;
 
 export const HERO_ANIMATION_VARIANTS = {
