@@ -1007,5 +1007,35 @@
 - Pre-commit automated quality gate passed cleanly on git commit.
 - Sequential branch promotion completed: `step/20-admin-otp-flow` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
 
+---
 
+## 2026-09-18 — Step 21: Multi-Email Admin Authorization (Completed ✅)
 
+**Branch:** `step/21-multi-admin-emails` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `ca37667 feat(step-21): multi-email admin authorization — whitelisted admin management, root admin immutability, and AuthorizedEmailsManager`
+
+**What was done:**
+1. **Application Layer (`src/application/use-cases/admin-users/`):**
+   - `GetAuthorizedEmailsUseCase.ts`: Query use-case resolving whitelisted admin email addresses from `IAdminAccessRepository`.
+   - `AddAdminEmailUseCase.ts`: Validates email string, normalizes case, checks for duplicates, and persists new administrator to `adminEmails` collection.
+   - `RemoveAdminEmailUseCase.ts`: Strictly enforces root admin immutability (`sachin.shakya@live.com` cannot be deleted), verifies target existence, and removes document from `adminEmails`.
+2. **DI Container Registration (`src/infrastructure/di/`):**
+   - `tokens.ts`: Registered `GetAuthorizedEmails`, `AddAdminEmail`, `RemoveAdminEmail` symbols.
+   - `bootstrap.ts`: Registered singletons for all three use-cases bound to `IAdminAccessRepository`.
+3. **Presentation Layer (`src/presentation/admin/authorization/`):**
+   - `constants/auth-emails.constants.ts`: Copy, status badges, counter labels, and security warnings.
+   - `AuthorizedEmailsManager.types.ts`: View model contract and form/feedback types.
+   - `AuthorizedEmailsManager.hooks.ts`: Query lifecycle, add/remove handlers, blur-only validation (zero debounce per Rule 12), and interactive feedback state.
+   - `AuthorizedEmailsManager.tsx`: Pure declarative instrument panel interface with telemetry counter, inline add form, immutable root administrator badge, and revoke affordance with confirmation prompt.
+4. **Console Integration (`src/presentation/admin/login/AdminLogin.tsx`):**
+   - Rendered authenticated session view (`step === "authenticated"`) with top active session bar, user email beacon, return-to-site link, logout button, and `<AuthorizedEmailsManager />`.
+5. **Automated Verification (`scripts/test-multi-admin-emails-e2e.ts`):**
+   - 100% test pass across DI resolution, root admin presence, strict root immutability rejection, delegated admin addition, duplicate rejection, multi-admin OTP request flow, delegated admin revocation, and non-existent admin rejection (7/7 tests passed).
+
+**Verification:**
+- `npx biome check .` → ✅ 198 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build succeeded.
+- `npx tsx scripts/test-multi-admin-emails-e2e.ts` → ✅ 100% passed (7/7).
+- Pre-commit automated quality gate passed cleanly on git commit.
+- Sequential branch promotion completed: `step/21-multi-admin-emails` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
