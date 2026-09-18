@@ -5,10 +5,14 @@
 
 import { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages/GetPublishedPageBySlugUseCase";
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
+import { GetSiteSettingsUseCase } from "../../application/use-cases/settings/GetSiteSettingsUseCase";
+import { SubscribeSiteSettingsUseCase } from "../../application/use-cases/settings/SubscribeSiteSettingsUseCase";
 import type { IPageRepository } from "../../domain/repositories/content/IPageRepository";
+import type { ISiteSettingsRepository } from "../../domain/repositories/settings/ISiteSettingsRepository";
 import { CloudinaryMediaUploader } from "../cloudinary/CloudinaryMediaUploader";
 import { getDb } from "../firebase/firebaseClient";
 import { FirestorePageRepository } from "../repositories/content/FirestorePageRepository";
+import { FirestoreSiteSettingsRepository } from "../repositories/settings/FirestoreSiteSettingsRepository";
 import { getEnv } from "../system/env";
 import { container, singleton } from "./container";
 import { DI_TOKENS } from "./tokens";
@@ -33,19 +37,41 @@ export function bootstrapContainer(): void {
     singleton(() => new PingUseCase())
   );
 
-  // ── Content repositories (Step 11) ──────────────────────────────────────────
+  // ── Content & Settings repositories (Step 11 & 13) ─────────────────────────
   container.register(
     DI_TOKENS.PageRepository,
     singleton(() => new FirestorePageRepository())
   );
+  container.register(
+    DI_TOKENS.SiteSettingsRepository,
+    singleton(() => new FirestoreSiteSettingsRepository())
+  );
 
-  // ── Use-cases (Step 11) ─────────────────────────────────────────────────────
+  // ── Use-cases (Step 11 & 13) ────────────────────────────────────────────────
   container.register(
     DI_TOKENS.GetPublishedPageBySlug,
     singleton(
       () =>
         new GetPublishedPageBySlugUseCase(
           container.resolve<IPageRepository>(DI_TOKENS.PageRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.GetSiteSettings,
+    singleton(
+      () =>
+        new GetSiteSettingsUseCase(
+          container.resolve<ISiteSettingsRepository>(DI_TOKENS.SiteSettingsRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.SubscribeSiteSettings,
+    singleton(
+      () =>
+        new SubscribeSiteSettingsUseCase(
+          container.resolve<ISiteSettingsRepository>(DI_TOKENS.SiteSettingsRepository)
         )
     )
   );

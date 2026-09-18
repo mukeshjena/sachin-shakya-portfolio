@@ -19,11 +19,14 @@ export const DI_TOKENS = {
   ContactRepository: Symbol("IContactRepository"),
   EmailSender: Symbol("IEmailSender"),
   MediaUploader: Symbol("IMediaUploader"),
+  SiteSettingsRepository: Symbol("ISiteSettingsRepository"),
 
   // ── Application-layer use-cases ───────────────────────────────────────────
   // (populated as use-cases are implemented in Steps 11+)
   GetPublishedPages: Symbol("GetPublishedPages"),
   GetPublishedPageBySlug: Symbol("GetPublishedPageBySlug"),
+  GetSiteSettings: Symbol("GetSiteSettings"),
+  SubscribeSiteSettings: Symbol("SubscribeSiteSettings"),
   SubmitContactForm: Symbol("SubmitContactForm"),
   SubmitPromoInquiry: Symbol("SubmitPromoInquiry"),
   RequestAccessCode: Symbol("RequestAccessCode"),
