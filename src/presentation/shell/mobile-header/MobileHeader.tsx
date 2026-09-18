@@ -10,10 +10,8 @@ export function MobileHeader() {
 
   return (
     <header
-      className={`md:hidden fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 border-b ${
-        isScrolled
-          ? "bg-[var(--ink-900)]/90 backdrop-blur-xl border-[var(--line)]"
-          : "bg-transparent backdrop-blur-none border-transparent"
+      className={`md:hidden fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 ${
+        isScrolled ? "header-glass-scrolled" : "header-glass-transparent"
       }`}
     >
       <div className="px-4 h-14 flex items-center justify-between gap-3">
@@ -40,7 +38,7 @@ export function MobileHeader() {
             </span>
             <span
               className={`text-[9px] font-mono tracking-widest uppercase ${
-                isScrolled ? "text-[var(--mist-dim)]" : "text-zinc-400"
+                isScrolled ? "text-[var(--mist-dim)]" : "text-white/70"
               }`}
             >
               ARCHITECT &bull; CLOUDOPS
@@ -59,7 +57,7 @@ export function MobileHeader() {
             </div>
           )}
 
-          <ThemeToggle />
+          <ThemeToggle isTransparent={!isScrolled} />
         </div>
       </div>
     </header>

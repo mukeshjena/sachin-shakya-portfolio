@@ -185,12 +185,14 @@ async function main() {
         url: "https://linkedin.com/in/sachinshakya",
         label: "LinkedIn",
         isVisible: true,
+        order: 1,
       },
       {
         platform: "github",
         url: "https://github.com/sachinshakya",
         label: "GitHub",
         isVisible: true,
+        order: 2,
       },
     ],
   });

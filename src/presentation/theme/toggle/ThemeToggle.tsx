@@ -6,7 +6,11 @@ import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
 import { useThemeToggle } from "./ThemeToggle.hooks";
 import "./ThemeToggle.css";
 
-export function ThemeToggle() {
+export interface ThemeToggleProps {
+  readonly isTransparent?: boolean;
+}
+
+export function ThemeToggle({ isTransparent = false }: ThemeToggleProps) {
   const { isDark, ariaLabel, handleToggle } = useThemeToggle();
 
   return (
@@ -15,7 +19,7 @@ export function ThemeToggle() {
       onClick={handleToggle}
       aria-label={ariaLabel}
       title={ariaLabel}
-      className="theme-toggle-btn"
+      className={`theme-toggle-btn ${isTransparent ? "theme-toggle-btn--transparent" : ""}`}
     >
       {isDark ? (
         <IoSunnyOutline className="theme-toggle-icon" aria-hidden="true" />

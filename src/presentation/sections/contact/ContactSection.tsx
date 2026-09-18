@@ -7,10 +7,10 @@ import {
   IoAlertCircleOutline,
   IoCallOutline,
   IoCheckmarkCircleOutline,
-  IoDocumentTextOutline,
   IoLocationOutline,
   IoLogoLinkedin,
   IoMailOutline,
+  IoOpenOutline,
   IoPaperPlaneOutline,
 } from "react-icons/io5";
 import { useContactSectionLogic } from "./ContactSection.hooks";
@@ -72,7 +72,7 @@ export function ContactSection() {
               <div className="relative z-10 w-full bg-gradient-to-t from-black via-black/85 to-transparent pt-24 pb-6 px-6 space-y-4">
                 {/* Direct Identity */}
                 <div>
-                  <h3 className="text-xl font-bold tracking-tight text-[var(--paper)]">
+                  <h3 className="text-xl font-bold tracking-tight text-white">
                     {contactInfo.fullName}
                   </h3>
                   <p className="text-xs text-[var(--cyan)] font-mono mt-0.5">
@@ -81,11 +81,11 @@ export function ContactSection() {
                 </div>
 
                 {/* Direct Channels Icon Bar */}
-                <div className="flex items-center gap-2.5 pt-3 border-t border-[var(--line-soft)]">
+                <div className="flex items-center gap-2.5 pt-3 border-t border-white/15">
                   <a
                     href={`mailto:${contactInfo.email}`}
                     title={`Direct Email (${contactInfo.email})`}
-                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                    className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-[var(--amber)] text-[var(--cyan)] hover:text-white flex items-center justify-center transition-all cursor-pointer"
                     aria-label={`Email ${contactInfo.fullName}`}
                   >
                     <IoMailOutline className="w-5 h-5" aria-hidden="true" />
@@ -94,7 +94,7 @@ export function ContactSection() {
                   <a
                     href={`tel:${contactInfo.phone.replace(/\s+/g, "")}`}
                     title={`Direct Phone / WhatsApp (${contactInfo.phone})`}
-                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                    className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-[var(--amber)] text-[var(--cyan)] hover:text-white flex items-center justify-center transition-all cursor-pointer"
                     aria-label={`Call ${contactInfo.fullName}`}
                   >
                     <IoCallOutline className="w-5 h-5" aria-hidden="true" />
@@ -105,7 +105,7 @@ export function ContactSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="LinkedIn Profile"
-                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                    className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-[var(--amber)] text-[var(--cyan)] hover:text-white flex items-center justify-center transition-all cursor-pointer"
                     aria-label={`${contactInfo.fullName} LinkedIn Profile`}
                   >
                     <IoLogoLinkedin className="w-5 h-5" aria-hidden="true" />
@@ -116,20 +116,21 @@ export function ContactSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Location (Faridabad / Delhi NCR, India)"
-                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                    className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-[var(--amber)] text-[var(--cyan)] hover:text-white flex items-center justify-center transition-all cursor-pointer"
                     aria-label="Location Map"
                   >
                     <IoLocationOutline className="w-5 h-5" aria-hidden="true" />
                   </a>
 
                   <a
-                    href={contactInfo.resumePdfUrl}
-                    download
-                    title="Download Verified CV (PDF)"
-                    className="w-11 h-11 rounded-xl bg-[var(--ink-800)]/90 backdrop-blur-md border border-[var(--line)] hover:border-[var(--amber)] text-[var(--amber)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer ml-auto"
-                    aria-label="Download Verified Résumé PDF"
+                    href={contactInfo.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-[var(--amber)] text-[var(--amber)] hover:text-white flex items-center justify-center transition-all cursor-pointer ml-auto"
+                    title="Open External Profile"
+                    aria-label="External Link"
                   >
-                    <IoDocumentTextOutline className="w-5 h-5" aria-hidden="true" />
+                    <IoOpenOutline className="w-5 h-5" aria-hidden="true" />
                   </a>
                 </div>
               </div>

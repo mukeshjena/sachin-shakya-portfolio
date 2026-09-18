@@ -24,6 +24,21 @@
   color: var(--amber);
 }
 
+/* Frosted glass variant when floating over the dark blackhole hero section */
+.theme-toggle-btn--transparent {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.theme-toggle-btn--transparent:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
 .theme-toggle-icon {
   width: 1.125rem;
   height: 1.125rem;

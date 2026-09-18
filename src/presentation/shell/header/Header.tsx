@@ -11,10 +11,8 @@ export function Header() {
 
   return (
     <header
-      className={`hidden md:block fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 border-b ${
-        isScrolled
-          ? "border-[var(--line)] bg-[var(--ink-900)]/90 backdrop-blur-xl"
-          : "border-transparent bg-transparent backdrop-blur-none"
+      className={`hidden md:block fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 ${
+        isScrolled ? "header-glass-scrolled" : "header-glass-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-6">
@@ -43,7 +41,7 @@ export function Header() {
             </span>
             <span
               className={`text-[10px] font-mono tracking-widest uppercase ${
-                isScrolled ? "text-[var(--mist-dim)]" : "text-zinc-400"
+                isScrolled ? "text-[var(--mist-dim)]" : "text-white/70"
               }`}
             >
               {HEADER_COPY.brandSubtitle}
@@ -63,11 +61,11 @@ export function Header() {
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
                       isActive
                         ? isScrolled
-                          ? "text-[var(--amber)] bg-[var(--ink-800)] font-semibold border border-[var(--amber)]/30"
-                          : "text-[var(--amber)] bg-white/10 font-semibold border border-[var(--amber)]/40"
+                          ? "text-[var(--amber)] bg-[var(--ink-800)] font-semibold border border-[var(--amber)]/40"
+                          : "text-[var(--amber)] bg-white/10 font-semibold border border-[var(--amber)]/50"
                         : isScrolled
-                          ? "text-[var(--mist)] hover:text-[var(--paper)] hover:bg-[var(--ink-800)]/70 border border-transparent"
-                          : "text-zinc-300 hover:text-white hover:bg-white/10 border border-transparent"
+                          ? "text-[var(--mist)] hover:text-[var(--paper)] hover:bg-[var(--ink-800)]/80 border border-transparent font-medium"
+                          : "text-white/80 hover:text-white hover:bg-white/10 border border-transparent font-medium"
                     }`}
                   >
                     {item.label}
@@ -81,7 +79,7 @@ export function Header() {
         {/* Actions & Controls */}
         <div className="flex items-center gap-3">
           {/* Cupertino Theme Toggle */}
-          <ThemeToggle />
+          <ThemeToggle isTransparent={!isScrolled} />
 
           {/* Contact Action CTA */}
           <a

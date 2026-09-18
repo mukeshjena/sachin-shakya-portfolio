@@ -52,9 +52,9 @@
   --line-soft: rgba(15, 45, 60, 0.06);
 
   /* Typography tones — WCAG AA high-contrast */
-  --mist: #4b6370;
-  --mist-dim: #6d8490;
-  --paper: #081720;
+  --mist: #2d4452;
+  --mist-dim: #4e6573;
+  --paper: #05131a;
 
   /* Signal accents — contrast-tuned for light backgrounds */
   --amber: #d97706;
@@ -270,4 +270,19 @@ select:focus {
 
 [data-theme="light"] .vintage-vignette {
   background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(220, 230, 238, 0.35) 100%);
+}
+
+/* ── Header Surface Glass Classes (Cross-Browser Shadow-Free) ─────────────── */
+.header-glass-scrolled {
+  background-color: color-mix(in srgb, var(--ink-900) 92%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+
+.header-glass-transparent {
+  background-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid transparent;
 }

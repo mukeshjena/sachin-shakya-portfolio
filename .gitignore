@@ -41,3 +41,8 @@ Thumbs.db
 
 # TypeScript build info
 *.tsbuildinfo
+
+# AI Agent & Documentation artifacts (Local only, excluded from remote GitHub)
+.agents/
+doc/
+docs/
