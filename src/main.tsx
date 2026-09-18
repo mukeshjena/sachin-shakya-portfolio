@@ -21,6 +21,20 @@ async function bootstrap() {
   );
 }
 
+// Suppress harmless external browser extension disconnection errors
+if (typeof window !== "undefined") {
+  window.addEventListener("unhandledrejection", (event) => {
+    const msg = event.reason?.message || String(event.reason || "");
+    if (
+      msg.includes("Could not establish connection. Receiving end does not exist") ||
+      msg.includes("Receiving end does not exist")
+    ) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  });
+}
+
 bootstrap().catch((err) => {
   console.error("Failed to bootstrap application:", err);
 });

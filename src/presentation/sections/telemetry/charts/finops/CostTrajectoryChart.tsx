@@ -1,257 +1,116 @@
 // presentation/sections/telemetry/charts/CostTrajectoryChart.tsx
-// 12-Month FinOps Monthly Cloud Spend & Savings Trajectory Chart.
-// Pure SVG area & dual-line chart with interactive scrubber and milestone tags.
+// Signature Animated FinOps Cost Optimization Curve Console (parity with original design).
 // Strictly adheres to shadow-free surfaces, monospaced tabular figures, and zero emojis.
 
-import { useMemo, useState } from "react";
-import { MONTHLY_SPEND_SERIES } from "../../constants/telemetry.constants";
+import { motion } from "framer-motion";
 
 export function CostTrajectoryChart() {
-  const [activeIndex, setActiveIndex] = useState<number>(MONTHLY_SPEND_SERIES.length - 1);
-
-  // SVG Coordinate Geometry (viewBox: 0 0 800 320)
-  const width = 800;
-  const height = 320;
-  const padding = { top: 30, right: 30, bottom: 50, left: 60 };
-
-  const chartWidth = width - padding.left - padding.right;
-  const chartHeight = height - padding.top - padding.bottom;
-
-  const minVal = 200;
-  const maxVal = 500;
-
-  const points = useMemo(() => {
-    return MONTHLY_SPEND_SERIES.map((pt, i) => {
-      const x = padding.left + (i / (MONTHLY_SPEND_SERIES.length - 1)) * chartWidth;
-      const yBaseline =
-        padding.top + chartHeight - ((pt.baseline - minVal) / (maxVal - minVal)) * chartHeight;
-      const yOptimized =
-        padding.top + chartHeight - ((pt.optimized - minVal) / (maxVal - minVal)) * chartHeight;
-      return { ...pt, x, yBaseline, yOptimized };
-    });
-  }, [chartWidth, chartHeight, padding.left, padding.top]);
-
-  const baselinePath = useMemo(() => {
-    return points.reduce(
-      (acc, pt, i) => `${acc} ${i === 0 ? "M" : "L"} ${pt.x},${pt.yBaseline}`,
-      ""
-    );
-  }, [points]);
-
-  const optimizedPath = useMemo(() => {
-    return points.reduce(
-      (acc, pt, i) => `${acc} ${i === 0 ? "M" : "L"} ${pt.x},${pt.yOptimized}`,
-      ""
-    );
-  }, [points]);
-
-  const areaPath = useMemo(() => {
-    if (points.length === 0) return "";
-    const topForward = points.reduce(
-      (acc, pt, i) => `${acc} ${i === 0 ? "M" : "L"} ${pt.x},${pt.yBaseline}`,
-      ""
-    );
-    const bottomBackward = points
-      .slice()
-      .reverse()
-      .reduce((acc, pt) => `${acc} L ${pt.x},${pt.yOptimized}`, "");
-    return `${topForward} ${bottomBackward} Z`;
-  }, [points]);
-
-  const activePoint = points[activeIndex] || points[points.length - 1];
-
   return (
-    <div className="w-full space-y-4 select-none">
-      {/* Chart Top Metrics Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-[var(--ink-850)] border border-[var(--line)] text-xs">
-        <div className="flex items-center gap-6">
-          <div>
-            <span className="text-[10px] font-mono text-[var(--mist-dim)] uppercase block">
-              Active Timeline
-            </span>
-            <span className="font-mono font-bold text-sm text-[var(--paper)]">
-              Month {activeIndex + 1} ({activePoint.month})
-            </span>
-          </div>
-          <div>
-            <span className="text-[10px] font-mono text-[var(--mist-dim)] uppercase block">
-              Baseline Run-Rate
-            </span>
-            <span className="font-mono font-semibold text-sm text-[var(--cyan)] tabular-nums">
-              ${activePoint.baseline}K/mo
-            </span>
-          </div>
-          <div>
-            <span className="text-[10px] font-mono text-[var(--mist-dim)] uppercase block">
-              Optimized Spend
-            </span>
-            <span className="font-mono font-bold text-sm text-[var(--amber)] tabular-nums">
-              ${activePoint.optimized}K/mo
-            </span>
-          </div>
-        </div>
-
-        <div className="px-3.5 py-1.5 rounded-lg bg-[var(--ink-800)] border border-[var(--amber)]/30 flex items-center gap-2">
-          <span className="text-[10px] font-mono uppercase text-[var(--mist-dim)]">
-            SAVINGS DELTA:
+    <figure className="w-full rounded-2xl border border-[var(--line)] bg-[var(--ink-850)] overflow-hidden select-none m-0">
+      {/* Console Top Header */}
+      <div className="flex items-center justify-between gap-4 px-5 py-3.5 border-b border-[var(--line)] text-[11px] font-mono tracking-widest uppercase text-[var(--mist-dim)] bg-[var(--ink-900)]/60">
+        <span className="font-semibold text-[var(--paper)]">Azure cost signal</span>
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--live)] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--live)]" />
           </span>
-          <span className="font-mono font-bold text-sm text-[var(--amber)] tabular-nums">
-            -${activePoint.savings}K/mo
-          </span>
-          {activePoint.milestone && (
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--amber)]/10 text-[var(--amber)] border border-[var(--amber)]/20 hidden sm:inline-block">
-              {activePoint.milestone}
-            </span>
-          )}
+          <span className="text-[var(--live)] font-bold">Optimised</span>
         </div>
       </div>
 
-      {/* SVG Canvas Area */}
-      <div className="relative w-full rounded-2xl bg-[var(--ink-850)]/90 border border-[var(--line)] p-2 sm:p-4 overflow-hidden">
+      {/* Main Chart Canvas */}
+      <div className="relative p-4 sm:p-6 pb-2">
+        {/* Top-Left Tag */}
+        <span className="absolute left-6 top-5 text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[var(--mist-dim)] font-medium">
+          Monthly cloud spend
+        </span>
+
+        {/* Scalable SVG Curve */}
         <svg
-          viewBox={`0 0 ${width} ${height}`}
+          viewBox="0 0 560 200"
           className="w-full h-auto overflow-visible"
-          aria-label="FinOps Monthly Cloud Spend and Savings Trajectory Chart"
+          role="img"
+          aria-label="Line chart showing monthly Azure cloud spend falling steeply after the cost-optimisation programme and holding at the lower level."
         >
           <defs>
-            {/* Savings Delta Gradient */}
-            <linearGradient id="savingsFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--amber)" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="var(--amber)" stopOpacity="0.02" />
+            <linearGradient id="costGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ffb020" stopOpacity="0.32" />
+              <stop offset="100%" stopColor="#ffb020" stopOpacity="0" />
             </linearGradient>
           </defs>
 
-          {/* Horizontal Hairline Gridlines & Y-Axis Ticks */}
-          {[200, 300, 400, 500].map((val) => {
-            const y =
-              padding.top + chartHeight - ((val - minVal) / (maxVal - minVal)) * chartHeight;
-            return (
-              <g key={val}>
-                <line
-                  x1={padding.left}
-                  y1={y}
-                  x2={width - padding.right}
-                  y2={y}
-                  stroke="var(--line-soft)"
-                  strokeWidth="1"
-                  strokeDasharray="4 4"
-                />
-                <text
-                  x={padding.left - 12}
-                  y={y + 4}
-                  textAnchor="end"
-                  className="fill-[var(--mist-dim)] text-[10px] font-mono tabular-nums"
-                >
-                  ${val}K
-                </text>
-              </g>
-            );
-          })}
-
-          {/* Shaded Area between Baseline and Optimized */}
-          <path d={areaPath} fill="url(#savingsFill)" />
-
-          {/* Baseline Curve (Cyan Dashed) */}
-          <path
-            d={baselinePath}
-            fill="none"
-            stroke="var(--cyan)"
-            strokeWidth="2"
-            strokeDasharray="5 5"
-            strokeLinecap="round"
-            strokeOpacity="0.85"
+          {/* Area Fill */}
+          <motion.path
+            d="M8,52 C60,44 96,70 132,62 S196,40 236,58 C268,74 288,124 330,136 S404,152 448,148 C492,144 524,152 552,150 L552,192 L8,192 Z"
+            fill="url(#costGrad)"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, delay: 0.8 }}
           />
 
-          {/* Optimized Spend Curve (Solid Amber) */}
-          <path
-            d={optimizedPath}
+          {/* Cyan Dashed Milestone Line */}
+          <motion.line
+            x1="262"
+            y1="14"
+            x2="262"
+            y2="192"
+            stroke="var(--cyan)"
+            strokeWidth="1.5"
+            strokeDasharray="3 4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 0.75 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 1.4 }}
+          />
+
+          {/* Animated Curve Trace Line */}
+          <motion.path
+            d="M8,52 C60,44 96,70 132,62 S196,40 236,58 C268,74 288,124 330,136 S404,152 448,148 C492,144 524,152 552,150"
             fill="none"
             stroke="var(--amber)"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 2.2, ease: [0.4, 0, 0.2, 1] }}
           />
-
-          {/* Data Points and Interaction Bars */}
-          {points.map((pt, i) => {
-            const isHovered = i === activeIndex;
-            return (
-              // biome-ignore lint/a11y/noStaticElementInteractions: SVG element interactive scrubber
-              <g
-                key={pt.month}
-                className="cursor-pointer focus:outline-none"
-                onMouseEnter={() => setActiveIndex(i)}
-                onClick={() => setActiveIndex(i)}
-              >
-                {/* Invisible Hover Hitbox */}
-                <rect
-                  x={pt.x - chartWidth / (points.length * 2)}
-                  y={padding.top}
-                  width={chartWidth / points.length}
-                  height={chartHeight}
-                  fill="transparent"
-                />
-
-                {/* Vertical Scrubber Crosshair Line on Active */}
-                {isHovered && (
-                  <line
-                    x1={pt.x}
-                    y1={padding.top}
-                    x2={pt.x}
-                    y2={height - padding.bottom}
-                    stroke="var(--line)"
-                    strokeWidth="1.5"
-                    strokeDasharray="3 3"
-                  />
-                )}
-
-                {/* Optimized Point Ring */}
-                <circle
-                  cx={pt.x}
-                  cy={pt.yOptimized}
-                  r={isHovered ? 6 : 3.5}
-                  className={`transition-all ${
-                    isHovered
-                      ? "fill-[var(--amber)] stroke-[var(--ink-900)] stroke-2"
-                      : "fill-[var(--amber)] stroke-none"
-                  }`}
-                />
-
-                {/* X-Axis Month Label */}
-                <text
-                  x={pt.x}
-                  y={height - padding.bottom + 22}
-                  textAnchor="middle"
-                  className={`text-[11px] font-mono uppercase transition-colors ${
-                    isHovered
-                      ? "fill-[var(--amber)] font-bold"
-                      : "fill-[var(--mist-dim)] font-medium"
-                  }`}
-                >
-                  {pt.month}
-                </text>
-              </g>
-            );
-          })}
         </svg>
 
-        {/* Legend */}
-        <div className="pt-2 flex flex-wrap items-center justify-between border-t border-[var(--line-soft)] text-[11px] font-mono text-[var(--mist-dim)] px-2">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <span className="w-3 h-0.5 bg-[var(--cyan)] inline-block border-b border-dashed border-[var(--cyan)]" />
-              <span>Unoptimized Baseline ($450K/mo)</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-3 h-1 rounded-full bg-[var(--amber)] inline-block" />
-              <span className="text-[var(--paper)]">Post-Optimization Trajectory ($280K/mo)</span>
-            </div>
-          </div>
-          <div className="text-[10px] text-[var(--amber)] font-semibold">
-            VERIFIED $170,000 / MONTH SAVINGS
-          </div>
+        {/* Bottom-Right Tag */}
+        <div className="absolute right-6 bottom-4 text-right">
+          <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--amber)] block">
+            −$170K / month
+          </span>
+          <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-[var(--mist-dim)] block">
+            after optimisation
+          </span>
         </div>
       </div>
-    </div>
+
+      {/* Readout Telemetry Figures */}
+      <figcaption className="grid grid-cols-2 border-t border-[var(--line)] bg-[var(--ink-900)]/40">
+        <div className="p-4 sm:p-6 border-r border-[var(--line)]">
+          <strong className="block font-mono text-2xl sm:text-4xl font-bold tracking-tight text-[var(--paper)] tabular-nums">
+            $2M
+          </strong>
+          <small className="block mt-1 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase text-[var(--mist-dim)]">
+            Annual cloud savings
+          </small>
+        </div>
+
+        <div className="p-4 sm:p-6">
+          <strong className="block font-mono text-2xl sm:text-4xl font-bold tracking-tight text-[var(--paper)] tabular-nums">
+            −40%
+          </strong>
+          <small className="block mt-1 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase text-[var(--mist-dim)]">
+            Faster incident resolution
+          </small>
+        </div>
+      </figcaption>
+    </figure>
   );
 }

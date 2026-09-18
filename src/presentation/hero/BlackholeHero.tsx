@@ -33,7 +33,6 @@ export function BlackholeHero() {
           {/* Eyebrow Telemetry Beacon */}
           <motion.div variants={HERO_ANIMATION_VARIANTS.item}>
             <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.07] backdrop-blur-md border border-white/15 select-none">
-              <span className="w-2 h-2 rounded-full bg-[var(--amber)]" aria-hidden="true" />
               <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[var(--amber)] font-semibold">
                 {content.eyebrow}
               </span>
@@ -61,7 +60,7 @@ export function BlackholeHero() {
             className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-1"
           >
             <a
-              href="#impact"
+              href="#telemetry"
               className="px-6 py-3 rounded-full bg-[var(--amber)] text-black font-semibold text-xs sm:text-sm uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all flex items-center justify-center gap-2 cursor-pointer select-none"
             >
               <span>{content.ctaPrimary}</span>
@@ -80,7 +79,7 @@ export function BlackholeHero() {
               </a>
             ) : (
               <a
-                href="#impact"
+                href="#telemetry"
                 className="px-6 py-3 rounded-full bg-white/[0.08] backdrop-blur-md text-white border border-white/20 hover:border-[var(--cyan)] hover:text-[var(--cyan)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer select-none"
               >
                 <span>{content.ctaSecondary}</span>
@@ -93,8 +92,8 @@ export function BlackholeHero() {
       {/* Bottom Scroll Indicator Cue */}
       <div className="relative z-10 pb-6 md:pb-8 flex justify-center pointer-events-none">
         <a
-          href="#impact"
-          aria-label="Scroll to impact"
+          href="#telemetry"
+          aria-label="Scroll to telemetry"
           className="pointer-events-auto flex flex-col items-center gap-1.5 text-white/60 hover:text-white transition-colors select-none"
         >
           <span className="text-[10px] font-mono uppercase tracking-widest">

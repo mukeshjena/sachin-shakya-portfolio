@@ -195,14 +195,15 @@ export default {
       }
 
       try {
-        const body = (await request.json()) as {
+        const body = (await request.json().catch(() => ({}))) as {
           name?: string;
           email?: string;
           subject?: string;
           message?: string;
+          to?: string;
         };
 
-        const { name, email, subject, message } = body;
+        const { name, email, subject, message, to } = body;
         if (!name || !email || !message) {
           return new Response(JSON.stringify({ error: "Missing required fields" }), {
             status: 400,
@@ -225,12 +226,24 @@ export default {
           });
         }
 
+        // Send to targeted recipient if provided (e.g. admin OTP), otherwise default portfolio recipient
+        const targetRecipient =
+          to && emailRegex.test(to.trim())
+            ? to.trim()
+            : env.EMAIL_RECIPIENT || "sachin.shakya@live.com";
+
         // Server-side forward to internal microservice — credentials NEVER touch client
         const emailPayload = {
-          to: env.EMAIL_RECIPIENT || "sachin.shakya@live.com",
-          subject: `[Portfolio Inquiry] ${subject || "Contact Form Submission"} from ${name}`,
+          to: targetRecipient,
+          subject: subject || `[Portfolio Inquiry] from ${name}`,
           profile: env.EMAIL_PROFILE || "sachin-shakya",
-          html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(/\n/g, "<br>")}</p>`,
+          html: message.startsWith("<")
+            ? message
+            : `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(/\n/g, "<br>")}</p>`,
+          customConfig: {
+            fromName: "Sachin Shakya — Mission Control",
+            fromEmail: "sachin.shakya@live.com",
+          },
         };
 
         const emailResponse = await fetch(env.EMAIL_API_URL, {

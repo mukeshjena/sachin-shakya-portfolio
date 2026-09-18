@@ -61,9 +61,37 @@ export function useHeaderLogic(): HeaderState {
     };
   }, [getHeaderNavUseCase]);
 
+  const [activeSection, setActiveSection] = useState<string>("");
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+
+      // Identify currently visible section
+      const sectionIds = [
+        "contact",
+        "credentials",
+        "capabilities",
+        "experience",
+        "impact",
+        "telemetry",
+      ];
+      const scrollPos = window.scrollY + 180;
+
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.offsetTop;
+          if (scrollPos >= top) {
+            setActiveSection(id);
+            return;
+          }
+        }
+      }
+
+      if (window.scrollY < 200) {
+        setActiveSection("");
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -86,5 +114,6 @@ export function useHeaderLogic(): HeaderState {
     availabilityNote: siteSettings.availabilityNote || HEADER_COPY.availabilityDefault,
     navLinks,
     resumePdfUrl: siteSettings.resumePdfUrl,
+    activeSection,
   };
 }

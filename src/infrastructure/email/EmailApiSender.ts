@@ -30,8 +30,13 @@ export class EmailApiSender implements IEmailSender {
           email: payload.replyTo || "inquiry@sachin-shakya.com",
           subject: payload.subject,
           message: payload.html,
+          html: payload.html,
           to: payload.to,
           profile: env.email.profile,
+          customConfig: {
+            fromName: "Sachin Shakya — Mission Control",
+            fromEmail: "sachin.shakya@live.com",
+          },
         }),
       });
 

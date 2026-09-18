@@ -1,9 +1,11 @@
 // presentation/shell/footer/Footer.tsx
-// Universal executive footer rendering dynamic social links, navigation, and telemetry metadata.
+// Executive DIIRA-parity footer rendering corporate coordinates, social links, and navigation.
 // Adheres strictly to shadow-free surfaces, Cupertino outline icons, and zero emojis.
 
 import type { ComponentType } from "react";
 import {
+  IoArrowForwardOutline,
+  IoCallOutline,
   IoDocumentTextOutline,
   IoGlobeOutline,
   IoLocationOutline,
@@ -11,9 +13,10 @@ import {
   IoLogoLinkedin,
   IoLogoTwitter,
   IoMailOutline,
+  IoPersonOutline,
 } from "react-icons/io5";
 import type { SocialLink } from "../../../domain/entities/admin/SiteSettings";
-import { FOOTER_COPY, FOOTER_TELEMETRY_PILLS } from "./constants/footer.constants";
+import { FOOTER_COPY, FOOTER_STACK_ITEMS } from "./constants/footer.constants";
 import { useFooterLogic } from "./Footer.hooks";
 
 function getSocialIcon(
@@ -49,123 +52,67 @@ export function Footer() {
   return (
     <footer className="w-full bg-[var(--ink-900)] border-t border-[var(--line)] text-[var(--paper)]">
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-28 md:pb-16 space-y-12">
-        {/* Top Operational Status Bar */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 border-b border-[var(--line-soft)]">
-          <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--ink-850)] border border-[var(--line)] text-xs font-mono text-[var(--live)] select-none">
-            <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
-            <span className="font-semibold tracking-wider uppercase">
-              {FOOTER_COPY.systemStatus}
-            </span>
-          </div>
-          <div className="text-[11px] font-mono text-[var(--mist-dim)] tracking-wider uppercase flex items-center gap-2 select-none">
-            <span className="text-[var(--cyan)] font-semibold">EDGE</span>
-            <span>&bull;</span>
-            <span>HIGH-PERFORMANCE RUNTIME</span>
-            <span>&bull;</span>
-            <span>DISTRIBUTED CACHE</span>
-          </div>
-        </div>
-
-        {/* 4-Column Responsive Grid */}
+        {/* 4-Column Responsive Grid (DIIRA Reference Layout) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Column 1: Identity & Executive Mission */}
+          {/* Column 1: Identity & Corporate Coordinates */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3 select-none">
+            <a href="#top" className="inline-flex items-center gap-3 select-none">
               {logoUrl ? (
                 <img
                   src={logoUrl}
                   alt={`${fullName} emblem`}
-                  className="w-10 h-10 rounded-full object-cover border border-[var(--line)] bg-[var(--ink-800)]"
+                  className="w-10 h-10 rounded-xl object-cover border border-[var(--line)] bg-[var(--ink-800)]"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-sm">
+                <div className="w-10 h-10 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] flex items-center justify-center text-[var(--amber)] font-mono font-bold text-sm">
                   SS
                 </div>
               )}
               <div>
-                <h3 className="text-base font-bold tracking-tight text-[var(--paper)] uppercase">
+                <h3 className="text-base font-bold tracking-tight text-[var(--paper)] uppercase leading-none">
                   {fullName}
                 </h3>
-                <p className="text-[10px] font-mono tracking-widest text-[var(--mist-dim)] uppercase">
+                <p className="text-[10px] font-mono tracking-widest text-[var(--mist-dim)] uppercase mt-1">
                   {headline}
                 </p>
               </div>
-            </div>
+            </a>
 
             <p className="text-xs text-[var(--mist)] leading-relaxed">
               {FOOTER_COPY.summaryDescription}
             </p>
 
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[var(--ink-850)] border border-[var(--line-soft)] text-[10px] font-mono text-[var(--live)] select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--live)]" aria-hidden="true" />
-              <span>OPEN TO STRATEGIC ADVISORY</span>
-            </div>
-
-            <div className="pt-1 space-y-1.5 text-xs font-mono text-[var(--mist)]">
-              <div className="flex items-center gap-2">
-                <IoLocationOutline className="w-4 h-4 text-[var(--cyan)]" aria-hidden="true" />
-                <span>{location}</span>
+            {/* Coordinates */}
+            <div className="flex flex-col gap-2 text-xs font-mono text-[var(--mist)] pt-1">
+              <div className="flex items-center gap-2.5">
+                <IoLocationOutline
+                  className="w-4 h-4 text-[var(--cyan)] shrink-0"
+                  aria-hidden="true"
+                />
+                <span className="truncate">{location}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <IoMailOutline className="w-4 h-4 text-[var(--amber)]" aria-hidden="true" />
-                <a href={`mailto:${email}`} className="hover:text-[var(--paper)] transition-colors">
+              <div className="flex items-center gap-2.5">
+                <IoMailOutline
+                  className="w-4 h-4 text-[var(--amber)] shrink-0"
+                  aria-hidden="true"
+                />
+                <a
+                  href={`mailto:${email}`}
+                  className="hover:text-[var(--paper)] transition-colors truncate"
+                >
                   {email}
                 </a>
               </div>
+              <div className="flex items-center gap-2.5">
+                <IoCallOutline className="w-4 h-4 text-[var(--live)] shrink-0" aria-hidden="true" />
+                <a href="tel:+919953060735" className="hover:text-[var(--paper)] transition-colors">
+                  +91 99530 60735
+                </a>
+              </div>
             </div>
-          </div>
 
-          {/* Column 2: Navigation Directory */}
-          <div className="space-y-4">
-            <h4 className="text-[11px] font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold">
-              {FOOTER_COPY.navHeading}
-            </h4>
-            <ul className="space-y-2">
-              {navItems.map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={item.href}
-                    className="group text-xs text-[var(--mist)] hover:text-[var(--paper)] transition-colors inline-flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <span className="text-[var(--mist-dim)] group-hover:text-[var(--cyan)] group-hover:translate-x-0.5 transition-all font-mono text-[10px]">
-                      &rarr;
-                    </span>
-                    <span>{item.label}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 3: Operational Telemetry Highlights */}
-          <div className="space-y-4">
-            <h4 className="text-[11px] font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold">
-              {FOOTER_COPY.telemetryHeading}
-            </h4>
-            <div className="space-y-2.5">
-              {FOOTER_TELEMETRY_PILLS.map((pill) => (
-                <div
-                  key={pill.label}
-                  className="p-2.5 rounded-xl bg-[var(--ink-850)] border border-[var(--line-soft)] hover:border-[var(--line)] transition-colors space-y-0.5 select-none"
-                >
-                  <span className="text-[10px] font-mono uppercase text-[var(--mist-dim)] block">
-                    {pill.label}
-                  </span>
-                  <span className="text-xs font-mono font-semibold text-[var(--amber)] tabular-nums block">
-                    {pill.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 4: Communication Channels & Résumé */}
-          <div className="space-y-4">
-            <h4 className="text-[11px] font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold">
-              {FOOTER_COPY.connectHeading}
-            </h4>
-
-            <div className="flex flex-wrap gap-2">
+            {/* Social Channels (DIIRA-style outline buttons) */}
+            <div className="flex items-center gap-2 pt-2">
               {socialLinks
                 .filter((s) => s.isVisible)
                 .map((link) => {
@@ -178,27 +125,101 @@ export function Footer() {
                       rel="noopener noreferrer"
                       aria-label={link.label}
                       title={link.label}
-                      className="w-9 h-9 rounded-full bg-[var(--ink-850)] border border-[var(--line)] text-[var(--mist)] hover:text-[var(--paper)] hover:border-[var(--cyan)] active:translate-y-px transition-all cursor-pointer flex items-center justify-center"
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--mist)] hover:text-[var(--paper)] border border-[var(--line)] bg-[var(--ink-850)] hover:border-[var(--amber)] transition-colors cursor-pointer"
                     >
                       <Icon className="w-4 h-4" aria-hidden="true" />
                     </a>
                   );
                 })}
             </div>
+          </div>
 
-            {resumePdfUrl && (
-              <div className="pt-2">
+          {/* Column 2: Navigation Directory */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold pb-2 border-b border-[var(--line-soft)]">
+              {FOOTER_COPY.navHeading}
+            </h4>
+            <ul className="space-y-2.5">
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <a
+                    href={item.href}
+                    className="group text-xs text-[var(--mist)] hover:text-[var(--paper)] transition-colors inline-flex items-center gap-2 cursor-pointer font-mono"
+                  >
+                    <span className="text-[var(--mist-dim)] group-hover:text-[var(--cyan)] group-hover:translate-x-0.5 transition-all text-[10px]">
+                      &rarr;
+                    </span>
+                    <span>{item.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Core Multi-Cloud Infrastructure */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold pb-2 border-b border-[var(--line-soft)]">
+              {FOOTER_COPY.stackHeading}
+            </h4>
+            <ul className="space-y-2.5">
+              {FOOTER_STACK_ITEMS.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-center gap-2 text-xs font-mono text-[var(--mist)]"
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)]/60 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Direct Engagement & Access */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[var(--mist-dim)] font-semibold pb-2 border-b border-[var(--line-soft)]">
+              {FOOTER_COPY.connectHeading}
+            </h4>
+
+            <div className="space-y-3">
+              <a
+                href="#contact"
+                className="w-full py-2.5 px-4 rounded-xl bg-[var(--amber)] text-black text-xs font-semibold uppercase tracking-wider hover:bg-[var(--amber-deep)] active:translate-y-px transition-all flex items-center justify-between cursor-pointer select-none"
+              >
+                <span>Schedule Review</span>
+                <IoArrowForwardOutline className="w-4 h-4 text-black" aria-hidden="true" />
+              </a>
+
+              {resumePdfUrl && (
                 <a
                   href={resumePdfUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--amber)] text-black text-xs font-semibold hover:bg-[var(--amber-deep)] active:translate-y-px transition-all cursor-pointer select-none"
+                  className="w-full py-2.5 px-4 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--cyan)] text-[var(--paper)] text-xs font-mono font-medium flex items-center justify-between transition-colors cursor-pointer select-none"
                 >
-                  <IoDocumentTextOutline className="w-4 h-4 text-black" aria-hidden="true" />
-                  <span>Download CV (PDF)</span>
+                  <span className="flex items-center gap-2">
+                    <IoDocumentTextOutline
+                      className="w-4 h-4 text-[var(--cyan)]"
+                      aria-hidden="true"
+                    />
+                    <span>Download CV</span>
+                  </span>
+                  <span className="text-[10px] text-[var(--mist-dim)] font-mono uppercase">
+                    PDF
+                  </span>
                 </a>
-              </div>
-            )}
+              )}
+
+              <a
+                href="/admin"
+                className="w-full py-2.5 px-4 rounded-xl bg-[var(--ink-850)] border border-[var(--line-soft)] hover:border-[var(--line)] text-[var(--mist)] hover:text-[var(--paper)] text-xs font-mono flex items-center gap-2 transition-colors cursor-pointer select-none"
+              >
+                <IoPersonOutline className="w-4 h-4 text-[var(--mist-dim)]" aria-hidden="true" />
+                <span>Mission Control Portal</span>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -209,7 +230,7 @@ export function Footer() {
             reserved.
           </div>
           <div className="text-[10px] tracking-wider uppercase text-[var(--mist-dim)]">
-            {"ENTERPRISE ARCHITECTURE // ZERO DROP SHADOWS"}
+            AI-Native Enterprise Architecture
           </div>
         </div>
       </div>

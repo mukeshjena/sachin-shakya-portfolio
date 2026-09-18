@@ -174,17 +174,13 @@ ul {
 }
 
 button {
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: 0;
   cursor: pointer;
 }
 
-:focus-visible {
-  outline: 2px solid var(--amber);
-  outline-offset: 3px;
-  border-radius: 4px;
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
 }
 
 ::selection {

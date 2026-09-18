@@ -12,15 +12,9 @@ import {
   IoLogoLinkedin,
   IoMailOutline,
   IoPaperPlaneOutline,
-  IoShieldCheckmarkOutline,
-  IoTimeOutline,
 } from "react-icons/io5";
 import { useContactSectionLogic } from "./ContactSection.hooks";
-import {
-  CONTACT_COPY,
-  CONTACT_DIRECT_CHANNELS,
-  CONTACT_FIELD_CONFIG,
-} from "./constants/contact.constants";
+import { CONTACT_COPY, CONTACT_FIELD_CONFIG } from "./constants/contact.constants";
 
 export function ContactSection() {
   const {
@@ -70,16 +64,16 @@ export function ContactSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Left Column (5 cols): Executive Portrait & Direct Channels */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="rounded-2xl overflow-hidden border border-[var(--line)] bg-[var(--ink-850)]/90 backdrop-blur-md">
+            <div className="rounded-2xl overflow-hidden border border-[var(--line)] bg-[var(--ink-850)]/90 backdrop-blur-md space-y-5 p-5 sm:p-6">
               {/* Sachin Shakya Portrait */}
-              <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-[var(--ink-900)]">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[var(--ink-900)] border border-[var(--line-soft)]">
                 <img
                   src="/assets/sachin-three.png"
                   alt="Sachin Shakya — Technical Lead — CloudOps"
                   className="w-full h-full object-cover object-top"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink-850)] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink-900)]/60 via-transparent to-transparent" />
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)]">
                     <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
@@ -93,86 +87,65 @@ export function ContactSection() {
                 </div>
               </div>
 
-              {/* Direct Details & Channels */}
-              <div className="p-6 space-y-5">
+              {/* Direct Identity */}
+              <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--mist-dim)] block">
-                    {CONTACT_COPY.directChannelsHeader}
-                  </span>
-                  <h3 className="text-lg font-bold text-[var(--paper)] mt-0.5">Sachin Shakya</h3>
+                  <h3 className="text-lg font-bold text-[var(--paper)]">Sachin Shakya</h3>
                   <p className="text-xs text-[var(--cyan)] font-mono">Technical Lead — CloudOps</p>
                 </div>
+              </div>
 
-                {/* Direct Channels Cards */}
-                <div className="space-y-2.5">
-                  {CONTACT_DIRECT_CHANNELS.map((channel) => (
-                    <a
-                      key={channel.id}
-                      href={channel.href}
-                      target={channel.href.startsWith("http") ? "_blank" : undefined}
-                      rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      className="p-3 rounded-xl bg-[var(--ink-800)]/80 border border-[var(--line)] hover:border-[var(--cyan)] hover:bg-[var(--ink-800)] transition-colors flex items-start gap-3 group cursor-pointer block"
-                    >
-                      <span className="w-8 h-8 rounded-lg bg-[var(--ink-700)] border border-[var(--line)] flex items-center justify-center text-[var(--cyan)] shrink-0 group-hover:border-[var(--cyan)] transition-colors">
-                        {channel.id === "email" && (
-                          <IoMailOutline className="w-4 h-4" aria-hidden="true" />
-                        )}
-                        {channel.id === "phone" && (
-                          <IoCallOutline className="w-4 h-4" aria-hidden="true" />
-                        )}
-                        {channel.id === "linkedin" && (
-                          <IoLogoLinkedin className="w-4 h-4" aria-hidden="true" />
-                        )}
-                        {channel.id === "location" && (
-                          <IoLocationOutline className="w-4 h-4" aria-hidden="true" />
-                        )}
-                      </span>
-                      <div className="space-y-0.5 min-w-0 flex-1">
-                        <span className="text-[9px] font-mono uppercase tracking-wider text-[var(--mist-dim)] block">
-                          {channel.label}
-                        </span>
-                        <span className="text-xs sm:text-sm font-semibold text-[var(--paper)] group-hover:text-[var(--cyan)] transition-colors block truncate">
-                          {channel.value}
-                        </span>
-                        <span className="text-[10px] text-[var(--mist-dim)] block leading-snug">
-                          {channel.caption}
-                        </span>
-                      </div>
-                    </a>
-                  ))}
-                </div>
+              {/* Direct Channels Icon Bar */}
+              <div className="flex items-center gap-2.5 pt-2 border-t border-[var(--line-soft)]">
+                <a
+                  href="mailto:sachinshakya69@gmail.com"
+                  title="Direct Email (sachinshakya69@gmail.com)"
+                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                  aria-label="Email Sachin Shakya"
+                >
+                  <IoMailOutline className="w-5 h-5" aria-hidden="true" />
+                </a>
 
-                {/* Download Résumé Action */}
+                <a
+                  href="tel:+919953060735"
+                  title="Direct Phone / WhatsApp (+91 99530 60735)"
+                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                  aria-label="Call Sachin Shakya"
+                >
+                  <IoCallOutline className="w-5 h-5" aria-hidden="true" />
+                </a>
+
+                <a
+                  href="https://linkedin.com/in/sachin-shakya0782"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="LinkedIn Profile"
+                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                  aria-label="Sachin Shakya LinkedIn Profile"
+                >
+                  <IoLogoLinkedin className="w-5 h-5" aria-hidden="true" />
+                </a>
+
+                <a
+                  href="https://maps.google.com/?q=Faridabad,+Haryana+121005,+India"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Location (Faridabad / Delhi NCR, India)"
+                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--cyan)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer"
+                  aria-label="Location Map"
+                >
+                  <IoLocationOutline className="w-5 h-5" aria-hidden="true" />
+                </a>
+
                 <a
                   href="/Sachin_Shakya_Resume.pdf"
                   download
-                  className="w-full py-2.5 px-4 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--paper)] hover:text-[var(--amber)] text-xs font-mono font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer select-none"
+                  title="Download Verified CV (PDF)"
+                  className="w-11 h-11 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] hover:border-[var(--amber)] text-[var(--amber)] hover:text-[var(--paper)] flex items-center justify-center transition-all cursor-pointer ml-auto"
+                  aria-label="Download Verified Résumé PDF"
                 >
-                  <IoDocumentTextOutline
-                    className="w-4 h-4 text-[var(--amber)]"
-                    aria-hidden="true"
-                  />
-                  <span>Download Verified Résumé (PDF)</span>
+                  <IoDocumentTextOutline className="w-5 h-5" aria-hidden="true" />
                 </a>
-
-                {/* SLA & Security Beacon */}
-                <div className="pt-2 border-t border-[var(--line-soft)] space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-mono text-[var(--amber)]">
-                    <IoTimeOutline className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                    <span className="text-[10px] tracking-wider uppercase font-semibold">
-                      {CONTACT_COPY.responseSla}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs font-mono text-[var(--mist-dim)]">
-                    <IoShieldCheckmarkOutline
-                      className="w-3.5 h-3.5 text-[var(--live)] shrink-0"
-                      aria-hidden="true"
-                    />
-                    <span className="text-[10px] tracking-wider uppercase">
-                      CONFIDENTIAL {"//"} DIRECT ARCHITECT HANDSHAKE
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

@@ -51,7 +51,7 @@ export function CapabilitiesSection() {
         </motion.div>
 
         {/* Filter Chips Bar */}
-        <div className="flex flex-wrap gap-2 select-none">
+        <div className="flex flex-wrap items-center gap-1.5 select-none">
           {CAPABILITIES_COPY.filterCategories.map((cat) => {
             const isSelected = selectedCategory === cat.key;
             return (
@@ -59,7 +59,7 @@ export function CapabilitiesSection() {
                 key={cat.key}
                 type="button"
                 onClick={() => setSelectedCategory(cat.key)}
-                className={`px-3.5 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-wider transition-all cursor-pointer ${
+                className={`px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider transition-all cursor-pointer ${
                   isSelected
                     ? "bg-[var(--amber)] text-[#06121a] font-bold border border-[var(--amber)]"
                     : "bg-[var(--ink-850)] text-[var(--mist)] border border-[var(--line)] hover:border-[var(--amber)]/40 hover:text-[var(--paper)]"

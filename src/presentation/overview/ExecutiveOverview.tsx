@@ -43,7 +43,7 @@ export function ExecutiveOverview() {
 
   return (
     <section
-      id="telemetry"
+      id="impact"
       aria-label="Executive Architecture Telemetry"
       className="relative w-full py-16 md:py-24 scroll-mt-20 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >

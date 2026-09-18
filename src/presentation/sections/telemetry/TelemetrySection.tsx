@@ -28,7 +28,7 @@ export function TelemetrySection() {
 
   return (
     <section
-      id="impact"
+      id="telemetry"
       aria-label="CloudOps and Infrastructure Telemetry Command Center"
       className="relative w-full py-16 md:py-24 scroll-mt-20 bg-[var(--ink-900)] border-t border-[var(--line)] flex items-center justify-center overflow-hidden"
     >

@@ -9,8 +9,8 @@ export interface NavLinkItem {
 }
 
 export const DEFAULT_HEADER_SECTION_LINKS: readonly NavLinkItem[] = [
-  { id: "impact", label: "Impact", href: "#impact", isAnchor: true },
   { id: "telemetry", label: "Telemetry", href: "#telemetry", isAnchor: true },
+  { id: "impact", label: "Impact", href: "#impact", isAnchor: true },
   { id: "experience", label: "Experience", href: "#experience", isAnchor: true },
   { id: "capabilities", label: "Capabilities", href: "#capabilities", isAnchor: true },
   { id: "credentials", label: "Credentials", href: "#credentials", isAnchor: true },

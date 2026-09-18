@@ -85,6 +85,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 28 | QA sign-off, merge `release/v1.0.0` → `main`, production cutover | Release | Completed ✅ |
 | 29 | Comprehensive Executive Portfolio Overhaul (21 requirements) | Overhaul | Completed ✅ |
 | 30 | Blackhole hero fix, default light mode, admin authorization & caching parity | Polish | Completed ✅ |
+| 31 | UI/UX polish feedback, email routing, animated cost curve, and redesign parity | Polish | Completed ✅ |
 
 ---
 

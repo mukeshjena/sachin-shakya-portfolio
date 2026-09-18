@@ -11,4 +11,5 @@ export interface HeaderState {
   readonly availabilityNote: string;
   readonly navLinks: readonly NavLinkItem[];
   readonly resumePdfUrl?: string;
+  readonly activeSection: string;
 }

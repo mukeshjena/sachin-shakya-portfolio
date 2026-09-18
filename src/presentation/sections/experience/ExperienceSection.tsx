@@ -82,8 +82,12 @@ export function ExperienceSection() {
                   onMouseLeave={() => setActiveRoleId(null)}
                 >
                   {/* Central Node Marker (Desktop) */}
-                  <div
+                  <motion.div
                     aria-hidden="true"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{ duration: 0.45, delay: 0.1 }}
                     className={`hidden md:flex absolute left-1/2 top-8 -translate-x-1/2 z-10 w-9 h-9 rounded-full border transition-all items-center justify-center font-mono text-xs font-bold select-none ${
                       isHovered
                         ? "bg-[var(--amber)] text-[#06121a] border-[var(--amber)] ring-4 ring-[var(--amber)]/20"
@@ -91,7 +95,7 @@ export function ExperienceSection() {
                     }`}
                   >
                     {stepNumber}
-                  </div>
+                  </motion.div>
 
                   {/* Mobile Node Marker */}
                   <div
@@ -107,7 +111,13 @@ export function ExperienceSection() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pl-10 md:pl-0 items-start">
                     {/* Left Slot */}
                     {isEven ? (
-                      <div className="md:pr-12">
+                      <motion.div
+                        className="md:pr-12"
+                        initial={{ opacity: 0, x: -36 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                      >
                         <div
                           className={`p-6 sm:p-7 rounded-2xl border transition-all ${
                             isHovered
@@ -167,9 +177,15 @@ export function ExperienceSection() {
                             ))}
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     ) : (
-                      <div className="hidden md:flex flex-col items-end justify-center pr-12 pt-8 select-none">
+                      <motion.div
+                        className="hidden md:flex flex-col items-end justify-center pr-12 pt-8 select-none"
+                        initial={{ opacity: 0, x: -24 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: 0.65, delay: 0.1 }}
+                      >
                         <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--mist-dim)]">
                           DEPLOYMENT TIMELINE
                         </span>
@@ -181,12 +197,18 @@ export function ExperienceSection() {
                             {role.headlineMetric}
                           </span>
                         )}
-                      </div>
+                      </motion.div>
                     )}
 
                     {/* Right Slot */}
                     {!isEven ? (
-                      <div className="md:pl-12">
+                      <motion.div
+                        className="md:pl-12"
+                        initial={{ opacity: 0, x: 36 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                      >
                         <div
                           className={`p-6 sm:p-7 rounded-2xl border transition-all ${
                             isHovered
@@ -246,9 +268,15 @@ export function ExperienceSection() {
                             ))}
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     ) : (
-                      <div className="hidden md:flex flex-col items-start justify-center pl-12 pt-8 select-none">
+                      <motion.div
+                        className="hidden md:flex flex-col items-start justify-center pl-12 pt-8 select-none"
+                        initial={{ opacity: 0, x: 24 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: 0.65, delay: 0.1 }}
+                      >
                         <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--mist-dim)]">
                           DEPLOYMENT TIMELINE
                         </span>
@@ -260,7 +288,7 @@ export function ExperienceSection() {
                             {role.headlineMetric}
                           </span>
                         )}
-                      </div>
+                      </motion.div>
                     )}
                   </div>
                 </motion.div>

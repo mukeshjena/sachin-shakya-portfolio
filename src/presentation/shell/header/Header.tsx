@@ -8,7 +8,7 @@ import { HEADER_COPY } from "./constants/header.constants";
 import { useHeaderLogic } from "./Header.hooks";
 
 export function Header() {
-  const { isScrolled, logoUrl, fullName, navLinks } = useHeaderLogic();
+  const { isScrolled, logoUrl, fullName, navLinks, activeSection } = useHeaderLogic();
 
   return (
     <header
@@ -45,16 +45,23 @@ export function Header() {
         {/* Dynamic Navigation Links */}
         <nav aria-label="Desktop primary navigation">
           <ul className="flex items-center gap-1 lg:gap-2">
-            {navLinks.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={item.href}
-                  className="px-3.5 py-2 rounded-lg text-xs font-medium text-[var(--mist)] hover:text-[var(--paper)] hover:bg-[var(--ink-800)]/70 transition-all cursor-pointer tracking-wide"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+            {navLinks.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <li key={item.id}>
+                  <a
+                    href={item.href}
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
+                      isActive
+                        ? "text-[var(--amber)] bg-[var(--ink-800)] font-semibold border border-[var(--amber)]/30"
+                        : "text-[var(--mist)] hover:text-[var(--paper)] hover:bg-[var(--ink-800)]/70 border border-transparent"
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 

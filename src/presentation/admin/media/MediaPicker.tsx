@@ -10,6 +10,7 @@ import {
   IoImageOutline,
   IoTrashOutline,
 } from "react-icons/io5";
+import { Select } from "../../shared/select/Select";
 import { useMediaPicker } from "./MediaPicker.hooks";
 import type { MediaPickerProps } from "./MediaPicker.types";
 
@@ -162,24 +163,16 @@ export const MediaPicker: React.FC<MediaPickerProps> = (props) => {
 
           {/* Destination Folder Selector */}
           <div>
-            <label
-              htmlFor="media-folder-select"
-              className="block text-xs font-mono uppercase tracking-wider text-[var(--mist)] mb-1.5"
-            >
-              Media Storage Directory
-            </label>
-            <select
+            <Select
               id="media-folder-select"
+              label="Media Storage Directory"
               value={folder}
+              options={FOLDER_OPTIONS}
+              allowCustom={true}
+              customPlaceholder="Select or type custom directory path..."
               onChange={(e) => handleFolderChange(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--ink-800)] border border-[var(--line)] text-xs font-mono text-[var(--paper)] focus:outline-none focus:border-[var(--cyan)] transition-colors"
-            >
-              {FOLDER_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value} className="bg-[var(--ink-850)]">
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              onCustomValueChange={(val) => handleFolderChange(val)}
+            />
           </div>
 
           {/* Accessible Alt Text Input */}

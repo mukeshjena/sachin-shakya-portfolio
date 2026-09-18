@@ -1442,13 +1442,73 @@
    - Updated `scripts/seed/seed-content.ts` with authentic CloudOps role copy and set `showInHeader: false` on dynamic pages.
    - Re-ran idempotent seeding: all collections synchronized with zero duplicates.
 
-**Verification & Quality Gates:**
-- `npx biome check .` → ✅ 287 files passed, 0 errors
+
+---
+
+## 2026-09-19 — Step 31: UI/UX Polish Feedback, Email Routing, Animated Cost Curve & Redesign Parity (Completed ✅)
+
+**Branch:** `step/31-polish-feedback-redesign` → merged into `release/v1.0.0` → `main` → `develop`
+
+**What was done:**
+1. **Targeted Email OTP & Sender Branding:**
+   - Updated `worker/index.ts` `/api/contact` endpoint to support optional `to?: string`, routing admin OTP directly to the requesting administrator instead of broadcasting to all administrators.
+   - Configured `customConfig: { fromName: "Sachin Shakya — Mission Control", fromEmail: "sachin.shakya@live.com" }` in the microservice payload to eliminate the fallback "ODINA Garments" sender name.
+   - Updated `EmailApiSender.ts` to pass `to` and `customConfig`.
+
+2. **Button Background "0 0" & Form Focus Borders:**
+   - Diagnosed root cause in `src/index.css`: un-layered `button { background: none; border: 0; }` was overriding Tailwind utilities (`bg-[var(--ink-800)]`) causing `background: 0 0` / transparent buttons in DevTools. Removed rule and replaced with `button { cursor: pointer; }`.
+   - Replaced `:focus-visible { outline: 2px solid var(--amber); }` with explicit `input:focus, textarea:focus, select:focus { outline: none; }` to eliminate unwanted focus outlines and preserve sleek hairline borders.
+
+3. **Promo Popup & Searchable Custom Combobox (DIIRA Parity):**
+   - Removed `"FINOPS & DEVOPS CONSULTATION"` pill badge and `"VERIFIED IMPACT $170K/MO SAVED"` image overlay from `PromoPopupModal.tsx`.
+   - Created reusable DIIRA-style searchable combobox in `src/presentation/shared/select/` (`Select.types.ts`, `Select.tsx`) supporting `allowCustom?: boolean`, custom text inputs, search filtering, and outline chevron/check icons.
+   - Integrated `<Select>` into `PromoPopupModal.tsx` and `MediaPicker.tsx`.
+
+4. **Header & Page Order Realignment:**
+   - Updated navigation order in `header.constants.ts`: Telemetry (`#telemetry`) is first, followed by Impact (`#impact`).
+   - Aligned section IDs and hero CTAs: `TelemetrySection.tsx` has `id="telemetry"`, `ExecutiveOverview.tsx` has `id="impact"`, hero primary button links to `#telemetry`.
+
+5. **Animated Signature Cost Curve (Old Site Parity):**
+   - Replaced the previous flat chart in `CostTrajectoryChart.tsx` with the authentic animated SVG spline console card from `code.old/index.html` (lines 442–463).
+   - Integrated Framer Motion `pathLength: 0` to `1` stroke-dashoffset transition (2.2s duration), linear-gradient area fill, cyan dashed milestone marker line (`strokeDasharray="3 4"`), and highlighted readouts (`$2M Annual cloud savings` and `−40% Faster incident resolution`).
+   - Fixed tab buttons to ensure visible backgrounds and active tab indicators.
+
+6. **Experience Section Animations:**
+   - Restored scroll-triggered alternating entrance animations in `ExperienceSection.tsx` (`x: -36` / `x: 36`, `opacity: 0` to `1`, `whileInView`, `viewport={{ once: true, margin: "-60px" }}`) on timeline role cards and central node.
+
+7. **Capabilities Tab Sizing & Wrap:**
+   - In `CapabilitiesSection.tsx`, adjusted filter chips to `px-2.5 py-1 text-[10px] font-mono tracking-wider` with visible pill backgrounds, eliminating awkward text wrapping onto a second row.
+
+8. **Credentials Section Balanced Redesign:**
+   - Redesigned `CredentialsSection.tsx` from an uneven 2-column layout into a balanced 3-column instrument console:
+     - Column 1: Industry Certifications (6 certification cards + verified status badge).
+     - Column 2: Academic Background (MCA, B.Sc. Electronics, Higher Secondary + foundations note).
+     - Column 3: Enterprise Recognition (4 awards: SpotON-HatsOff, Leadership-Gracias, TCS Kaizen, Star Performer).
+
+9. **Contact Section Height Equalization & Icon Bar:**
+   - Equalized height in `ContactSection.tsx` by replacing bulky cards with a sleek, horizontal 5-button icon bar (Email, Phone, LinkedIn, Location, Resume PDF).
+   - Removed robotic strings: `"RESPONSE SLA: < 24 HOURS // DIRECT ARCHITECT REPLY"` and `"CONFIDENTIAL // DIRECT ARCHITECT HANDSHAKE"`.
+   - Enlarged portrait framing (`aspect-[4/3]`) with subtle lighting.
+
+10. **Footer Redesign (DIIRA Parity):**
+    - Redesigned `Footer.tsx` and `footer.constants.ts` with clean corporate coordinates, square outline icon buttons, and legitimate architectural copy.
+    - Removed the 4 specified strings: `"ALL SUBSYSTEMS NOMINAL // 99.99% FLEET UPTIME"`, `"EDGE HIGH-PERFORMANCE RUNTIME DISTRIBUTED CACHE"`, `"OPEN TO STRATEGIC ADVISORY"`, and `"ENTERPRISE ARCHITECTURE // ZERO DROP SHADOWS"`.
+
+11. **Browser Extension Connection Error Suppression:**
+    - Added global window `unhandledrejection` listener in `src/main.tsx` suppressing `"Could not establish connection. Receiving end does not exist."`.
+
+12. **Header Active Section Highlight:**
+    - Updated `Header.hooks.ts` with active section scroll listener (`IntersectionObserver`).
+    - Styled active navigation link with distinct `text-[var(--amber)] bg-[var(--ink-800)] font-semibold border border-[var(--amber)]/30`.
+
+13. **Hero Eyebrow Dot Removal:**
+    - Removed the dot next to `TECHNICAL LEAD — CLOUDOPS // CLOUD & DEVOPS ARCHITECT` in `BlackholeHero.tsx`.
+
+**Verification:**
+- `npx biome check .` → ✅ 289 files checked, 0 errors
 - `npx tsc -b` → ✅ strict typecheck passed with 0 errors
+- `npm run build` → ✅ production build passed cleanly in 631ms
 - `npx tsx scripts/test-audit-gates.ts` → ✅ 0 box-shadow, 0 emojis, max 3 files/folder, max 500 LOC
-- `npx tsx scripts/test-hero-e2e.ts` → ✅ 100% passed
-- `npx tsx scripts/test-seo-e2e.ts` → ✅ 100% passed
-- `npm run build` → ✅ production build passed cleanly
 
 
 

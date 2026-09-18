@@ -3,12 +3,8 @@
 // Split-panel desktop layout and sleek mobile sheet.
 // Strictly shadow-free (Rule 12), emoji-free, and zero debounced inputs.
 
-import {
-  IoArrowForwardOutline,
-  IoCheckmarkCircleOutline,
-  IoCloseOutline,
-  IoShieldCheckmarkOutline,
-} from "react-icons/io5";
+import { IoArrowForwardOutline, IoCheckmarkCircleOutline, IoCloseOutline } from "react-icons/io5";
+import { Select } from "../shared/select/Select";
 import { CONSULTATION_INTEREST_OPTIONS, PROMO_COPY } from "./constants/promo.constants";
 import { usePromoPopupModal } from "./PromoPopupModal.hooks";
 
@@ -30,7 +26,6 @@ export function PromoPopupModal() {
     return null;
   }
 
-  const badgeText = promoConfig?.badgeText || PROMO_COPY.DEFAULT_BADGE;
   const headingText = promoConfig?.heading || PROMO_COPY.DEFAULT_HEADING;
   const subheadingText = promoConfig?.subheading || PROMO_COPY.DEFAULT_SUBHEADING;
   const ctaText = promoConfig?.ctaText || PROMO_COPY.CTA_BUTTON;
@@ -72,30 +67,15 @@ export function PromoPopupModal() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink-900)] via-[var(--ink-900)]/40 to-[var(--ink-900)]/60" />
 
-          {/* Top Pill */}
-          <div className="relative z-10 p-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--ink-900)]/80 backdrop-blur-md border border-[var(--line)] text-[10px] font-mono uppercase tracking-widest text-[var(--amber)]">
-              <IoShieldCheckmarkOutline
-                className="w-3.5 h-3.5 text-[var(--amber)]"
-                aria-hidden="true"
-              />
-              <span>{badgeText}</span>
-            </div>
-          </div>
-
           {/* Bottom Telemetry Card Overlay */}
-          <div className="relative z-10 p-6 space-y-3">
-            <div className="p-4 rounded-xl bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)] space-y-1.5">
+          <div className="relative z-10 p-6">
+            <div className="p-3.5 rounded-xl bg-[var(--ink-900)]/90 backdrop-blur-md border border-[var(--line)] space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-bold text-[var(--paper)]">Sachin Shakya</span>
                 <span className="w-2 h-2 rounded-full bg-[var(--live)]" aria-hidden="true" />
               </div>
               <div className="text-[11px] font-mono text-[var(--cyan)]">
                 Technical Lead — CloudOps
-              </div>
-              <div className="pt-2 border-t border-[var(--line-soft)] flex items-center justify-between text-[10px] font-mono">
-                <span className="text-[var(--mist-dim)]">VERIFIED IMPACT</span>
-                <span className="text-[var(--amber)] font-bold tabular-nums">$170K/MO SAVED</span>
               </div>
             </div>
           </div>
@@ -129,14 +109,6 @@ export function PromoPopupModal() {
             </div>
           ) : (
             <div>
-              <div className="md:hidden inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[var(--ink-800)] border border-[var(--line)] text-[10px] font-mono uppercase tracking-widest text-[var(--amber)] mb-3">
-                <IoShieldCheckmarkOutline
-                  className="w-3 h-3 text-[var(--amber)]"
-                  aria-hidden="true"
-                />
-                <span>{badgeText}</span>
-              </div>
-
               <h3
                 id="promo-heading"
                 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--paper)]"
@@ -204,28 +176,19 @@ export function PromoPopupModal() {
 
                 {/* Consultation Focus Selector */}
                 <div>
-                  <label
-                    htmlFor="promo-interest"
-                    className="block text-[11px] font-mono uppercase tracking-wider text-[var(--mist-dim)] mb-1.5"
-                  >
-                    {PROMO_COPY.FOCUS_LABEL}
-                  </label>
-                  <select
+                  <Select
                     id="promo-interest"
+                    label={PROMO_COPY.FOCUS_LABEL}
                     value={values.interestArea}
+                    options={CONSULTATION_INTEREST_OPTIONS.map((opt) => ({
+                      value: opt.value,
+                      label: opt.label,
+                    }))}
+                    allowCustom={true}
+                    customPlaceholder="Select or type custom workload focus..."
                     onChange={(e) => handleChange("interestArea", e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--ink-800)] text-xs text-[var(--paper)] border border-[var(--line)] outline-none focus:border-[var(--amber)] transition-colors cursor-pointer"
-                  >
-                    {CONSULTATION_INTEREST_OPTIONS.map((opt) => (
-                      <option
-                        key={opt.value}
-                        value={opt.value}
-                        className="bg-[var(--ink-900)] text-[var(--paper)]"
-                      >
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
+                    onCustomValueChange={(val) => handleChange("interestArea", val)}
+                  />
                 </div>
 
                 {/* Optional Message / Scope Field */}
