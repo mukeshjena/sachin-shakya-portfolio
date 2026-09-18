@@ -1,0 +1,10 @@
+# robots.txt for Sachin Shakya Cloud/DevOps Portfolio
+# Domain: https://shakya.mukeshjena.com
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api/
+
+Sitemap: https://shakya.mukeshjena.com/sitemap.xml

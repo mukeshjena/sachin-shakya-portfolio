@@ -16,6 +16,7 @@ import { ContactSection } from "./presentation/sections/contact/ContactSection";
 import { CredentialsSection } from "./presentation/sections/credentials/CredentialsSection";
 import { ExperienceSection } from "./presentation/sections/experience/ExperienceSection";
 import { TelemetrySection } from "./presentation/sections/telemetry/TelemetrySection";
+import { SeoHead } from "./presentation/shared/seo/SeoHead";
 import { AppLayout } from "./presentation/shell/layout/AppLayout";
 
 function App() {
@@ -38,6 +39,12 @@ function App() {
           <DynamicPage slug={activeSlug} />
         ) : (
           <>
+            <SeoHead
+              title="Sachin Shakya — Lead Cloud Architect & DevOps Consultant"
+              description="AI-Native Lead Cloud Architect managing 2,000+ multi-cloud resources with $170K/month verified cost optimization and 40% MTTR reduction across AWS, Microsoft Azure, and Kubernetes."
+              canonicalPath="/"
+              ogImage="/og-image.png"
+            />
             <BlackholeHero />
             <ExecutiveOverview />
             <TelemetrySection />

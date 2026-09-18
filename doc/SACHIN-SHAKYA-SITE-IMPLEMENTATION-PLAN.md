@@ -79,7 +79,7 @@ main ← release/v1.0.0       → final merge, only in Step 28
 | 22 | Admin dashboard shell (3-dot menus, realtime updates) | Admin | Completed ✅ |
 | 23 | Content management modules (pages/sections/logo/text/social links) | Admin | Completed ✅ |
 | 24 | Media manager (Cloudinary upload+preview+cascade delete) + inbox | Admin | Completed ✅ |
-| 25 | SEO pass (meta/JSON-LD/sitemap/OG/favicons) | Quality | Pending |
+| 25 | SEO pass (meta/JSON-LD/sitemap/OG/favicons) | Quality | Completed ✅ |
 | 26 | PWA setup (manifest, icons, installability) | Quality | Pending |
 | 27 | Performance, accessibility, Biome lint gate | Quality | Pending |
 | 28 | QA sign-off, merge `release/v1.0.0` → `main`, production cutover | Release | Pending |

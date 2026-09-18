@@ -2,6 +2,7 @@
 // Pure declarative dynamic page view container.
 // Universal Separation of Concerns (Rule 13) — zero inline state calculations or direct database access.
 
+import { SeoHead } from "../../shared/seo/SeoHead";
 import { NotFoundTelemetry } from "./components/NotFoundTelemetry";
 import { SectionRenderer } from "./components/SectionRenderer";
 import { useDynamicPageLogic } from "./DynamicPage.hooks";
@@ -10,6 +11,7 @@ import type { DynamicPageProps } from "./DynamicPage.types";
 export function DynamicPage({ slug }: DynamicPageProps) {
   const {
     slug: activeSlug,
+    page,
     sections,
     isLoading,
     isNotFound,
@@ -63,6 +65,18 @@ export function DynamicPage({ slug }: DynamicPageProps) {
 
   return (
     <div className="w-full flex flex-col bg-[var(--ink-900)]">
+      {page && (
+        <SeoHead
+          title={page.seoTitle || page.title}
+          description={page.seoDescription}
+          canonicalPath={`/${activeSlug}`}
+          ogImage={page.seoImage || "/og-image.png"}
+          breadcrumbs={[
+            { name: "Home", path: "/" },
+            { name: page.title, path: `/${activeSlug}` },
+          ]}
+        />
+      )}
       {sections.map((section) => (
         <SectionRenderer key={section.id} section={section} />
       ))}

@@ -1161,5 +1161,53 @@
 - `npx vite build --logLevel silent` → ✅ Production build verified.
 - `npx tsx scripts/test-media-inbox-e2e.ts` → ✅ 100% passed (5/5).
 
+---
+
+## 2026-09-19 — Step 25: SEO Pass (Meta / JSON-LD / Dynamic Sitemap / OG / Favicons) (Completed ✅)
+
+**Branch:** `step/25-seo-pass` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `feat(seo): implement meta tags, json-ld structured data, sitemap, and favicons for step 25`
+
+**What was done:**
+1. **Multi-Resolution Favicon Suite & OpenGraph Card (`public/`):**
+   - Generated complete favicon and touch-icon suite from `sachin-logo.png` with high-quality bicubic interpolation:
+     - `public/favicon-16x16.png` (16×16)
+     - `public/favicon-32x32.png` (32×32)
+     - `public/favicon-48x48.png` (48×48)
+     - `public/apple-touch-icon.png` (180×180)
+     - `public/icon-192x192.png` (192×192)
+     - `public/icon-512x512.png` (512×512)
+     - `public/favicon.ico` (32×32 ICO)
+     - `public/og-image.png` (1200×630 branded instrument panel social preview card featuring Sachin Shakya, Lead Cloud Architect & DevOps Consultant, $170K/mo savings, 40% MTTR reduction, 2,000+ resources).
+2. **Search Crawling Directives & XML Sitemap (`public/`):**
+   - `public/robots.txt`: Allowed root indexing, disallowed `/admin`, `/admin/*`, and `/api/*`, pointing to `https://shakya.mukeshjena.com/sitemap.xml`.
+   - `public/sitemap.xml`: Valid sitemaps.org XML with root landing page, static sections, and published dynamic routes.
+   - `scripts/generate-sitemap.ts`: Automated build-time and edge generator querying published Firestore pages.
+3. **Infrastructure Layer — Clean Architecture (`src/infrastructure/seo/`):**
+   - `src/infrastructure/seo/SeoMetadataManager.ts`: Pure DOM manager for `<title>`, `<meta name="description">`, `<link rel="canonical">`, OpenGraph, Twitter Cards, robots directives, and JSON-LD script elements.
+   - `src/infrastructure/seo/JsonLdGenerator.ts`: Generates valid Schema.org graph for `Person`, `ProfilePage`, `WebSite`, and `BreadcrumbList`.
+   - `src/infrastructure/seo/SitemapGenerator.ts`: Generates XML sitemaps with proper character escaping.
+   - Strictly satisfies Rule 4 (exactly 3 files in `src/infrastructure/seo/`).
+4. **Presentation Layer — Declarative SEO Component (`src/presentation/shared/seo/`):**
+   - `src/presentation/shared/seo/SeoHead.tsx`: Declarative head metadata component.
+   - `src/presentation/shared/seo/SeoHead.hooks.ts`: React hook managing lifecycle, canonical URLs, and JSON-LD injection.
+   - `src/presentation/shared/seo/SeoHead.types.ts`: Type contracts.
+   - `src/presentation/shared/seo/constants/seo.constants.ts`: Default copy, keywords, credentials, and social links.
+5. **Application Routing Integration:**
+   - `index.html`: Added canonical tag, apple-touch-icon, favicon-32x32, favicon-16x16, and fallback OpenGraph tags.
+   - `src/App.tsx`: Mounted `<SeoHead />` for root homepage with Person/ProfilePage JSON-LD and canonical URL.
+   - `src/presentation/pages/dynamic/DynamicPage.tsx`: Mounted `<SeoHead />` dynamically reflecting `page.seoTitle`, `page.seoDescription`, `page.seoImage`, and breadcrumbs.
+   - `src/presentation/admin/login/AdminLogin.tsx`: Mounted `<SeoHead noIndex={true} />` to protect admin routes from indexing.
+6. **Automated Verification (`scripts/test-seo-e2e.ts`):**
+   - Comprehensive test suite validating Schema.org graph, breadcrumb generator, XML sitemap escaping, `robots.txt` rules, all favicon/touch icon sizes, and `index.html` link tags (5/5 tests passed).
+
+**Verification:**
+- `npx biome check .` → ✅ 254 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build verified.
+- `npx tsx scripts/test-seo-e2e.ts` → ✅ 100% passed (5/5).
+- `npx tsx scripts/test-media-inbox-e2e.ts` → ✅ 100% passed (5/5, zero regressions).
+
+
 
 

@@ -11,6 +11,7 @@ import {
   IoRefreshOutline,
   IoShieldCheckmarkOutline,
 } from "react-icons/io5";
+import { SeoHead } from "../../shared/seo/SeoHead";
 import { DashboardShell } from "../dashboard/DashboardShell";
 import { useAdminLogin } from "./AdminLogin.hooks";
 import { OtpInput } from "./components/OtpInput";
@@ -34,11 +35,25 @@ export function AdminLogin() {
   } = useAdminLogin();
 
   if (step === "authenticated") {
-    return <DashboardShell />;
+    return (
+      <>
+        <SeoHead
+          title="Executive Mission Control // Sachin Shakya"
+          description="Authenticated telemetry and administration interface."
+          noIndex={true}
+        />
+        <DashboardShell />
+      </>
+    );
   }
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center p-4 sm:p-6">
+      <SeoHead
+        title="Admin Authentication // Sachin Shakya"
+        description="Secure OTP terminal for authorized cloud architects."
+        noIndex={true}
+      />
       <div className="w-full max-w-md bg-[var(--ink-850)] border border-[var(--line)] rounded-2xl p-6 sm:p-8">
         {/* Terminal Header */}
         <div className="text-center mb-6">
