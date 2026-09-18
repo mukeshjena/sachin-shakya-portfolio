@@ -5,6 +5,7 @@
 import { BlackholeHero } from "../../../hero/BlackholeHero";
 import { ExecutiveOverview } from "../../../overview/ExecutiveOverview";
 import { CapabilitiesSection } from "../../../sections/capabilities/CapabilitiesSection";
+import { ContactSection } from "../../../sections/contact/ContactSection";
 import { CredentialsSection } from "../../../sections/credentials/CredentialsSection";
 import { ExperienceSection } from "../../../sections/experience/ExperienceSection";
 import { TelemetrySection } from "../../../sections/telemetry/TelemetrySection";
@@ -30,6 +31,9 @@ export function SectionRenderer({ section }: SectionRendererProps) {
 
     case "credentials":
       return <CredentialsSection />;
+
+    case "contact":
+      return <ContactSection />;
 
     default:
       return <CustomSection section={section} />;

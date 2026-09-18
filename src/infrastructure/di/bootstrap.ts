@@ -3,6 +3,7 @@
 // This is the ONLY file that imports both infrastructure classes and DI tokens together.
 // Import this once at app startup (main.tsx), before any component renders.
 
+import { SubmitContactFormUseCase } from "../../application/use-cases/contact/SubmitContactFormUseCase";
 import { ReorderSectionsUseCase } from "../../application/use-cases/pages/mutation/ReorderSectionsUseCase";
 import { GetFooterNavPagesUseCase } from "../../application/use-cases/pages/nav/GetFooterNavPagesUseCase";
 import { GetHeaderNavPagesUseCase } from "../../application/use-cases/pages/nav/GetHeaderNavPagesUseCase";
@@ -11,11 +12,15 @@ import { GetPublishedPageBySlugUseCase } from "../../application/use-cases/pages
 import { PingUseCase } from "../../application/use-cases/ping/PingUseCase";
 import { GetSiteSettingsUseCase } from "../../application/use-cases/settings/GetSiteSettingsUseCase";
 import { SubscribeSiteSettingsUseCase } from "../../application/use-cases/settings/SubscribeSiteSettingsUseCase";
+import type { IContactRepository } from "../../domain/repositories/admin/IContactRepository";
+import type { IEmailSender } from "../../domain/repositories/admin/IEmailSender";
 import type { IPageRepository } from "../../domain/repositories/content/IPageRepository";
 import type { ISectionRepository } from "../../domain/repositories/content/ISectionRepository";
 import type { ISiteSettingsRepository } from "../../domain/repositories/settings/ISiteSettingsRepository";
 import { CloudinaryMediaUploader } from "../cloudinary/CloudinaryMediaUploader";
+import { EmailApiSender } from "../email/EmailApiSender";
 import { getDb } from "../firebase/firebaseClient";
+import { FirestoreContactRepository } from "../repositories/admin/FirestoreContactRepository";
 import { FirestorePageRepository } from "../repositories/content/FirestorePageRepository";
 import { FirestoreSectionRepository } from "../repositories/content/FirestoreSectionRepository";
 import { FirestoreSiteSettingsRepository } from "../repositories/settings/FirestoreSiteSettingsRepository";
@@ -43,7 +48,7 @@ export function bootstrapContainer(): void {
     singleton(() => new PingUseCase())
   );
 
-  // ── Content & Settings repositories (Step 11, 13 & 17) ─────────────────────
+  // ── Content & Settings repositories (Step 11, 13, 17 & 18) ────────────────
   container.register(
     DI_TOKENS.PageRepository,
     singleton(() => new FirestorePageRepository())
@@ -51,6 +56,14 @@ export function bootstrapContainer(): void {
   container.register(
     DI_TOKENS.SectionRepository,
     singleton(() => new FirestoreSectionRepository())
+  );
+  container.register(
+    DI_TOKENS.ContactRepository,
+    singleton(() => new FirestoreContactRepository())
+  );
+  container.register(
+    DI_TOKENS.EmailSender,
+    singleton(() => new EmailApiSender())
   );
   container.register(
     DI_TOKENS.SiteSettingsRepository,
@@ -115,6 +128,16 @@ export function bootstrapContainer(): void {
       () =>
         new SubscribeSiteSettingsUseCase(
           container.resolve<ISiteSettingsRepository>(DI_TOKENS.SiteSettingsRepository)
+        )
+    )
+  );
+  container.register(
+    DI_TOKENS.SubmitContactForm,
+    singleton(
+      () =>
+        new SubmitContactFormUseCase(
+          container.resolve<IContactRepository>(DI_TOKENS.ContactRepository),
+          container.resolve<IEmailSender>(DI_TOKENS.EmailSender)
         )
     )
   );

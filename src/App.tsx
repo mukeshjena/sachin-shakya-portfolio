@@ -10,6 +10,7 @@ import { DynamicPage } from "./presentation/pages/dynamic/DynamicPage";
 import { PipelineTest } from "./presentation/pages/pipeline-test/PipelineTest";
 import { AppProviders } from "./presentation/providers/AppProviders";
 import { CapabilitiesSection } from "./presentation/sections/capabilities/CapabilitiesSection";
+import { ContactSection } from "./presentation/sections/contact/ContactSection";
 import { CredentialsSection } from "./presentation/sections/credentials/CredentialsSection";
 import { ExperienceSection } from "./presentation/sections/experience/ExperienceSection";
 import { TelemetrySection } from "./presentation/sections/telemetry/TelemetrySection";
@@ -38,6 +39,7 @@ function App() {
             <ExperienceSection />
             <CapabilitiesSection />
             <CredentialsSection />
+            <ContactSection />
           </>
         )}
       </AppLayout>
