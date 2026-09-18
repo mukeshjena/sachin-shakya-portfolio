@@ -1073,3 +1073,48 @@
 - Pre-commit automated quality gate passed cleanly on git commit without `--no-verify`.
 - Sequential branch promotion completed: `step/22-admin-dashboard-shell` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
 
+---
+
+## 2026-09-18 — Step 23: Content Management Modules (Completed ✅)
+
+**Branch:** `step/23-content-management` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `d379306 feat(admin): implement content management modules and editors for step 23`
+
+**What was done:**
+1. **Application Layer Mutations & Repositories:**
+   - `src/application/use-cases/pages/mutation/SavePageUseCase.ts`: Creates or updates dynamic pages with URL slug normalization and uniqueness verification.
+   - `src/application/use-cases/pages/mutation/DeletePageUseCase.ts`: Safely removes custom dynamic pages while strictly enforcing root `"home"` page immutability.
+   - `src/application/use-cases/sections/SaveSectionUseCase.ts`: Creates or updates section content payloads, order, and visibility, auto-synchronizing parent page `sectionOrder` arrays.
+   - `src/application/use-cases/pages/mutation/ReorderSectionsUseCase.ts`: Atomically updates section numerical positions via Firestore `writeBatch` and parent `sectionOrder` list.
+   - `src/application/use-cases/settings/UpdateSiteSettingsUseCase.ts`: Updates global site metadata, professional headline, executive bio, and public social links.
+   - `src/domain/repositories/telemetry/ITelemetryRepository.ts` & `src/infrastructure/repositories/telemetry/FirestoreTelemetryRepository.ts`: Pure domain contract and Firestore implementation for FinOps spend curves and MTTR benchmarks.
+   - `src/application/use-cases/telemetry/SaveTelemetryMetricsUseCase.ts`: Persists FinOps 12-month trajectories ($170K/mo target) and fleet metrics to Firestore.
+2. **DI Container Registrations (`src/infrastructure/di/`):**
+   - Registered tokens: `SavePage`, `DeletePage`, `SaveSection`, `UpdateSiteSettings`, `TelemetryRepository`, `SaveTelemetryMetrics`.
+   - Bootstrapped singletons in `bootstrap.ts` resolving respective repositories.
+3. **Presentation Layer — Content Editors (Max 3 files per folder):**
+   - `src/presentation/admin/content/pages/`: `PageEditorModal.tsx`, `PageEditorModal.hooks.ts`, `PageEditorModal.types.ts` — Modal interface for creating/editing pages with title, slug, header/footer nav flags, and SEO overrides.
+   - `src/presentation/admin/content/sections/`: `SectionEditorModal.tsx`, `SectionEditorModal.hooks.ts`, `SectionEditorModal.types.ts` — Modal interface for editing section titles, types, visibility, and content payloads.
+   - `src/presentation/admin/content/settings/`: `SiteSettingsEditor.tsx`, `SiteSettingsEditor.hooks.ts`, `SiteSettingsEditor.types.ts` — Executive identity, headline, summary bio, and dynamic social profile CRUD with add/remove/visibility toggles.
+   - `src/presentation/admin/content/telemetry/`: `TelemetryEditorModal.tsx`, `TelemetryEditorModal.hooks.ts`, `TelemetryEditorModal.types.ts` — FinOps trajectory editor with 12-month spend inputs, milestone badges, MTTR reduction %, and managed resources counter.
+4. **Presentation Layer — Modular Dashboard Tabs (`src/presentation/admin/dashboard/`):**
+   - Refactored `DashboardShell.tsx` from 609 lines down to 296 lines (adhering strictly to Rule 4's 200–400 LOC target).
+   - Partitioned tabs into subfolders (≤ 3 files/folder):
+     - `tabs/overview/OverviewTab.tsx`: KPI cards, realtime status banner, recent pages table with 3-dot menus.
+     - `tabs/pages/PagesTab.tsx`: Dynamic page list with "+ New Page" button, draft/published badges, and edit/preview/delete row actions.
+     - `tabs/content/ContentTab.tsx`: Section reordering (Move Up / Move Down buttons), visibility toggles, section content editing, and FinOps telemetry configuration entry point.
+     - `tabs/contacts/ContactsTab.tsx`: Consultation and promo inquiry lead records.
+     - `tabs/settings/SettingsTab.tsx`: Side-by-side integration of `<SiteSettingsEditor />` and `<AuthorizedEmailsManager />`.
+5. **Automated Verification (`scripts/test-content-management-e2e.ts`):**
+   - 100% test pass across DI resolution, page creation/update, root page deletion protection, section creation with parent `sectionOrder` sync, atomic section reordering, site settings update, and FinOps telemetry persistence (6/6 tests passed).
+   - Zero regressions across Step 20, 21, and 22 E2E test suites.
+
+**Verification:**
+- `npx biome check .` → ✅ 234 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build` → ✅ Production build succeeded in 604ms.
+- `npx tsx scripts/test-content-management-e2e.ts` → ✅ 100% passed (6/6).
+- Pre-commit automated quality gate passed cleanly on git commit without `--no-verify`.
+- Sequential branch promotion completed: `step/23-content-management` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+
+
