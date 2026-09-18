@@ -1652,7 +1652,51 @@
 - `npx biome check .` → ✅ 300 files checked, 0 errors
 - `npx tsc -b` → ✅ strict typecheck passed with 0 errors
 - `npx vite build --logLevel silent` → ✅ production build passed cleanly
-- Git workflow: Automated pre-commit gate passed (Biome, TSC, Vite build), pushed to origin, sequentially merged into `release/v1.0.0` → `main` → `develop`, and deployment workflow triggered on GitHub.
+
+---
+
+## 2026-09-19 — Step 35: Observability Matrix Cleanup, Single-Word Header Navigation & Dynamic Telemetry Graph (Completed ✅)
+
+**Branch:** `step/35-header-nav-graph-dynamic-observability-cleanup` → `release/v1.0.0` → `main` → `develop`
+**Commit:** `df51278 feat: single-word header nav, dynamic telemetry graph and observability matrix cleanup`
+
+**What was done:**
+1. **DevOps Observability Matrix Section Removal:**
+   - Identified origin of residual test section created in Firestore by `scripts/test-content-management-e2e.ts`.
+   - Executed targeted cleanup to permanently delete the document from Firestore `sections` collection and strip its ID from `pages/home.sectionOrder`.
+   - Updated `scripts/test-content-management-e2e.ts` to cleanly delete test sections and sync `sectionOrder` at the conclusion of test suites.
+
+2. **Single-Word Header Navigation & Specified Ordering:**
+   - Updated desktop header navigation and mobile bottom nav to use single words in requested order:
+     1. **Overview** (`#overview`, with `#impact` fallback)
+     2. **Architecture** (`/cloud-architecture`, linking to the dedicated dynamic blueprint page)
+     3. **Metrics** (`#metrics`, with `#telemetry` fallback)
+     4. **Experience** (`#experience`)
+     5. **Capabilities** (`#capabilities`)
+     6. **Credentials** (`#credentials`)
+     7. **Contact** (`#contact`)
+   - Updated `ExecutiveOverview.tsx` to support `id="overview"` and `TelemetrySection.tsx` to support `id="metrics"`.
+   - Updated `Header.hooks.ts` scroll spy activeSection mapper to accurately highlight "overview" and "metrics".
+
+3. **Dynamic Telemetry Graph & Realtime CMS Customization:**
+   - Created `GetTelemetryMetricsUseCase` in `src/application/use-cases/telemetry/` and registered with token `DI_TOKENS.GetTelemetryMetrics` in DI container.
+   - Added `subscribeFinOpsMetrics` with `onSnapshot` to `ITelemetryRepository` and `FirestoreTelemetryRepository`.
+   - Created `CostTrajectoryChart.utils.ts` (117 LOC) providing pure deterministic math for Catmull-Rom to cubic Bézier spline interpolation (`computeFinOpsCurveGeometry`), milestone positioning, and savings aggregations.
+   - Preserved current visual design as the canonical baseline (12 months from $450K baseline down to $280K optimized, $170K/mo savings, -40% MTTR, 2,000+ fleet).
+   - Re-architected `CostTrajectoryChart.tsx` to dynamically generate SVG area fill, milestone line, curve path, and readout figures from telemetry data.
+   - Added non-distorting interactive cursor tracking displaying live month, optimized spend, baseline, and delta in a frosted liquid-glass telemetry pill.
+   - Updated `TelemetrySection.tsx` to dynamically bind top KPI counters (Savings, MTTR, Managed Fleet) and chart views to realtime Firestore metrics.
+   - Seeded 12-month canonical baseline into `telemetryMetrics/global` so admin can immediately customize spend values in CMS and observe live changes on the public graph.
+
+**Verification:**
+- `npx biome check .` → ✅ 302 files checked, 0 errors
+- `npx tsc -b` → ✅ strict typecheck passed with 0 errors
+- `npx vite build --logLevel silent` → ✅ production build passed cleanly
+- `npx tsx scripts/test-content-management-e2e.ts` → ✅ all 6 integration tests passed with clean teardown
+- Pre-commit automated gate executed Biome, TSC, and Vite build before committing.
+- Merged sequentially into `release/v1.0.0` → `main` → `develop`.
+- Deployment workflow triggered on GitHub Actions.
+
 
 
 
