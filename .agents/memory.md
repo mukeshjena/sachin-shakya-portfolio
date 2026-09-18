@@ -780,3 +780,42 @@
 - `npx vite build --logLevel silent` → ✅ Production build succeeded in 840ms.
 - Pre-commit automated quality gate passed cleanly on git commit.
 - Sequential branch promotion completed: `step/15b...` → `release/v1.0.0` → `main` → `develop`.
+
+---
+
+## 2026-09-18 — Step 15c: Hero Viewport Fit, Centered Mobile Blackhole, Obsidian Palette & DIIRA Console Footer (Completed ✅)
+
+**Branch:** `step/15c-hero-and-theme-alignment` → merged into `release/v1.0.0` → `main` → `develop`
+**Commit:** `15ddeee feat(hero-theme): viewport coverage, centered mobile blackhole, obsidian palette, and DIIRA console footer`
+
+**What was done:**
+1. **Full Viewport (`100dvh`) Screen Fit & Header Overlay:**
+   - Changed `<Header>` and `<MobileHeader>` to fixed overlays (`fixed top-0 inset-x-0 z-40`) with `backdrop-blur-xl bg-[var(--ink-900)]/80` and subtle hairline border.
+   - Constrained `<BlackholeHero>` to `h-[100dvh] max-h-[100dvh] overflow-hidden`, eliminating the 80px overflow issue so "DISCOVER TELEMETRY" rests cleanly within the first viewport on both desktop and mobile.
+   - Added `scroll-mt-20` to `<section id="telemetry">` in `ExecutiveOverview.tsx` for seamless scroll anchoring.
+2. **Button Rename ("Download CV"):**
+   - Renamed "Executive Résumé" to "Download CV" in both the hero section and footer.
+   - Fixed primary button text contrast (`bg-[var(--amber)] text-black font-semibold`) to guarantee crystal-clear legibility.
+3. **Dynamic Cloud Architecture Hero Copy:**
+   - Replaced generic astrophysics demo text with Sachin Shakya's documented enterprise cloud milestones (Lead Cloud Architect // FinOps & SRE Executive, "Architecting Autonomous Cloud Horizons", $170K/mo savings).
+   - Hooked up `GetPublishedPageBySlugUseCase.execute("home")` in `BlackholeHero.hooks.ts` for dynamic Firestore CMS override in future admin steps, with robust fallback to `HERO_COPY`.
+4. **Obsidian Void Dark Theme Harmonization (`src/index.css`):**
+   - Transformed dark mode tokens from petrol blue-navy (`#06121a`) to deep space matte obsidian (`--ink-900: #000000;`, `--ink-850: #08080a;`, `--ink-800: #0f0f13;`, `--ink-700: #18181f;`, `--ink-600: #24242e;`, `--line: rgba(255,255,255,0.09);`, `--mist: #a1a1aa;`, `--paper: #fafafa;`).
+   - Seamlessly blends header, hero WebGL canvas, overview cards, and footer with zero color mismatch lines.
+5. **Centered Mobile Black Hole & Upper Text Positioning:**
+   - Updated `MOBILE_BLACKHOLE_SETTINGS.focus` to `[0.5, 0.52]` with `fov: 52` and `distance: 26` so the accretion disk is displayed directly in the center of mobile screens.
+   - Positioned hero copy and action buttons in the upper third above the black hole (`pt-16 sm:pt-20 md:pt-0 text-center md:text-left mx-auto md:mx-0`).
+6. **Executive Overview De-cluttering:**
+   - Removed duplicate CTA buttons ("Explore Architecture", "Download Résumé") from `ExecutiveOverview.tsx` so the section functions as pure technical telemetry without redundancy.
+7. **Icon-Rich Tech Stack Badges:**
+   - Integrated brand outline icons into all infrastructure stack badges: `VscAzure` (Microsoft Azure), `FaAws` (AWS), `SiKubernetes` (Kubernetes AKS/EKS), `SiTerraform` (Terraform IaC), `SiDatadog` (Datadog Telemetry), and `IoShieldCheckmarkOutline` (FinOps Certified).
+8. **DIIRA-Grade Executive Instrument Footer:**
+   - Re-architected footer to the DIIRA instrument console standard: live status pulse LED (`● ALL SUBSYSTEMS NOMINAL // 99.99% FLEET UPTIME`), Edge descriptor pill, 4 FinOps benchmark cards, directional navigation hover indicators, circular icon-only social connect buttons, and high-contrast "Download CV (PDF)" button.
+
+**Verification:**
+- `npx biome check .` → ✅ 129 files checked, 0 errors, 0 warnings.
+- `npx tsc -b` → ✅ Strict TypeScript compilation passed with 0 errors.
+- `npx vite build --logLevel silent` → ✅ Production build succeeded.
+- Pre-commit automated quality gate passed cleanly on git commit.
+- Sequential branch promotion completed: `step/15c...` → `release/v1.0.0` → `main` → `develop` (all synced with `origin`).
+- Cloudflare deployment pipeline triggered on `main`.
